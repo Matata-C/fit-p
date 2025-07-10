@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "数据分析",
+  "navigationBarBackgroundColor": "#FFD600",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "weight-chart": "../../components/weight-chart/weight-chart",
+    "exercise-core-data": "../../components/exercise-core-data/exercise-core-data",
+    "exercise-line-chart": "../../components/exercise-line-chart/exercise-line-chart",
+    "exercise-calendar-heatmap": "../../components/exercise-calendar-heatmap/exercise-calendar-heatmap",
+    "exercise-pie-chart": "../../components/exercise-pie-chart/exercise-pie-chart"
+}
+}

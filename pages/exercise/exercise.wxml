@@ -1,0 +1,67 @@
+<page-meta>
+  <navigation-bar title="运动记录" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+</page-meta>
+<view class="container">
+  <view class="header">
+    <view class="title">今日运动记录</view>
+    <view class="add-button" bindtap="showAddExercise">添加运动</view>
+  </view>
+  
+  <view class="exercise-list">
+    <block wx:if="{{exerciseRecords.length > 0}}">
+      <view class="exercise-item" wx:for="{{exerciseRecords}}" wx:key="index">
+        <view class="exercise-info">
+          <view class="exercise-name">{{item.name}}</view>
+          <view class="exercise-time">{{item.time}} <block wx:if="{{item.duration}}">| 时长: {{item.duration}} 小时</block></view>
+        </view>
+        <view class="calories-info">
+          <view class="exercise-calories">{{item.caloriesBurned}} 千卡</view>
+          <view class="delete-btn" bindtap="deleteExercise" data-id="{{item.id}}">×</view>
+        </view>
+      </view>
+      
+      <view class="total-section">
+        <view class="total-label">今日总消耗</view>
+        <view class="total-value">{{todayTotalCalories}} 千卡</view>
+      </view>
+    </block>
+    <view class="no-records" wx:else>
+      今天还没有运动记录，点击上方的"添加运动"按钮开始记录吧！
+    </view>
+  </view>
+  
+  <view class="dialog-mask" wx:if="{{showAddDialog}}" bindtap="hideAddExercise"></view>
+  <view class="dialog-container" wx:if="{{showAddDialog}}">
+    <view class="dialog-title">添加运动记录</view>
+    
+    <view class="common-exercises">
+      <view class="common-title">常见运动</view>
+      <view class="common-list">
+        <view class="common-item" wx:for="{{commonExercises}}" wx:key="index" bindtap="selectCommonExercise" data-index="{{index}}">
+          <view class="common-name">{{item.name}}</view>
+          <view class="common-calories">约 {{item.caloriesPerHour}} 千卡/小时</view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">运动名称</view>
+      <input class="input-field" placeholder="输入运动名称" value="{{exerciseName}}" bindinput="onExerciseNameInput" />
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">持续时间（小时）</view>
+      <input class="input-field" type="digit" placeholder="输入持续时间（小时）" value="{{duration}}" bindinput="onDurationInput" />
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">消耗千卡</view>
+      <input class="input-field" type="digit" placeholder="输入消耗的千卡" value="{{caloriesBurned}}" bindinput="onCaloriesBurnedInput" />
+    </view>
+    
+    <view class="dialog-buttons">
+      <button class="cancel-button" bindtap="hideAddExercise">取消</button>
+      <button class="save-button" bindtap="saveExercise">保存</button>
+    </view>
+  </view>
+</view> 

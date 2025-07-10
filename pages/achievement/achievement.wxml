@@ -1,0 +1,43 @@
+<view class="container">
+  <text class="section-title">我的成就</text>
+  <view class="achievement-list">
+    <block wx:for="{{achievements}}" wx:key="id">
+      <view class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}">
+        <view class="achieve-icon">
+          <text wx:if="{{item.unlocked}}">🏆</text>
+          <text wx:else>🔒</text>
+        </view>
+        <view class="achieve-content">
+          <view class="achieve-header">
+            <text class="achieve-name">{{item.name}}</text>
+            <text class="achieve-reward">{{item.reward}}</text>
+          </view>
+          <view class="achieve-detail">
+            <text class="achieve-type">{{item.type}}</text>
+            <text class="achieve-condition">{{item.condition}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section-title">排行榜</view>
+  <view class="leaderboard-list">
+    <block wx:for="{{leaderboard}}" wx:key="id">
+      <view class="leaderboard-item">
+        <text class="rank">{{index + 1}}.</text>
+        <text class="user">{{item.name}}</text>
+        <text class="score">成就点：{{item.score}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="section-title">语音激励</view>
+  <view class="voice-section">
+    <view class="voice-header">
+      <text class="voice-text">{{voiceText}}</text>
+      <button class="voice-refresh" bindtap="refreshVoice">🔄</button>
+    </view>
+    <button class="voice-btn" bindtap="playVoice">播放语音激励</button>
+  </view>
+</view> 

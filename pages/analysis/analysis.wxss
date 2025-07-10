@@ -1,0 +1,375 @@
+/**analysis.wxss**/
+.scrollarea {
+  padding-bottom: 30rpx;
+}
+.container {
+  padding-bottom: 30rpx;
+}
+
+/* 黄色主题边框容器 */
+.cute-yellow-border {
+  border: 3px solid #FFD600;
+  border-radius: 28px;
+  box-shadow: 0 2px 12px rgba(255, 214, 0, 0.08);
+  margin-bottom: 32rpx;
+  background: #fff;
+  padding: 0;
+}
+
+.calendar-title-pink {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #ff6f91;
+ margin-top: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #ff6f91;
+  margin-bottom: 6rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.section-icon {
+  font-size: 32rpx;
+  margin-left: 10rpx;
+}
+.card {
+  margin: 16px 0;
+  padding: 20px 18px;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
+  border-left: 8px solid #FFD600;
+  transition: box-shadow 0.2s;
+}
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #222;
+  margin-bottom: 6px;
+}
+.card-content {
+  font-size: 15px;
+  color: #888;
+  margin-left: 8px;
+}
+.button {
+  background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 12px 32px;
+  font-size: 17px;
+  font-weight: bold;
+  box-shadow: 0 2px 12px rgba(255, 152, 0, 0.15);
+  transition: transform 0.1s;
+}
+.button:active {
+  transform: scale(0.96);
+}
+
+.title-section {
+  margin-bottom: 30rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.tab-section {
+  display: flex;
+  background-color: #f5f5f5;
+  border-radius: 10rpx;
+  margin-bottom: 30rpx;
+  overflow: hidden;
+}
+
+.tab-item {
+  flex: 1;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 28rpx;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.tab-item.active {
+  background-color: #1aad19;
+  color: white;
+}
+
+.tab-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background-color: #4caf50;
+  border-radius: 2rpx;
+}
+
+.chart-section {
+  margin: 20rpx 0;
+  background-color: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.chart-card {
+  padding: 20rpx;
+  position: relative;
+}
+
+.chart-title {
+  font-size: 28rpx;
+  color: #333;
+ 
+  text-align: center;
+  font-weight: 500;
+}
+
+.weight-range {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20rpx;
+  padding: 10rpx 20rpx;
+  background-color: #f8f8f8;
+  border-radius: 8rpx;
+}
+
+.weight-range-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.range-label {
+  font-size: 24rpx;
+  color: #999;
+  margin-bottom: 5rpx;
+}
+
+.range-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  font-size: 30rpx;
+  padding: 50rpx 0;
+}
+
+.no-data-tip {
+  margin-top: 16rpx;
+  font-size: 26rpx;
+  color: #bbb;
+}
+
+.stats-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30rpx;
+}
+
+.stat-item {
+  flex: 1;
+  background-color: white;
+  border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  text-align: center;
+  padding: 20rpx 10rpx;
+  margin: 0 10rpx;
+}
+
+.stat-item:first-child {
+  margin-left: 0;
+}
+
+.stat-item:last-child {
+  margin-right: 0;
+}
+
+.stat-value {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1aad19;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.tips-section {
+  background-color: #fffbe6;
+  border: 2.5px solid #FFD600;
+  border-radius: 22px;
+  box-shadow: 0 2px 10px rgba(255, 214, 0, 0.08);
+  padding: 28rpx 24rpx 20rpx 24rpx;
+  margin: 0 auto 78rpx auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.tip-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #FFD600;
+  margin-bottom: 16rpx;
+  display: flex;
+  align-items: center;
+}
+.tip-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+}
+.tip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+}
+.tip-text {
+  font-size: 24rpx;
+  color: #ffb300;
+  line-height: 1.7;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.subtitle {
+  font-size: 24rpx;
+  color: #666;
+  margin-top: 10rpx;
+  display: block;
+}
+
+.date-labels {
+  position: relative;
+  height: 40rpx;
+  margin-top: 10rpx;
+}
+
+.date-label {
+  position: absolute;
+  transform: translateX(-50%);
+  font-size: 22rpx;
+  color: #999;
+}
+
+/* 数据分析提示 */
+.analysis-tips {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.tips-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.tips-content text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.8;
+  margin-bottom: 15rpx;
+}
+
+/* 加载状态样式 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300rpx;
+}
+
+.loading-spinner {
+  width: 70rpx;
+  height: 70rpx;
+  border: 5rpx solid rgba(26, 173, 25, 0.2);
+  border-top-color: #1aad19;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+/* 数据修复容器 */
+.repair-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 400rpx;
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.repair-desc {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 10rpx;
+}
+
+/* 隐藏内容 */
+.hidden-content {
+  display: none;
+} 
+
+.photo-recognition-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFD600;
+  border-radius: 18rpx;
+  box-shadow: 0 4rpx 16rpx rgba(255, 214, 0, 0.15);
+  margin: 32rpx 0 24rpx 0;
+  padding: 32rpx 0;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.photo-recognition-entry:active {
+  box-shadow: 0 2rpx 8rpx rgba(255, 214, 0, 0.25);
+}
+.photo-icon {
+  font-size: 56rpx;
+  margin-right: 24rpx;
+}
+.photo-text {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  letter-spacing: 2rpx;
+} 

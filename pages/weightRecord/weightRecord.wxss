@@ -1,0 +1,141 @@
+/* weightRecord.wxss */
+.container {
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  min-height: 100vh;
+}
+
+.record-section, .history-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+}
+
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.input-item {
+  display: flex;
+  align-items: center;
+  border-bottom: 1rpx solid #eee;
+  padding-bottom: 20rpx;
+}
+
+.input-label {
+  width: 180rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.weight-input {
+  flex: 1;
+  height: 60rpx;
+  line-height: 60rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.save-button {
+  background-color: #07c160;
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 30rpx;
+}
+
+.save-button::after {
+  border: none;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx;
+  background-color: #f9f9f9;
+  border-radius: 12rpx;
+}
+
+.history-info {
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+}
+
+.history-date {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.history-weight {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #07c160;
+}
+
+.empty-records {
+  text-align: center;
+  padding: 40rpx 0;
+  font-size: 28rpx;
+  color: #999;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.toggle-text {
+  font-size: 26rpx;
+  color: #07c160;
+}
+
+.delete-btn {
+  width: 60rpx;
+  height: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+}
+
+.delete-icon {
+  font-size: 40rpx;
+  color: #999;
+}
+
+.tips-section {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.tips-content {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.tip-item {
+  margin-bottom: 10rpx;
+} 

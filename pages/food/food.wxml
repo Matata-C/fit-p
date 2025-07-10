@@ -1,0 +1,78 @@
+<page-meta>
+  <navigation-bar title="饮食记录" back="{{true}}" color="black" background="#FFF"></navigation-bar>
+</page-meta>
+<view class="container">
+  <view class="header">
+    <view class="title">今日饮食记录</view>
+    <view class="add-button" bindtap="showAddFood">添加食物</view>
+  </view>
+  
+  <view class="food-list">
+    <block wx:if="{{foodRecords.length > 0}}">
+      <view class="food-item" wx:for="{{foodRecords}}" wx:key="index">
+        <view class="food-info">
+          <view class="food-name">{{item.name}}</view>
+          <view class="food-time">{{item.time}} | 数量: {{item.quantity}}</view>
+        </view>
+        <view class="calories-info">
+          <view class="food-calories">{{item.calories}} 千卡</view>
+          <view class="delete-btn" bindtap="deleteFood" data-index="{{index}}">×</view>
+        </view>
+      </view>
+      
+      <view class="total-section">
+        <view class="total-label">今日总摄入</view>
+        <view class="total-value">{{totalCalories}} 千卡</view>
+      </view>
+    </block>
+    <view class="no-records" wx:else>
+      今天还没有饮食记录，点击上方的"添加食物"按钮开始记录吧！
+    </view>
+  </view>
+  
+  <!-- 添加食物对话框 -->
+  <view class="dialog-mask" wx:if="{{showAddDialog}}" bindtap="hideAddFood"></view>
+  <view class="dialog-container" wx:if="{{showAddDialog}}">
+    <view class="dialog-title">添加饮食记录</view>
+    
+    <view class="common-foods">
+      <view class="common-title">常见食物</view>
+      <view class="common-list">
+        <view class="common-item" wx:for="{{commonFoods}}" wx:key="index" bindtap="selectCommonFood" data-index="{{index}}">
+          <view class="common-name">{{item.name}}</view>
+          <view class="common-calories">约 {{item.calories}} 千焦 ({{item.weight}}克)</view>
+        </view>
+      </view>
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">食物名称</view>
+      <input class="input-field" placeholder="输入食物名称" value="{{foodName}}" bindinput="onFoodNameInput" />
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">单位热量（千焦）</view>
+      <input class="input-field" type="digit" placeholder="输入单位热量（千焦）" value="{{calories}}" bindinput="onCaloriesInput" />
+    </view>
+    
+    <view class="convert-section">
+      <view class="convert-hint">1千卡 = 4.184千焦</view>
+      <button class="convert-button" bindtap="convertToKcal">转换为千卡</button>
+    </view>
+    
+    <view class="input-group" wx:if="{{showKcalValue}}">
+      <view class="input-label">转换后的千卡值</view>
+      <view class="converted-value">{{kcalValue}} 千卡</view>
+    </view>
+    
+    <view class="input-group">
+      <view class="input-label">数量</view>
+      <input class="input-field" type="digit" placeholder="输入数量（默认为1）" value="{{quantity}}" bindinput="onQuantityInput" />
+    </view>
+    
+    <view class="dialog-buttons">
+      <button class="cancel-button" bindtap="hideAddFood">取消</button>
+      <button class="save-button" bindtap="saveFood">保存</button>
+    </view>
+  </view>
+</view> 

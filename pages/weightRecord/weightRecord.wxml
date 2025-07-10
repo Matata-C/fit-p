@@ -1,0 +1,79 @@
+<!--weightRecord.wxml-->
+<view class="container">
+  <view class="record-section">
+    <view class="section-title">记录体重</view>
+    
+    <view class="input-group">
+      <view class="input-item">
+        <text class="input-label">体重(kg)</text>
+        <input 
+          class="weight-input" 
+          type="digit" 
+          placeholder="请输入体重" 
+          value="{{currentWeight}}"
+          bindinput="onWeightInput"
+        />
+      </view>
+      
+      <view class="input-item">
+        <text class="input-label">日期</text>
+        <picker 
+          mode="date" 
+          value="{{date}}" 
+          bindchange="bindDateChange"
+        >
+          <view class="picker-value">{{date}}</view>
+        </picker>
+      </view>
+      
+      <view class="input-item">
+        <text class="input-label">时间</text>
+        <picker 
+          mode="time" 
+          value="{{time}}" 
+          bindchange="bindTimeChange"
+        >
+          <view class="picker-value">{{time}}</view>
+        </picker>
+      </view>
+    </view>
+    
+    <button class="save-button" bindtap="saveWeightRecord">保存记录</button>
+  </view>
+  
+  <view class="history-section">
+    <view class="history-header" bindtap="toggleHistoryRecords">
+      <text class="section-title">历史记录</text>
+      <text class="toggle-text">{{showHistoryRecords ? '收起' : '展开'}}</text>
+    </view>
+    
+    <view class="history-list" wx:if="{{showHistoryRecords}}">
+      <block wx:if="{{weightRecords.length > 0}}">
+        <view class="history-item" wx:for="{{weightRecords}}" wx:key="timestamp">
+          <view class="history-info">
+            <view class="history-date">{{item.date}}</view>
+            <view class="history-time">{{item.time}}</view>
+            <view class="history-weight">{{item.weight}}kg</view>
+          </view>
+          <view class="delete-btn" bindtap="deleteRecord" data-index="{{index}}">
+            <text class="delete-icon">×</text>
+          </view>
+        </view>
+      </block>
+      
+      <view class="empty-records" wx:else>
+        <text>暂无体重记录</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="tips-section">
+    <view class="section-title">记录小贴士</view>
+    <view class="tips-content">
+      <view class="tip-item">- 建议在每天固定时间测量体重</view>
+      <view class="tip-item">- 早晨起床后、排空、进食前是最佳测量时间</view>
+      <view class="tip-item">- 使用同一台体重秤，穿着类似的衣物</view>
+      <view class="tip-item">- 体重可能会有日常波动，不必过于在意短期变化</view>
+    </view>
+  </view>
+</view> 

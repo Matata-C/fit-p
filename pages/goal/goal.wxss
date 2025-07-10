@@ -1,0 +1,352 @@
+/* pages/goal/goal.wxss */
+/* 页面容器样式 */
+.page-container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  position: relative;
+}
+
+/* 加载中样式 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f5f5f5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.loading-icon {
+  width: 80rpx;
+  height: 80rpx;
+  border: 6rpx solid #f3f3f3;
+  border-top: 6rpx solid #4CAF50;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20rpx;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #666;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 紧急显示区域 */
+.emergency-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f9f9f9;
+  padding: 0 40rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+}
+
+.emergency-content {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+  width: 100%;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.emergency-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.emergency-subtitle {
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
+
+.emergency-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  border-radius: 40rpx;
+  width: 80%;
+  margin: 0 auto;
+}
+
+/* 简单兜底显示 */
+.simple-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 0 40rpx;
+}
+
+.fallback-text {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 30rpx;
+}
+
+.fallback-btn {
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 28rpx;
+  padding: 16rpx 40rpx;
+  border-radius: 40rpx;
+}
+
+/* 内容区样式 */
+.content-container {
+  padding: 30rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-section {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30rpx;
+  padding-left: 20rpx;
+  border-left: 8rpx solid #4CAF50;
+}
+
+.basic-info, .goal-info {
+  margin-bottom: 40rpx;
+}
+
+.gender-group {
+  margin-bottom: 30rpx;
+}
+
+.gender-options {
+  display: flex;
+  gap: 20rpx;
+}
+
+.gender-item {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  background: #f8f8f8;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.gender-item.active {
+  background: #4CAF50;
+  color: #fff;
+}
+
+.input-group {
+  margin-bottom: 30rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.input {
+  width: 100%;
+  height: 80rpx;
+  background: #f8f8f8;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  font-size: 28rpx;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.summary-section {
+  margin-top: 30rpx;
+  padding: 20rpx;
+  background: #f8f8f8;
+  border-radius: 8rpx;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-label {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.summary-value {
+  font-size: 28rpx;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+.tips-section {
+  margin-top: 30rpx;
+  padding: 20rpx;
+  background: #fff5e6;
+  border-radius: 8rpx;
+}
+
+.tips-title {
+  display: block;
+  font-size: 26rpx;
+  color: #ff9800;
+  margin-bottom: 10rpx;
+}
+
+.tips-content {
+  display: block;
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.btn-section {
+  margin-top: 40rpx;
+}
+
+.save-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: #4CAF50;
+  color: #fff;
+  font-size: 32rpx;
+  border-radius: 44rpx;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.save-btn:active {
+  opacity: 0.9;
+}
+
+/* 添加输入框和按钮组合的样式 */
+.input-with-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-with-button .input {
+  flex: 1;
+}
+
+.disabled-input {
+  background-color: #f5f5f5;
+  color: #888;
+}
+
+.edit-button {
+  margin-left: 10rpx;
+  padding: 10rpx 20rpx;
+  background-color: #f2f2f2;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-button.active {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+.edit-button text {
+  line-height: 1;
+}
+
+/* 添加转换按钮样式 */
+.convert-button {
+  margin-left: 10rpx;
+  padding: 10rpx 20rpx;
+  background-color: #4CAF50;
+  border-radius: 6rpx;
+  font-size: 24rpx;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80rpx;
+}
+
+.convert-button:active {
+  opacity: 0.9;
+}
+
+/* 安卓特定优化 */
+/* 适配安卓输入框高度 */
+.input {
+  line-height: normal;
+}
+
+/* 确保按钮在安卓上居中 */
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 解决安卓行高问题 */
+text {
+  display: inline-block;
+} 

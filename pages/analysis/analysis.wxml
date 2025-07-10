@@ -1,0 +1,77 @@
+<page-meta>
+  <navigation-bar title="数据分析" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+</page-meta>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <!-- 数据修复状态指示 -->
+    <view class="repair-container" wx:if="{{isRepairing}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">数据修复中...</text>
+      <text class="repair-desc">首次加载可能需要较长时间</text>
+    </view>
+    
+    <!-- 加载状态指示 -->
+    <view class="loading-container" wx:elif="{{isLoading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">数据加载中...</text>
+    </view>
+
+    <!-- 顶部核心运动数据卡片 -->
+    <exercise-core-data
+      date="{{coreData.date}}"
+      steps="{{coreData.steps}}"
+      stepsPercent="{{coreData.stepsPercent}}"
+      duration="{{coreData.duration}}"
+      durationPercent="{{coreData.durationPercent}}"
+      calories="{{coreData.calories}}"
+      caloriesPercent="{{coreData.caloriesPercent}}"
+      weight="{{coreData.weight}}"
+      weightPercent="{{coreData.weightPercent}}"
+    />
+
+    <view class="{{isLoading || isRepairing ? 'hidden-content' : ''}}">
+      <!-- 本周运动数据折线图 -->
+      <view class="cute-yellow-border">
+        <view class="calendar-title-pink">
+          本周运动量数据 <text class="section-icon">🏃‍♂️</text>
+        </view>
+        <exercise-line-chart
+          dateLabels="{{exerciseChart.dateLabels}}"
+          stepsData="{{exerciseChart.stepsData}}"
+          durationData="{{exerciseChart.durationData}}"
+          caloriesData="{{exerciseChart.caloriesData}}"
+          height="220"
+        />
+      </view>
+
+      <!-- 本月运动数据饼图 -->
+      <view class="cute-yellow-border">
+        <exercise-pie-chart pieData="{{pieData}}" />
+      </view>
+
+      <!-- 拍照识别入口 -->
+      <view class="cute-yellow-border photo-recognition-entry" bindtap="onPhotoRecognize">
+        <view class="photo-icon">📷</view>
+        <view class="photo-text">拍照识别食物热量</view>
+      </view>
+
+      <!-- 运动小贴士 -->
+      <view class="cute-yellow-border tips-section">
+        <view class="tip-title">
+          <text class="tip-icon">💡</text> 运动小贴士
+        </view>
+        <view class="tip-content">
+          <view class="tip-item">
+            <text class="tip-text">适量运动有助于身心健康，建议每周至少进行150分钟中等强度运动。</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-text">运动前做好热身，运动后注意拉伸，预防受伤。</text>
+          </view>
+          <view class="tip-item">
+            <text class="tip-text">保持运动习惯，选择自己喜欢的运动方式更容易坚持哦！</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view> 

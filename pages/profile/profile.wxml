@@ -1,0 +1,185 @@
+<!--profile.wxml-->
+<view class="container">
+  <view class="header" bindtap="onUserInfoTap">
+  <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+  <view class="nickname">{{userInfo.nickName}}</view>
+  <view class="login-tip" wx:if="{{!isLoggedIn}}">(点击登录)</view>
+  </view>
+  
+  <view class="stats-section">
+    <view class="stats-title">我的统计</view>
+    <view class="stats-row">
+      <view class="stat-item">
+        <view class="stat-value">{{stats.recordDays}}</view>
+        <view class="stat-label">记录天数</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{stats.weightLost}}</view>
+        <view class="stat-label">已减重(kg)</view>
+      </view>
+      <view class="stat-item">
+        <view class="stat-value">{{stats.daysToGoal}}</view>
+        <view class="stat-label">预计天数</view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 折叠面板 -->
+  <view class="collapse-section">
+    <view class="collapse-header" bindtap="toggleGoalSettings">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/圆圈.svg" mode="aspectFit"></image>
+        <text>目标设置</text>
+      </view>
+      <view class="menu-item-right">
+        <view class="arrow {{isGoalExpanded ? 'arrow-up' : 'arrow-down'}}"></view>
+      </view>
+    </view>
+    
+    <view class="collapse-content {{isGoalExpanded ? 'expanded' : ''}}">
+      <!-- 目标设置表单 -->
+      <view class="goal-form">
+        <view class="form-group">
+          <view class="form-label">性别</view>
+          <view class="gender-selector">
+            <view class="gender-option {{gender === 'male' ? 'selected' : ''}}" data-gender="male" bindtap="onGenderSelect">男</view>
+            <view class="gender-option {{gender === 'female' ? 'selected' : ''}}" data-gender="female" bindtap="onGenderSelect">女</view>
+          </view>
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">年龄 (岁)</view>
+          <input class="form-input" type="number" value="{{age}}" bindinput="onAgeInput" placeholder="请输入年龄" />
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">身高 (cm)</view>
+          <input class="form-input" type="digit" value="{{height}}" bindinput="onHeightInput" placeholder="请输入身高" />
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">当前体重 (kg)</view>
+          <input class="form-input" type="digit" value="{{currentWeight}}" bindinput="onCurrentWeightInput" placeholder="请输入当前体重" />
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">目标体重 (kg)</view>
+          <input class="form-input" type="digit" value="{{goalWeight}}" bindinput="onGoalWeightInput" placeholder="请输入目标体重" />
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">每日目标减重 (kg)</view>
+          <view class="consumption-input-group">
+            <input class="form-input" type="digit" value="{{dailyGoal}}" bindinput="onDailyGoalInput" placeholder="推荐0.1-0.3kg" />
+            <view class="convert-btn" bindtap="convertToTargetConsumption">转换</view>
+          </view>
+        </view>
+        
+        <view class="form-group">
+          <view class="form-label">每日目标消耗 (千卡)</view>
+          <view class="consumption-input-group">
+            <input class="form-input" type="digit" value="{{dailyTargetConsumption}}" bindinput="onDailyTargetConsumptionInput" placeholder="点击转换计算目标消耗" disabled="{{!allowManualTargetEdit}}"/>
+            <view class="edit-btn" bindtap="toggleTargetEdit">{{allowManualTargetEdit ? '完成' : '编辑'}}</view>
+          </view>
+        </view>
+        
+        <view class="summary-section" wx:if="{{showSummary}}">
+          <view class="summary-row">
+            <view class="summary-label">基础代谢率(BMR)</view>
+            <view class="summary-value">{{bmr}}千卡/天</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">需要减重</view>
+            <view class="summary-value">{{weightToLose}}kg</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">预计所需天数</view>
+            <view class="summary-value">{{estimatedDays}}天</view>
+          </view>
+          <view class="summary-row">
+            <view class="summary-label">预计达成日期</view>
+            <view class="summary-value">{{targetDate}}</view>
+          </view>
+        </view>
+        
+        <view class="health-tip">
+          <view class="health-tip-item">· 建议每日减重不超过0.3kg</view>
+          <view class="health-tip-item">· 每周减重建议控制在1-2kg</view>
+          <view class="health-tip-item">· 基础代谢率因人而异，请根据实际情况适当调整</view>
+        </view>
+        
+        <button class="save-btn" bindtap="onSaveGoalSettings">保存目标</button>
+      </view>
+    </view>
+  </view>
+  
+  <view class="menu-section">
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/calendar/calendar">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/日历.svg" mode="aspectFit"></image>
+        <text>打卡日历</text>
+      </view>
+      <view class="menu-item-right">
+        <image class="arrow-icon" src="/images/右箭头.svg"></image>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/account/account">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/钱包.svg" mode="aspectFit"></image>
+        <text>资产账户</text>
+      </view>
+      <view class="menu-item-right">
+        <image class="arrow-icon" src="/images/右箭头.svg"></image>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/sport/sport">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/跑步.svg" mode="aspectFit"></image>
+        <text>运动管理</text>
+      </view>
+      <view class="menu-item-right">
+        <image class="arrow-icon" src="/images/右箭头.svg"></image>
+      </view>
+    </view>
+    <view class="menu-item">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/喇叭.svg" mode="aspectFit"></image>
+        <text>音效</text>
+      </view>
+      <view class="menu-item-right">
+        <switch checked="{{soundEnabled}}" bindchange="onSoundSwitchChange"></switch>
+      </view>
+    </view>
+    <view class="menu-item">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/手机.svg" mode="aspectFit"></image>
+        <text>震动</text>
+      </view>
+      <view class="menu-item-right">
+        <switch checked="{{vibrationEnabled}}" bindchange="onVibrationSwitchChange"></switch>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/about-us/about-us">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/笑脸.svg" mode="aspectFit"></image>
+        <text>关于我们</text>
+      </view>
+      <view class="menu-item-right">
+        <image class="arrow-icon" src="/images/右箭头.svg"></image>
+      </view>
+    </view>
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages">
+      <view class="menu-item-left">
+        <image class="menu-icon" src="/images/信封.svg" mode="aspectFit"></image>
+        <text>意见反馈</text>
+      </view>
+      <view class="menu-item-right">
+        <image class="arrow-icon" src="/images/右箭头.svg"></image>
+      </view>
+    </view>
+  </view>
+  
+  <view class="version-info">
+    <text>版本 1.0.0</text>
+  </view>
+</view>

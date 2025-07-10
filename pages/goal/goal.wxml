@@ -1,0 +1,141 @@
+<!--pages/goal/goal.wxml-->
+<view class="page-container">
+  <!-- 加载中提示 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <view class="loading-icon"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 备用显示区，防止白屏 -->
+  <view class="emergency-container" wx:elif="{{renderError || (!pageReady && !isLoading)}}">
+    <view class="emergency-content">
+      <view class="emergency-title">设置您的目标</view>
+      <view class="emergency-subtitle">请填写下方信息以开始使用</view>
+      <button class="emergency-btn" bindtap="forceRefresh">点击重新加载</button>
+    </view>
+  </view>
+
+  <!-- 内容区 -->
+  <view class="content-container" wx:elif="{{pageReady}}">
+    <view class="header">
+      <text class="title">设置目标</text>
+    </view>
+
+    <view class="form-section">
+      <view class="basic-info">
+        <text class="section-title">基本信息</text>
+        <view class="gender-group">
+          <text class="label">性别</text>
+          <view class="gender-options">
+            <view class="gender-item {{gender === 'male' ? 'active' : ''}}" 
+                  bindtap="onGenderSelect" data-gender="male">男</view>
+            <view class="gender-item {{gender === 'female' ? 'active' : ''}}" 
+                  bindtap="onGenderSelect" data-gender="female">女</view>
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="label">年龄</text>
+          <input type="number" 
+                 value="{{age}}"
+                 placeholder="请输入年龄"
+                 bindinput="onAgeInput"
+                 class="input"/>
+        </view>
+
+        <view class="input-group">
+          <text class="label">身高 (cm)</text>
+          <input type="digit" 
+                 value="{{height}}"
+                 placeholder="请输入身高"
+                 bindinput="onHeightInput"
+                 class="input"/>
+        </view>
+
+        <view class="input-group">
+          <text class="label">当前体重 (kg)</text>
+          <input type="digit" 
+                 value="{{currentWeight}}"
+                 placeholder="请输入当前体重"
+                 bindinput="onCurrentWeightInput"
+                 class="input"/>
+        </view>
+      </view>
+
+      <view class="goal-info">
+        <text class="section-title">目标设置</text>
+        <view class="input-group">
+          <text class="label">目标体重 (kg)</text>
+          <input type="digit" 
+                 value="{{goalWeight}}"
+                 placeholder="请输入目标体重"
+                 bindinput="onGoalWeightInput"
+                 class="input"/>
+        </view>
+
+        <view class="input-group">
+          <text class="label">每日目标减重 (kg)</text>
+          <view class="input-with-button">
+            <input type="digit" 
+                   value="{{dailyGoal}}"
+                   placeholder="建议0.1-0.3kg"
+                   bindinput="onDailyGoalInput"
+                   class="input"/>
+            <view class="convert-button" bindtap="convertToTargetConsumption">
+              <text>转换</text>
+            </view>
+          </view>
+        </view>
+
+        <view class="input-group">
+          <text class="label">每日目标消耗 (千卡)</text>
+          <view class="input-with-button">
+            <input type="digit" 
+                   value="{{dailyTargetConsumption}}"
+                   placeholder="自动计算"
+                   bindinput="onDailyTargetConsumptionInput"
+                   disabled="{{!allowManualTargetEdit}}"
+                   class="input {{!allowManualTargetEdit ? 'disabled-input' : ''}}"/>
+            <view class="edit-button {{allowManualTargetEdit ? 'active' : ''}}" bindtap="toggleTargetEdit">
+              <text>{{allowManualTargetEdit ? '锁定' : '编辑'}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="summary-section" wx:if="{{showSummary}}">
+        <view class="summary-item">
+          <text class="summary-label">基础代谢率(BMR)</text>
+          <text class="summary-value">{{bmr}}千卡/天</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-label">需要减重</text>
+          <text class="summary-value">{{weightToLose}}kg</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-label">预计所需天数</text>
+          <text class="summary-value">{{estimatedDays}}天</text>
+        </view>
+        <view class="summary-item">
+          <text class="summary-label">预计达成日期</text>
+          <text class="summary-value">{{targetDate}}</text>
+        </view>
+      </view>
+
+      <view class="tips-section">
+        <text class="tips-title">健康提示</text>
+        <text class="tips-content">· 建议每日减重不超过0.3kg\n· 每周减重建议控制在1-2kg\n· 基础代谢率因人而异，请根据实际情况调整\n· 循序渐进才能长期保持</text>
+      </view>
+    </view>
+
+    <view class="btn-section">
+      <button class="save-btn" bindtap="onSave">保存目标</button>
+    </view>
+  </view>
+  
+  <!-- 简单兜底显示 -->
+  <view class="simple-fallback" wx:else>
+    <text class="fallback-text">加载目标设置...</text>
+    <button class="fallback-btn" bindtap="forceRefresh">点击重新加载</button>
+  </view>
+</view> 
