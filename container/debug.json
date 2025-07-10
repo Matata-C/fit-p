@@ -1,0 +1,17 @@
+{
+  "containers": [],
+  "config": {
+    "newjob": {
+      "containerPort": 80,
+      "minNum": 0,
+      "maxNum": 5,
+      "cpu": 1,
+      "mem": 2,
+      "policyType": "cpu",
+      "policyThreshold": 60,
+      "envParams": {},
+      "customLogs": "stdout",
+      "initialDelaySeconds": 2
+    }
+  }
+}
