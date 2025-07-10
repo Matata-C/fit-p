@@ -1,0 +1,99 @@
+/**app.wxss**/
+page {
+  --color-primary: #07c160;
+  --color-gray: #999999;
+  --color-light-gray: #f5f7fa;
+  --color-text: #333333;
+  --color-text-secondary: #666666;
+  
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica,
+    Segoe UI, Arial, Roboto, 'PingFang SC', 'miui', 'Hiragino Sans GB', 'Microsoft Yahei',
+    sans-serif;
+}
+
+/* 自定义tabBar图标 */
+.tab-icon {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 6rpx;
+  margin: 0 auto 8rpx;
+}
+
+/* 首页图标颜色 */
+.tab-home {
+  background-color: #ffcc00;
+}
+
+/* 记录图标颜色 */
+.tab-record {
+  background-color: #ff6666;
+}
+
+/* 分析图标颜色 */
+.tab-analysis {
+  background-color: #6699ff;
+}
+
+/* 我的图标颜色 */
+.tab-profile {
+  background-color: #9966cc;
+}
+
+/* 通用样式 */
+.container {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 30rpx;
+  background-color: var(--color-light-gray);
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #ffffff;
+  border: none;
+  font-size: 30rpx;
+  padding: 16rpx 32rpx;
+  border-radius: 8rpx;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-text {
+  background: none;
+  padding: 0;
+  line-height: normal;
+  color: var(--color-primary);
+  font-size: 28rpx;
+}
+
+.btn-text::after {
+  border: none;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  margin-bottom: 20rpx;
+  color: var(--color-text);
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6rpx;
+  height: 6rpx;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 3rpx;
+  background-color: rgba(0, 0, 0, 0.1);
+} 

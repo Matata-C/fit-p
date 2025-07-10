@@ -1,0 +1,26 @@
+<view class="weight-chart-container">
+  <block wx:if="{{showChart}}">
+    <view class="chart-canvas-wrapper">
+      <canvas type="2d" class="weight-chart-canvas" style="height: {{canvasHeight}}px;"></canvas>
+    </view>
+    <view class="chart-legend">
+      <view class="legend-item">
+        <view class="legend-color legend-increase"></view>
+        <view class="legend-text">增长</view>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color legend-maintain"></view>
+        <view class="legend-text">维持</view>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color legend-decrease"></view>
+        <view class="legend-text">下降</view>
+      </view>
+    </view>
+  </block>
+  <view class="no-data" wx:else>
+    <view class="no-data-icon">📊</view>
+    <view class="no-data-text">暂无体重记录</view>
+    <view class="no-data-tip">记录您的体重以查看趋势</view>
+  </view>
+</view> 

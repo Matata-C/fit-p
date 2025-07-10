@@ -1,0 +1,15 @@
+<view class="calendar-heatmap-container">
+  <view class="calendar-title">本月运动热力图 <text class="calendar-emoji">🔥</text></view>
+  <view class="calendar-grid">
+    <view class="calendar-weekdays">
+      <view class="calendar-weekday" wx:for="{{weekdays}}" wx:key="index">{{item}}</view>
+    </view>
+    <view class="calendar-row" wx:for="{{calendarRows}}" wx:key="rowIdx">
+      <view class="calendar-cell" wx:for="{{row}}" wx:key="cellIdx">
+        <view class="cell-bg">
+          <text class="cell-value">{{cell.day}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

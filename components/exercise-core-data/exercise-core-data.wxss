@@ -1,0 +1,77 @@
+.core-data-card {
+  background: linear-gradient(135deg, #FFF6D1 0%, #FFD600 100%);
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
+  padding: 32rpx 24rpx 24rpx 24rpx;
+  margin-bottom: 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.core-data-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 16rpx;
+}
+.core-data-date {
+  font-size: 28rpx;
+  color: #ffb6b9;
+  margin-bottom: 4rpx;
+  font-weight: 500;
+}
+.core-data-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #ff6f91;
+  display: flex;
+  align-items: center;
+}
+.core-data-emoji {
+  font-size: 36rpx;
+  margin-left: 8rpx;
+}
+.core-data-items {
+  display: flex;
+  flex-direction: column;
+  gap: 18rpx;
+}
+.core-data-row {
+  display: flex;
+  flex-direction: row;
+  gap: 18rpx;
+  margin-bottom: 0;
+}
+.core-data-item {
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2px 8px rgba(255, 182, 185, 0.08);
+  padding: 18rpx 20rpx 10rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  margin-bottom: 4rpx;
+}
+.core-data-row .core-data-item:not(:last-child) {
+  margin-right: 18rpx;
+}
+.core-data-label {
+  font-size: 24rpx;
+  color: #ffb6b9;
+  font-weight: 500;
+  margin-bottom: 2rpx;
+}
+.core-data-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #ff6f91;
+  margin-bottom: 6rpx;
+}
+progress {
+  margin-top: 2rpx;
+  margin-bottom: 0;
+  border-radius: 8rpx;
+  height: 16rpx;
+  background: #FFF6D1;
+} 

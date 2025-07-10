@@ -1,0 +1,26 @@
+<view class="exercise-line-chart-container">
+  <block wx:if="{{showChart}}">
+    <view class="chart-canvas-wrapper">
+      <canvas type="2d" class="exercise-line-chart-canvas" style="height: {{canvasHeight}}px;"></canvas>
+    </view>
+    <view class="chart-legend">
+      <view class="legend-item">
+        <view class="legend-color legend-steps"></view>
+        <view class="legend-text">步数</view>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color legend-duration"></view>
+        <view class="legend-text">时长</view>
+      </view>
+      <view class="legend-item">
+        <view class="legend-color legend-calories"></view>
+        <view class="legend-text">卡路里</view>
+      </view>
+    </view>
+  </block>
+  <view class="no-data" wx:else>
+    <view class="no-data-icon">📈</view>
+    <view class="no-data-text">暂无本周运动数据</view>
+    <view class="no-data-tip">快去记录运动吧！</view>
+  </view>
+</view> 

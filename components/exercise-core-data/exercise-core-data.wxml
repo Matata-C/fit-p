@@ -1,0 +1,32 @@
+<view class="core-data-card">
+  <view class="core-data-header">
+    <text class="core-data-date">{{date}}</text>
+    <text class="core-data-title">今日运动核心数据 <text class="core-data-emoji">🏃‍♂️✨</text></text>
+  </view>
+  <view class="core-data-items">
+    <view class="core-data-row">
+      <view class="core-data-item">
+        <text class="core-data-label">步数</text>
+        <text class="core-data-value">{{steps}}</text>
+        <progress percent="{{stepsPercent}}" stroke-width="8" active color="#FFD600" backgroundColor="#FFF6D1" border-radius="8"/>
+      </view>
+      <view class="core-data-item">
+        <text class="core-data-label">运动时长</text>
+        <text class="core-data-value">{{duration}} min</text>
+        <progress percent="{{durationPercent}}" stroke-width="8" active color="#FFB6B9" backgroundColor="#FFF6D1" border-radius="8"/>
+      </view>
+    </view>
+    <view class="core-data-row">
+      <view class="core-data-item">
+        <text class="core-data-label">消耗卡路里</text>
+        <text class="core-data-value">{{calories}} kcal</text>
+        <progress percent="{{caloriesPercent}}" stroke-width="8" active color="#A0E7E5" backgroundColor="#FFF6D1" border-radius="8"/>
+      </view>
+      <view class="core-data-item">
+        <text class="core-data-label">当前体重</text>
+        <text class="core-data-value">{{weight}} kg</text>
+        <progress percent="{{weightPercent}}" stroke-width="8" active color="#B4F8C8" backgroundColor="#FFF6D1" border-radius="8"/>
+      </view>
+    </view>
+  </view>
+</view> 

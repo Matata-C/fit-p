@@ -1,0 +1,59 @@
+.exercise-pie-chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fffbe6;
+  border-radius: 24rpx;
+  box-shadow: 0 4rpx 16rpx rgba(255, 214, 0, 0.10);
+  padding: 24rpx 0 12rpx 0;
+}
+.pie-canvas-wrapper {
+  width: 220rpx;
+  height: 220rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16rpx auto;
+}
+.exercise-pie-chart-canvas {
+  width: 220rpx;
+  height: 220rpx;
+  display: block;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2rpx 8rpx #ffe066;
+}
+.pie-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10rpx 18rpx;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  background: #fffde7;
+  border-radius: 16rpx;
+  padding: 6rpx 12rpx 6rpx 8rpx;
+  margin-bottom: 4rpx;
+  box-shadow: 0 2rpx 8rpx #ffe06622;
+}
+.legend-icon {
+  font-size: 28rpx;
+  margin-right: 6rpx;
+}
+.legend-color {
+  width: 14rpx;
+  height: 14rpx;
+  border-radius: 50%;
+  margin-right: 6rpx;
+  border: 2rpx solid #FFD600;
+}
+.legend-text {
+  font-size: 22rpx;
+  color: #333;
+  font-weight: bold;
+  letter-spacing: 1rpx;
+} 
