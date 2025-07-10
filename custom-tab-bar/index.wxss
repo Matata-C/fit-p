@@ -1,0 +1,58 @@
+.tabbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  background: #fff;
+  box-shadow: 0 -2px 12px rgba(255, 214, 0, 0.08);
+  border-top: 1px solid #f5f5f5;
+}
+.tabbar-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 0 0 0;
+  color: #888;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+/* 图片容器样式：控制图片尺寸和位置 */
+.imgcontent {
+  width: 24px; /* 图片容器宽度，根据需求调整 */
+  height: 24px; /* 图片容器高度，与宽度一致保持方形 */
+  margin-bottom: 2px; /* 图片与文字的间距，确保分离不重叠 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 图片样式：确保填满容器且不变形 */
+.imgcontent image {
+  width: 100%; /* 图片宽度充满容器 */
+  height: 100%; /* 图片高度充满容器 */
+  object-fit: contain; /* 保持图片比例，完整显示在容器内 */
+}
+
+.tabbar-icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 1px;
+  filter: brightness(0) saturate(100%) sepia(100%) hue-rotate(45deg) brightness(1.2);
+}
+.tabbar-text {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.tabbar-item-selected {
+  color: #FFD600;
+}
+.tabbar-item-selected .tabbar-text {
+  color: #FFD600;
+}
+.tabbar-item-selected .tabbar-icon {
+  filter: brightness(0) saturate(100%) sepia(100%) hue-rotate(45deg) brightness(1.8);
+} 

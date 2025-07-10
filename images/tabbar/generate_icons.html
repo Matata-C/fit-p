@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生成TabBar图标</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        .icon { margin: 10px; }
+        button { margin: 10px; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <h2>TabBar图标预览</h2>
+    <div id="icons"></div>
+    <script>
+        const icons = {
+            home: 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII=',
+            'home-active': 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII=',
+            goal: 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII=',
+            'goal-active': 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII=',
+            user: 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII=',
+            'user-active': 'iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAOxAAADsQBlSsOGwAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAGESURBVGiB7ZixSgNBEIb/EQsLwUoQBCstxFJIGkHwBXwCC8HGB7CxFHwCX0CwFcHOSkGwEGKjYKWFhYWFhYVgYRFIjMXlQo7c3u3e7d6CPB8M7O3M7P/P3O5xC1gsFovFYvn/dABMALwBmGdxl+Y6hVADMAQwA7DMiVn6rFaEfhXAA4BvJOW9+AZwD6BSgI5qxvcAfKYE4McngF4OOhTjmwC+Mgbg4hNAM4WWVH0j4/ddPAJoKGiJ1TcyPu/iHsC5oKVW38j4vItbAC1CS62+kfF5F9cALgUtsfpGxuddXAO4ErSk6hsZn3dxDeBW0BKrb2R83sU1gAdBi62+kfF5F9cAxoIWW30j4/MurgFMBS2x+kbG512WAPqEjgqAJ4VBHgGcGqDFjc+7LAHUE3pKyBYvABwboMWNz7ssAfBPUgPALYA3AIsM8QJgAOBIqZY0Pu+yBCDVqQM4AzAC8JIGMk1zI+RbF6XxeZe8AuB0ygAuABwCqKe5i/RZX1GHxWKxWCyWAvgBCxJMXcCwJg8AAAAASUVORK5CYII='
+        };
+
+        const iconsDiv = document.getElementById('icons');
+        
+        Object.entries(icons).forEach(([name, base64]) => {
+            const div = document.createElement('div');
+            div.className = 'icon';
+            
+            const img = document.createElement('img');
+            img.src = 'data:image/png;base64,' + base64;
+            img.alt = name;
+            
+            const button = document.createElement('button');
+            button.textContent = '下载 ' + name + '.png';
+            button.onclick = () => {
+                const link = document.createElement('a');
+                link.download = name + '.png';
+                link.href = img.src;
+                link.click();
+            };
+            
+            div.appendChild(img);
+            div.appendChild(button);
+            iconsDiv.appendChild(div);
+        });
+    </script>
+</body>
+</html> 

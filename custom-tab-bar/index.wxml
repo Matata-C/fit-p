@@ -1,0 +1,18 @@
+<view class="tabbar">
+  <view class="tabbar-item {{selected === 0 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="0">
+    <view class="imgcontent"><image src="/images/首页.png"></image></view>
+    <text class="tabbar-text">首页</text>
+  </view>
+  <view class="tabbar-item {{selected === 1 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="1">
+    <view class="imgcontent"><image src="/images/饼图_ 统计_ 多媒体_ 统计图标(Pie chart_ s_爱给网_aigei_com.png" style="opacity: 0.6;"></image></view>
+    <text class="tabbar-text">分析</text>
+  </view>
+  <view class="tabbar-item {{selected === 2 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="2">
+    <view class="imgcontent"><image src="/images/成就.png" style="opacity: 0.8;"></image></view>
+    <text class="tabbar-text">成就</text>
+  </view>
+  <view class="tabbar-item {{selected === 3 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="3">
+    <view class="imgcontent"><image src="/images/我的.png" style="opacity: 0.5;"></image></view>
+    <text class="tabbar-text">我的</text>
+  </view>
+</view> 
