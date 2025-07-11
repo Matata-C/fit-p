@@ -89,7 +89,6 @@
   margin-left: 0;
   margin-right: 4px;
 }
-/* 优化未解锁标签样式 */
 .achieve-reward.locked {
   background: #f5f6fa;
   color: #b0b3b8;
@@ -117,11 +116,9 @@
 .leaderboard-list {
   margin-top: 10px;
 }
-/* --- 优化排行榜配色和卡片风格 --- */
 .leaderboard-item.top1,
 .leaderboard-item.top2,
 .leaderboard-item.top3 {
-  /* 移除原有样式 */
   background: none;
   color: inherit;
 }
