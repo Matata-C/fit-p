@@ -10,7 +10,13 @@
         <view class="achieve-content">
           <view class="achieve-header">
             <text class="achieve-name">{{item.name}}</text>
-            <text class="achieve-reward">{{item.reward}}</text>
+            <block wx:if="{{item.unlocked}}">
+              <text class="achieve-reward">{{item.reward}}</text>
+            </block>
+            <block wx:else>
+              <text class="achieve-reward locked">未解锁</text>
+              <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
+            </block>
           </view>
           <view class="achieve-detail">
             <text class="achieve-type">{{item.type}}</text>
@@ -24,8 +30,15 @@
   <view class="section-title">排行榜</view>
   <view class="leaderboard-list">
     <block wx:for="{{leaderboard}}" wx:key="id">
-      <view class="leaderboard-item">
-        <text class="rank">{{index + 1}}.</text>
+      <view class="leaderboard-item {{index < 3 ? 'top' + (index+1) : ''}} {{item.isSelf ? 'self' : ''}}">
+        <view class="rank-wrap">
+          <text class="rank">
+            <text wx:if="{{index === 0}}">🥇</text>
+            <text wx:elif="{{index === 1}}">🥈</text>
+            <text wx:elif="{{index === 2}}">🥉</text>
+            <text wx:else>{{index + 1}}.</text>
+          </text>
+        </view>
         <text class="user">{{item.name}}</text>
         <text class="score">成就点：{{item.score}}</text>
       </view>
@@ -34,10 +47,29 @@
 
   <view class="section-title">语音激励</view>
   <view class="voice-section">
-    <view class="voice-header">
-      <text class="voice-text">{{voiceText}}</text>
-      <button class="voice-refresh" bindtap="refreshVoice">🔄</button>
+    <view class="voice-tabs">
+      <view class="voice-tab {{tab === 'all' ? 'active' : ''}}" data-tab="all" bindtap="onTabChange">全部</view>
+      <view class="voice-tab {{tab === 'liked' ? 'active' : ''}}" data-tab="liked" bindtap="onTabChange">我的收藏</view>
     </view>
-    <button class="voice-btn" bindtap="playVoice">播放语音激励</button>
+    <swiper class="voice-swiper" current="{{swiperIndex}}" bindchange="onSwiperChange" circular="true">
+      <block wx:for="{{tab === 'liked' ? likedVoiceTexts : voiceTexts}}" wx:key="index">
+        <swiper-item>
+          <view class="voice-swiper-item">
+            <text class="voice-text {{voiceTextAnim}}" selectable="true" bindlongpress="copyVoice">{{item}}</text>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+    <view class="voice-btn-row">
+      <button class="voice-btn {{isPlaying ? 'playing' : ''}}" bindtap="playVoice">{{isPlaying ? '播放中...' : '播放'}}</button>
+      <button class="voice-like-btn" bindtap="likeVoice">{{likedVoiceTexts && likedVoiceTexts.includes(voiceText) ? '取消收藏' : '收藏'}}</button>
+      <button class="voice-copy-btn" bindtap="copyVoice">复制</button>
+      <button class="voice-share-btn" bindtap="shareVoice">分享</button>
+      <button class="voice-autoplay-btn" bindtap="toggleAutoPlay">{{autoPlay ? '停止轮播' : '自动轮播'}}</button>
+    </view>
+    <view class="voice-add-row">
+      <input class="voice-add-input" placeholder="添加你的专属激励语" value="{{addInput}}" bindinput="onInputChange" maxlength="30" />
+      <button class="voice-add-btn" bindtap="addVoiceText">添加</button>
+    </view>
   </view>
 </view> 
