@@ -60,6 +60,9 @@ Page({
       '适度的力量训练有助于提高基础代谢率。',
       '小的生活习惯改变可以带来长期效果。'
     ],
+    tip1: '',
+    tip2: '',
+
     needRefresh: false,         // 是否需要刷新数据
     pageReady: false, // 标记页面是否准备好
     showWeightHistoryDialog: false, // 是否显示体重历史记录对话框
@@ -84,6 +87,7 @@ Page({
     ]
   },
 
+  
    // 显示弹窗：根据点击的索引获取对应内容
    showPopup(e) {
     const index = e.currentTarget.dataset.index; // 获取轮播项的索引
@@ -102,6 +106,7 @@ Page({
 
   onLoad: function () {
     console.log('首页加载');
+    
     
     // 标记页面已准备好
     this.setData({
@@ -132,6 +137,25 @@ Page({
     } catch(e) {
       console.error('首页加载错误:', e);
     }
+    this.getRandomTips();
+  },
+
+  // 封装获取随机小贴士的方法
+  getRandomTips() {
+    const tipsArr = this.data.healthTips;
+    const len = tipsArr.length;
+    // 生成第一个随机索引
+    const index1 = Math.floor(Math.random() * len);
+    // 生成第二个随机索引，确保和第一个不同
+    let index2 = Math.floor(Math.random() * len);
+    while (index2 === index1) {
+      index2 = Math.floor(Math.random() * len);
+    }
+    // 根据索引获取对应小贴士内容并更新数据
+    this.setData({
+      tip1: tipsArr[index1],
+      tip2: tipsArr[index2]
+    });
   },
   
   onShow: function() {

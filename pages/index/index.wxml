@@ -134,10 +134,16 @@
     </view>
 
     <!-- 每日健康小贴士 -->
-    <view class="daily-tip card" style="margin-bottom: 70px;">
-      <view class="card-title">每日健康小贴士</view>
-      <view class="tip-content">{{currentTip}}</view>
-    </view>
+    
+    <view class="card-title">每日健康小贴士</view>
+      <view class="daily-tip card" style="margin-bottom: 20px; background: linear-gradient(45deg, rgba(255, 235, 59, 0.5), rgba(255, 193, 7, 0.4));">
+        <view class="tip-image"><image class="tip-image" src="/images/爱心1.png"></image></view>
+        <view class="tip-content">{{tip1}}</view>
+      </view>
+      <view class="daily-tip card" style="margin-bottom: 70px;background: linear-gradient(45deg, rgba(255, 235, 59, 0.5), rgba(255, 193, 7, 0.4))">
+        <view class="tip-image"><image class="tip-image " src="/images/健康1.png"></image></view>
+        <view class="tip-content">{{tip2}}</view>
+      </view>
 
     <!-- 体重记录对话框 -->
     <view class="dialog-mask" wx:if="{{showWeightDialog}}">
