@@ -8,22 +8,280 @@
 /* 头部样式 */
 .header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 20rpx 0;
+  padding: 40rpx 0;
+  margin-bottom: 30rpx;
+  background-color: #ffffff;
   border-radius: 12rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
 }
-
 .avatar {
-  width: 120rpx;
-  height: 120rpx;
+  width: 150rpx;
+  height: 150rpx;
   border-radius: 75rpx;
-  margin-right: 30rpx;
+  margin-bottom: 20rpx;
+  border: 4rpx solid #f0f0f0;
 }
 
 .nickname {
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: bold;
   color: #333333;
+  position: relative;
+  text-align: center;
+}
+.nickname::after {
+  content: '';
+  position: absolute;
+  bottom: -6rpx;
+  left: 0;
+  width: 100%;
+  height: 2rpx;
+  background-color: #cccccc;
+}
+.tuichu {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 10rpx 36rpx;
+  color: #ff4d4f;
+  background: #fff0f0;
+  border: 1rpx solid #ff4d4f;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+.tuichu:active {
+  background: #ff4d4f;
+  color: #fff;
+}
+.edit {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 10rpx 36rpx;
+  color: #07c160;
+  background: #e6f9f0;
+  border: 1rpx solid #07c160;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+.edit:active {
+  background: #07c160;
+  color: #fff;
+}
+
+/* 授权弹窗 */
+.userInfo_tank_bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.3;
+  background: #000;
+  z-index: 666;
+}
+
+.userInfo_tank {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  width: 80vw;           /* 或 max-width: 600rpx; */
+  max-width: 600rpx;
+  border-radius: 20rpx;
+  padding: 40rpx 20rpx;
+  box-sizing: border-box;
+  z-index: 999999;
+  box-shadow: 0 8rpx 32rpx rgba(0,0,0,0.18);
+}
+
+.transfromjoin {
+  transition: all 0.3s;
+  margin-bottom: 0;
+}
+
+.transfromout {
+  transition: all 0.3s;
+  margin-bottom: -700rpx;
+}
+
+.avatar_url {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.tank_content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  height: 100rpx;
+}
+
+.tank_content text {
+  color: #787376;
+}
+
+.tank_content input {
+  width: 80%;
+  text-align: right;
+}
+
+.tank_title {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 30rpx;
+  font-weight: 700;
+}
+
+.confirm_button {
+  display: flex;
+  margin: 50rpx 0;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm_button view {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+}
+
+.pos_photo {
+  position: absolute;
+  bottom: 0;
+  right: -10rpx;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pos_photo text {
+  font-size: 25rpx !important;
+  color: #fff;
+}
+
+.avatar {
+  position: relative;
+}
+
+.confirm_button view button {
+  width: 90%;
+}
+
+.default_button {
+  width: none !important;
+  margin: 0 !important;
+  padding: 10rpx 20rpx !important;
+  width: 260rpx !important;
+  font-weight: 600 !important;
+  font-size: 32rpx !important;
+}
+
+.avatar_button {
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 80rpx !important;
+  height: 80rpx !important;
+  border-radius: 50% !important;
+  font-size: 32rpx !important;
+  overflow: visible !important;
+}
+
+/* 组合式登录样式 */
+.login-option {
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+
+.login-option.primary {
+  margin-bottom: 40rpx;
+}
+
+.login-option.secondary {
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.login-option button {
+  width: 100% !important;
+  height: 100rpx !important;
+  border-radius: 50rpx !important;
+  font-size: 32rpx !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.login-option button:active {
+  transform: scale(0.98) !important;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.15) !important;
+}
+
+.wechat-login-btn {
+  background: linear-gradient(135deg, #07c160, #00a854) !important;
+  color: #ffffff !important;
+}
+
+.phone-login-btn {
+  background: linear-gradient(135deg, #1890ff, #096dd9) !important;
+  color: #ffffff !important;
+}
+
+.manual-login-btn {
+  background: linear-gradient(135deg, #722ed1, #531dab) !important;
+  color: #ffffff !important;
+}
+
+.guest-login-btn {
+  background: linear-gradient(135deg, #faad14, #d48806) !important;
+  color: #ffffff !important;
+}
+
+.login-icon {
+  width: 40rpx;
+  height: 40rpx;
+  margin-right: 20rpx;
+}
+
+.login-desc {
+  font-size: 24rpx;
+  color: #999999;
+  margin-top: 10rpx;
+  display: block;
+}
+
+.login-footer {
+  margin-top: 40rpx;
+  text-align: center;
+  border-top: 1rpx solid #f0f0f0;
+  padding-top: 30rpx;
+}
+
+.privacy-tip {
+  font-size: 24rpx;
+  color: #999999;
+  line-height: 1.5;
 }
 
 /* 统计部分样式 */
@@ -815,4 +1073,22 @@
 }
 .button:active {
   transform: scale(0.96);
+}
+
+.edit-profile-btn {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 10rpx 36rpx;
+  color: #07C160;
+  background: #f0fff0;
+  border: 1rpx solid #07C160;
+  border-radius: 32rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+.edit-profile-btn:active {
+  background: #07C160;
+  color: #fff;
 } 

@@ -2,7 +2,12 @@
 App({
   onLaunch: function() {
     console.log('应用启动');
-    
+     //云开发初始化
+     wx.cloud.init({
+      //把env替换成你自己的云开发环境id
+      env: 'cloud1-6g0qn8fo7e746837',
+      traceUser: true
+    })
     // 添加全局TabBar状态变量和操作函数
     this.tabChangeHandlers = [];
     
