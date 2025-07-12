@@ -30,7 +30,7 @@
 }
 
 /* 图片样式：确保填满容器且不变形 */
-.imgcontent image {
+.imgcontent .tabbar-image {
   width: 100%; /* 图片宽度充满容器 */
   height: 100%; /* 图片高度充满容器 */
   object-fit: contain; /* 保持图片比例，完整显示在容器内 */

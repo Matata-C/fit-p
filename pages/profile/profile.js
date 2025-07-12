@@ -193,16 +193,22 @@ async onWechatLogin() {
     wx.showLoading({ title: '正在登录', mask: true });
 
     // 1. 获取 openid
+    console.log('开始调用云函数login...');
     const loginRes = await wx.cloud.callFunction({ name: 'login' });
+    console.log('云函数login返回结果:', loginRes);
+    
     const openid = loginRes.result.openid;
+    console.log('获取到的openid:', openid);
     
     if (!openid) {
       throw new Error('获取用户openid失败');
     }
 
     // 2. 查询数据库是否有该用户
+    console.log('开始查询数据库...');
     const db = wx.cloud.database();
     const userRes = await db.collection('user2').where({ openid }).get();
+    console.log('数据库查询结果:', userRes);
 
     // 3. 使用微信用户信息
     const wechatUserInfo = userProfile.userInfo;
@@ -218,10 +224,12 @@ async onWechatLogin() {
 
     if (userRes.data.length === 0) {
       // 新用户，注册
+      console.log('开始注册新用户...');
       await db.collection('user2').add({ data: userInfo });
       console.log('微信授权注册成功');
     } else {
       // 已有用户，更新信息
+      console.log('开始更新用户信息...');
       await db.collection('user2').where({ openid }).update({
         data: { 
           avatarUrl: wechatUserInfo.avatarUrl,
@@ -255,17 +263,24 @@ async onWechatLogin() {
     wx.hideLoading();
     console.error('微信授权登录失败:', err);
     
+    // 显示详细错误信息
+    let errorMsg = '登录失败，请重试';
     if (err.errMsg && err.errMsg.includes('getUserProfile:fail')) {
-      wx.showToast({ 
-        title: '用户取消授权', 
-        icon: 'none' 
-      });
-    } else {
-      wx.showToast({ 
-        title: '登录失败，请重试', 
-        icon: 'error' 
-      });
+      errorMsg = '用户取消授权';
+    } else if (err.message && err.message.includes('openid')) {
+      errorMsg = '获取用户身份失败，请检查网络';
+    } else if (err.message && err.message.includes('cloud')) {
+      errorMsg = '云服务连接失败，请检查网络';
+    } else if (err.errMsg && err.errMsg.includes('cloud')) {
+      errorMsg = '云函数调用失败，请检查云开发环境';
     }
+    
+    wx.showModal({
+      title: '登录失败',
+      content: `错误详情：${err.message || err.errMsg || '未知错误'}\n\n请检查：\n1. 网络连接\n2. 云开发环境\n3. 云函数是否部署`,
+      showCancel: false,
+      confirmText: '确定'
+    });
   }
 },
 
@@ -335,18 +350,25 @@ async submit() {
 
   try {
     // 1. 获取 openid
+    console.log('开始调用云函数login...');
     const loginRes = await wx.cloud.callFunction({ name: 'login' });
+    console.log('云函数login返回结果:', loginRes);
+    
     const openid = loginRes.result.openid;
+    console.log('获取到的openid:', openid);
     
     if (!openid) {
       throw new Error('获取用户openid失败');
     }
 
     // 2. 查询数据库是否有该用户
+    console.log('开始查询数据库...');
     const db = wx.cloud.database();
     const userRes = await db.collection('user2').where({ openid }).get();
+    console.log('数据库查询结果:', userRes);
 
     // 3. 上传头像到云存储
+    console.log('开始上传头像...');
     let tempPath = this.data.avatarUrl;
     let suffix = /\.[^\.]+$/.exec(tempPath) ? /\.[^\.]+$/.exec(tempPath)[0] : '.png';
     const uploadRes = await wx.cloud.uploadFile({
@@ -354,6 +376,7 @@ async submit() {
       filePath: tempPath
     });
     let avatarUrl = uploadRes.fileID;
+    console.log('头像上传成功，fileID:', avatarUrl);
 
     let userInfo = {
       openid,
@@ -365,10 +388,12 @@ async submit() {
 
     if (userRes.data.length === 0) {
       // 新用户，注册
+      console.log('开始注册新用户...');
       await db.collection('user2').add({ data: userInfo });
       console.log('新用户注册成功');
     } else {
       // 已有用户，更新头像昵称
+      console.log('开始更新用户信息...');
       await db.collection('user2').where({ openid }).update({
         data: { 
           avatarUrl, 
@@ -401,14 +426,24 @@ async submit() {
     wx.hideLoading();
     console.error('登录失败:', err);
     
-    // 根据错误类型显示不同提示
-    if (err.message.includes('openid')) {
-      wx.showToast({ title: '登录失败，请重试', icon: 'error' });
-    } else if (err.message.includes('upload')) {
-      wx.showToast({ title: '头像上传失败', icon: 'error' });
-    } else {
-      wx.showToast({ title: '网络错误，请检查网络连接', icon: 'error' });
+    // 显示详细错误信息
+    let errorMsg = '登录失败，请重试';
+    if (err.message && err.message.includes('openid')) {
+      errorMsg = '获取用户身份失败，请检查网络';
+    } else if (err.message && err.message.includes('upload')) {
+      errorMsg = '头像上传失败，请检查网络';
+    } else if (err.message && err.message.includes('cloud')) {
+      errorMsg = '云服务连接失败，请检查网络';
+    } else if (err.errMsg && err.errMsg.includes('cloud')) {
+      errorMsg = '云函数调用失败，请检查云开发环境';
     }
+    
+    wx.showModal({
+      title: '登录失败',
+      content: `错误详情：${err.message || err.errMsg || '未知错误'}\n\n请检查：\n1. 网络连接\n2. 云开发环境\n3. 云函数是否部署`,
+      showCancel: false,
+      confirmText: '确定'
+    });
   }
 },
 
