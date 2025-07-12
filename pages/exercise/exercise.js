@@ -5,9 +5,9 @@ Page({
   data: {
     exerciseName: '',             
     caloriesBurned: '',            
-    duration: '',                  
+    duration: '',                  // 统一用 duration
     exerciseRecords: [],          
-    todayTotalCalories: 0,         
+    todayTotalCalories: 0,         // 统一用 todayTotalCalories
     showAddDialog: false,         
     showCommonExercises: false,  
     commonExercises: [
@@ -40,9 +40,8 @@ Page({
       }
       let todayRecords = exerciseRecords[today]
       let totalCalories = 0
-      
       todayRecords.forEach(record => {
-        totalCalories += record.caloriesBurned || 0
+        totalCalories += Number(record.caloriesBurned) || 0
       })
       this.setData({
         exerciseRecords: todayRecords,
@@ -109,7 +108,7 @@ Page({
       exercise => exercise.name === exerciseName
     )
     
-    if (selectedExercise && e.detail.value) {
+    if (selectedExercise && this.data.duration) {
       this.calculateCalories(selectedExercise.caloriesPerHour)
     }
   },
@@ -130,16 +129,14 @@ Page({
       });
       return;
     }
-    
-    if (!this.data.exerciseMinutes || this.data.exerciseMinutes <= 0) {
+    if (!this.data.duration || Number(this.data.duration) <= 0) {
       wx.showToast({
         title: '请输入有效的运动时间',
         icon: 'none'
       });
       return;
     }
-    
-    if (!this.data.caloriesBurned || this.data.caloriesBurned <= 0) {
+    if (!this.data.caloriesBurned || Number(this.data.caloriesBurned) <= 0) {
       wx.showToast({
         title: '请输入有效的消耗热量',
         icon: 'none'
@@ -149,23 +146,22 @@ Page({
     const newRecord = {
       id: Date.now().toString(), 
       name: this.data.exerciseName,
-      minutes: this.data.exerciseMinutes,
+      duration: this.data.duration,
       caloriesBurned: this.data.caloriesBurned,
       time: new Date().toLocaleTimeString()
     };
     const updatedRecords = [...this.data.exerciseRecords, newRecord];
     this.setData({
       exerciseRecords: updatedRecords,
-      totalCaloriesBurned: this.calculateTotalCalories(updatedRecords),
-      showExerciseDialog: false,
+      todayTotalCalories: this.calculateTotalCalories(updatedRecords),
+      showAddDialog: false,
       exerciseName: '',
-      exerciseMinutes: '',
+      duration: '',
       caloriesBurned: ''
     });
     this.saveRecordsToStorage(updatedRecords);
     this.updateHomeTheoreticalConsumption();
     this.updateHomeActualConsumption();
-    
     wx.showToast({
       title: '运动记录已保存',
       icon: 'success'
@@ -173,7 +169,6 @@ Page({
   },
   deleteExercise: function(e) {
     const recordId = e.currentTarget.dataset.id;
-    
     wx.showModal({
       title: '确认删除',
       content: '确定要删除这条运动记录吗？',
@@ -182,12 +177,11 @@ Page({
           const updatedRecords = this.data.exerciseRecords.filter(record => record.id !== recordId);
           this.setData({
             exerciseRecords: updatedRecords,
-            totalCaloriesBurned: this.calculateTotalCalories(updatedRecords)
+            todayTotalCalories: this.calculateTotalCalories(updatedRecords)
           });
           this.saveRecordsToStorage(updatedRecords);
           this.updateHomeTheoreticalConsumption();
           this.updateHomeActualConsumption();
-          
           wx.showToast({
             title: '记录已删除',
             icon: 'success'
@@ -282,5 +276,24 @@ Page({
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
     const day = date.getDate().toString().padStart(2, '0')
     return `${year}-${month}-${day}`
+  },
+  // 保存运动记录到本地存储
+  saveRecordsToStorage: function(records) {
+    try {
+      const today = this.getCurrentDateString();
+      let allRecords = wx.getStorageSync('exerciseRecords') || {};
+      allRecords[today] = records;
+      wx.setStorageSync('exerciseRecords', allRecords);
+    } catch (e) {
+      console.error('保存运动记录失败', e);
+    }
+  },
+  // 计算总消耗千卡
+  calculateTotalCalories: function(records) {
+    let total = 0;
+    records.forEach(item => {
+      total += Number(item.caloriesBurned) || 0;
+    });
+    return total;
   }
 }) 

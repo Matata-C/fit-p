@@ -39,7 +39,7 @@ function initTabBarForPage(pageIndex) {
   // 延迟设置，确保TabBar组件已经加载
   setTimeout(() => {
     setSelectedTab(pageIndex);
-  }, 100);
+  }, 1000);
 }
 
 /**
@@ -54,6 +54,7 @@ function switchTab(index) {
   const pages = [
     '/pages/index/index',
     '/pages/analysis/analysis',
+    '/pages/achievement/achievement',
     '/pages/profile/profile'
   ];
   
@@ -68,4 +69,4 @@ module.exports = {
   setSelectedTab,
   initTabBarForPage,
   switchTab
-}; 
+};

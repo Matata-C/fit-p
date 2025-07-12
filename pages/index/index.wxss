@@ -1293,7 +1293,7 @@
   width: 100%;
   height: 90rpx;
   line-height: 90rpx;
-  background-color: #FFD700;
+  background-color: #FFF700;
   color: #fff;
   text-align: center;
   border-radius: 45rpx;
@@ -1303,19 +1303,7 @@
   box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
 }
 
-/* 按钮公共样式 */
-.action-btn {
-  flex: 1;
-  margin: 0 10rpx;
-  height: 90rpx;
-  line-height: 90rpx;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 /* 对话框内容 */
 .dialog-content input {
@@ -1674,6 +1662,8 @@
 }
 
 .weight-record-btn {
+  width: 100%;
+  height: 90rpx;
   background-color: #FFD700;
   color: rgb(51, 51, 51);
   text-align: center;
@@ -1761,5 +1751,24 @@
   text-align: center;
   color: #999;
   font-size: 28rpx;
+}
+
+/* 找到原样式，替换为以下代码 */
+.weight-record-btn, .weight-history-btn {
+  /* 统一基础样式 */
+  flex: 1; /* 保持在flex容器中平均分配宽度 */
+  height: 90rpx; /* 统一高度 */
+  line-height: 90rpx; /* 文字垂直居中 */
+  border-radius: 45rpx; /* 统一圆角 */
+  font-size: 32rpx; /* 统一字体大小 */
+  font-weight: bold; /* 统一字体粗细 */
+  margin: 0 10rpx; /* 统一左右间距 */
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1); /* 统一阴影 */
+  background-color: #FFD700; /* 统一背景色 */
+  color: #333; /* 统一文字颜色 */
+  text-align: center; /* 文字水平居中 */
+  display: flex; /* 启用flex布局（确保对齐一致） */
+  align-items: center; /* 垂直居中 */
+  justify-content: center; /* 水平居中 */
 }
 

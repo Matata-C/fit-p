@@ -24,6 +24,12 @@ Component({
         // 如果无法获取当前页面，默认选中第一个tab
         this.setData({ selected: 0 });
       }
+
+      // 注册TabBar状态更新回调
+      if (!app.tabChangeHandlers) app.tabChangeHandlers = [];
+      app.tabChangeHandlers.push((index) => {
+        this.setData({ selected: index });
+      });
     } catch (error) {
       console.error('TabBar attached error:', error);
       // 出错时默认选中第一个tab
@@ -32,10 +38,11 @@ Component({
   },
   methods: {
     switchTab(e) {
-      const idx = e.currentTarget.dataset.index;
-      const pagePath = this.data.list[idx].pagePath;
-      wx.switchTab({ url: pagePath });
-      this.setData({ selected: idx });
-    }
+    const idx = e.currentTarget.dataset.index;
+    const pagePath = this.data.list[idx].pagePath;
+    wx.switchTab({ url: pagePath });
+    this.setData({ selected: idx });
+    tabBarManager.setSelectedTab(idx);
   }
-}); 
+  }
+});

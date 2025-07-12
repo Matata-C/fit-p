@@ -1,0 +1,65 @@
+<view class="container">
+  <!-- 顶部导航栏 -->
+  <view class="header">
+    <view class="header-left">
+      <view class="dropdown">
+        <text class="dropdown-text" style="margin-left: 6px;">减肥打卡记录</text>
+      </view>
+    </view>
+    <view class="header-right">
+      <image class="chicken-icon" src="/images/柯基.png" style="margin-right: 10px;"></image>
+    </view>
+  </view>
+
+  <!-- 日历主体 -->
+  <view class="calendar-wrapper">
+    <!-- 年月选择器 -->
+    <view class="calendar-header">
+      <image class="arrow-left" src="/images/去返回(Go Back)_爱给网_aigei_com.png" bindtap="prevMonth"></image>
+      <text class="current-date">{{year}}年{{month}}月</text>
+      <image class="arrow-right" src="/images/去返回右(Go Back)_爱给网_aigei_com.png" bindtap="nextMonth"></image>
+    </view>
+
+    <!-- 星期标题 -->
+    <view class="weekdays">
+      <text class="weekday">日</text>
+      <text class="weekday">一</text>
+      <text class="weekday">二</text>
+      <text class="weekday">三</text>
+      <text class="weekday">四</text>
+      <text class="weekday">五</text>
+      <text class="weekday">六</text>
+    </view>
+
+    <!-- 日期网格 -->
+    <view class="days-grid">
+      <!-- 上月日期（灰色） -->
+      <block wx:for="{{prevMonthDays}}" wx:key="index">
+        <view class="day prev-month-day">
+          <text>{{item}}</text>
+        </view>
+      </block>
+
+      <!-- 本月日期 -->
+      <block wx:for="{{currentMonthDays}}" wx:key="index">
+        <view class="day {{item.isToday ? 'today' : ''}} {{item.isChecked ? 'checked' : ''}}" 
+              data-date="{{item.date}}" bindtap="selectDate">
+          <text>{{item.day}}</text>
+          <view class="check-icon" wx:if="{{item.isChecked}}">√</view>
+        </view>
+      </block>
+
+      <!-- 下月日期（灰色） -->
+      <block wx:for="{{nextMonthDays}}" wx:key="index">
+        <view class="day next-month-day">
+          <text>{{item}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <!-- 底部统计 -->
+  <view class="stats">
+    <text class="stats-text">本月已打卡: {{checkedCount}}天</text>
+  </view>
+</view>

@@ -58,17 +58,20 @@
       <!-- 运动小贴士 -->
       <view class="cute-yellow-border tips-section">
         <view class="tip-title">
-          <text class="tip-icon">💡</text> 运动小贴士
+          <text class="tip-icon">💡</text> <text>运动小贴士</text>
         </view>
         <view class="tip-content">
-          <view class="tip-item">
-            <text class="tip-text">适量运动有助于身心健康，建议每周至少进行150分钟中等强度运动。</text>
+          <view class="tip-item tip-card">
+            <text class="tip-item-title">坚持锻炼 <text class="tip-emoji">🌟</text></text>
+            <text class="tip-item-text">适量运动有助于身心健康，建议每周至少进行150分钟中等强度运动。</text>
           </view>
-          <view class="tip-item">
-            <text class="tip-text">运动前做好热身，运动后注意拉伸，预防受伤。</text>
+          <view class="tip-item tip-card">
+            <text class="tip-item-title">热身拉伸 <text class="tip-emoji">🙆‍♂️</text></text>
+            <text class="tip-item-text">运动前做好热身，运动后注意拉伸，预防受伤。</text>
           </view>
-          <view class="tip-item">
-            <text class="tip-text">保持运动习惯，选择自己喜欢的运动方式更容易坚持哦！</text>
+          <view class="tip-item tip-card">
+            <text class="tip-item-title">享受运动 <text class="tip-emoji">🎉</text></text>
+            <text class="tip-item-text">保持运动习惯，选择自己喜欢的运动方式更容易坚持哦！</text>
           </view>
         </view>
       </view>
