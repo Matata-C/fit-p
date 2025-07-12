@@ -373,3 +373,30 @@
   font-weight: bold;
   letter-spacing: 2rpx;
 } 
+
+.tip-card {
+  background: #fff3b0;
+  border-radius: 16px;
+  padding: 18rpx 20rpx 12rpx 20rpx;
+  margin-bottom: 18rpx;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(255, 214, 0, 0.08);
+}
+.tip-item-title {
+  font-weight: bold;
+  color: #ffb300;
+  font-size: 28rpx;
+  margin-bottom: 6rpx;
+  display: flex;
+  align-items: center;
+}
+.tip-emoji {
+  margin-left: 8rpx;
+  font-size: 26rpx;
+}
+.tip-item-text {
+  color: #bfa100;
+  font-size: 24rpx;
+  line-height: 1.7;
+} 
