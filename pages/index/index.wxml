@@ -26,7 +26,7 @@
       <image class="arrow-right" src="/images/去返回右(Go Back)_爱给网_aigei_com.png"></image> <!-- 需替换实际箭头图标路径 -->
     </view>
     <view class="header-right">
-      <image class="calendar-icon" src="/images/日历_爱给网_aigei_com.png"></image> <!-- 需替换实际日历图标路径 -->
+      <image class="calendar-icon" src="/images/日历_爱给网_aigei_com.png" bindtap="goToCalendar"></image> <!-- 需替换实际日历图标路径 -->
     </view>
   </view>
 
@@ -87,7 +87,7 @@
     <!-- 添加体重历史记录按钮，放在体重记录按钮旁边 -->
     <view class="weight-buttons">
       <view class="weight-record-btn" bindtap="showWeightDialog">记录体重</view>
-      <view class="weight-history-btn" bindtap="showWeightHistory" style="padding-top: 13px;font-weight: 700;border-radius: 45rpx;">历史记录</view>
+      <view class="weight-history-btn" bindtap="showWeightHistory">历史记录</view>
     </view>
 
     <!-- 显示今日体重记录 -->
