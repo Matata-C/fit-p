@@ -1,0 +1,46 @@
+<!-- pages/userInfo/userInfo.wxml -->
+<view class="container">
+  <view class="section">
+    <view class="info-item">
+      <text class="label">头像</text>
+      <image class="avatar" src="{{avatarUrl || '/images/default-avatar.svg'}}"></image>
+    </view>
+    <view class="info-item">
+      <text class="label">昵称</text>
+      <text class="value">{{nickName}}</text>
+    </view>
+    <view class="info-item">
+      <text class="label">ID</text>
+      <text class="value">{{ID}}</text>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="info-item">
+      <text class="label">性别</text>
+      <picker mode="selector" range="{{genderRange}}" bindchange="onGenderChange">
+        <view class="picker-view">
+          <text>{{gender}}</text>
+        </view>
+      </picker>
+    </view>
+    <view class="info-item">
+      <text class="label">签名</text>
+      <input class="edit-input" value="{{signature}}" bindinput="onSignatureInput" bindblur="saveSignature" placeholder="点击编辑签名" confirm-type="done" />
+    </view>
+    <view class="info-item">
+      <text class="label">年龄</text>
+      <input class="edit-input" type="digit" value="{{age}}" bindinput="onAgeInput" placeholder="请输入年龄" confirm-type="done" bindconfirm="saveAge" />
+    </view>
+    <view class="info-item">
+      <text class="label">地区</text>
+      <text class="value">{{region}}</text>
+    </view>
+  </view>
+
+  <button class="logout-btn" bindtap="onLogout">退出登录</button>
+  <view class="bottom-info">
+    <text class="desc">Pick记账免费为用户提供安全高效的云同步</text>
+    <text class="delete-account" bindtap="onDeleteAccount">注销账号</text>
+  </view>
+</view>
