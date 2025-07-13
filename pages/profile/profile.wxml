@@ -1,30 +1,20 @@
 <!--profile.wxml-->
 <view class="container">
-  <!-- <view class="header" bindtap="onUserInfoTap">
-  <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-  <view class="nickname">{{userInfo.nickName}}</view>
-  <view class="login-tip" wx:if="{{!isLoggedIn}}">(点击登录)</view>
-  </view> -->
   <view class="header">
     <!-- 未登录 -->
     <image wx:if="{{!userInfo.avatarUrl}}" bindtap="onUserInfoTap" class="avatar" src="/images/default-avatar.svg" mode="aspectFill"></image>
     <view wx:if="{{!userInfo.avatarUrl}}" bindtap="onUserInfoTap" class="nickname">点击登录</view>
     <!-- 已登录 -->
-    <image wx:if="{{userInfo.avatarUrl}}"  class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-    <view wx:if="{{userInfo.avatarUrl}}"  >
+    <image wx:if="{{userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <view wx:if="{{userInfo.avatarUrl}}">
       <view class="nickname">{{userInfo.nickName}}</view>
-       <!-- 登录后显示编辑资料按钮 -->
-       <view style="text-align:center;margin:20rpx 0;">
-        <text class="edit-profile-btn" bindtap="onEditProfile">编辑资料</text>
+      <!-- 登录后显示编辑资料按钮 -->
+      <view style="text-align:center;margin:20rpx 0;">
+        <text class="edit-profile-btn" bindtap="onEditProfile">查看资料</text>
       </view>
-      <view style="text-align:center;margin:16rpx 0;">
-        <text class="tuichu" bindtap="tuichu">退出登录</text>
-      </view>
-     
     </view>
   </view>
  
-  
   <!-- 组合式登录弹框 -->
   <view wx:if="{{userInfo_tank}}">
     <view class="userInfo_tank_bg" bindtap="closeTank" wx:if="{{userInfo_tank}}"></view>
@@ -94,35 +84,6 @@
     </view>
   </view>
 
-  
-
-  <!-- 编辑资料弹窗 -->
-  <view wx:if="{{showEditProfile}}">
-    <view class="userInfo_tank_bg" bindtap="closeEditProfile"></view>
-    <view class="userInfo_tank transfromjoin">
-      <view class="tank_title">
-        <text>编辑资料</text>
-      </view>
-      <view class="tank_content">
-        <text>头像：</text>
-        <button class="avatar_button" open-type="chooseAvatar" bind:chooseavatar="onEditChooseAvatar">
-          <image class="avatar_url" src="{{editAvatarUrl || userInfo.avatarUrl}}"></image>
-        </button>
-      </view>
-      <view class="tank_content">
-        <text>昵称：</text>
-        <input value="{{editNickName || userInfo.nickName}}" bindinput="onEditNickNameInput" placeholder="请输入昵称" />
-      </view>
-      <view class="confirm_button">
-        <view>
-          <button bindtap="closeEditProfile">取消</button>
-        </view>
-        <view>
-          <button bindtap="onEditProfileSubmit" type="primary">保存</button>
-        </view>
-      </view>
-    </view>
-  </view>
   <view class="stats-section">
     <view class="stats-title">我的统计</view>
     <view class="stats-row">
@@ -235,24 +196,6 @@
       <view class="menu-item-left">
         <image class="menu-icon" src="/images/日历.svg" mode="aspectFit"></image>
         <text>打卡日历</text>
-      </view>
-      <view class="menu-item-right">
-        <image class="arrow-icon" src="/images/右箭头.svg"></image>
-      </view>
-    </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/account/account">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/钱包.svg" mode="aspectFit"></image>
-        <text>资产账户</text>
-      </view>
-      <view class="menu-item-right">
-        <image class="arrow-icon" src="/images/右箭头.svg"></image>
-      </view>
-    </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/sport/sport">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/跑步.svg" mode="aspectFit"></image>
-        <text>运动管理</text>
       </view>
       <view class="menu-item-right">
         <image class="arrow-icon" src="/images/右箭头.svg"></image>

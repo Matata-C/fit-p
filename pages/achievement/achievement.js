@@ -54,6 +54,8 @@ Page({
     autoPlayTimer: null,
   },
   onLoad() {
+    tabBarManager.initTabBarForPage(2);
+    tabBarManager.setSelectedTab(2);
     console.log('[DEBUG] 成就页面初始化完成');
     console.log('当前数据:', this.data);
   },

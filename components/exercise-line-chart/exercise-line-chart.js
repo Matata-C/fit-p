@@ -122,10 +122,11 @@ Component({
       ctx.lineWidth = 1;
       for (let i = 0; i <= 5; i++) {
         const y = padding + (chartHeight / 5) * i;
-        ctx.beginPath();
-        ctx.moveTo(padding, y);
-        ctx.lineTo(padding + chartWidth, y);
-        ctx.stroke();
+        // 去除横线，只保留y轴数字
+        // ctx.beginPath();
+        // ctx.moveTo(padding, y);
+        // ctx.lineTo(padding + chartWidth, y);
+        // ctx.stroke();
         ctx.fillStyle = '#bbb';
         ctx.font = '12px Arial';
         ctx.textAlign = 'right';

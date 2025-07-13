@@ -31,6 +31,13 @@
   position: relative;
   text-align: center;
 }
+
+.user-info-subtitle {
+  font-size: 24rpx;
+  color: #999;
+  text-align: center;
+  margin-top: 8rpx;
+}
 .nickname::after {
   content: '';
   position: absolute;
