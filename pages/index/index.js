@@ -590,11 +590,31 @@ Page({
         hasTodayWeight: true,
         todayWeight: weight
       });
+
+      try {
+        const today = this.getCurrentDateString();
+        let checkedDates = wx.getStorageSync('checkedDates') || [];
+        // 避免重复添加打卡日期
+        if (!checkedDates.includes(today)) {
+          checkedDates.push(today);
+          wx.setStorageSync('checkedDates', checkedDates);
+          console.log('体重记录同步打卡:', today);
+          
+          this.setData({ checkedCount: checkedDates.length }); 
+        }
+      } catch (e) {
+        console.error('同步打卡日期失败:', e);
+      }
       
       wx.showToast({
         title: '体重记录已保存',
         icon: 'success'
       });
+      const currentPages = getCurrentPages();
+      const calendarPage = currentPages.find(page => page.route === 'pages/calendar/calendar');
+      if (calendarPage) {
+        calendarPage.initCalendar(); // 调用日历页的初始化方法，强制刷新
+      }
     } catch(e) {
       console.error('保存体重记录失败:', e);
       wx.showToast({
