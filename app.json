@@ -9,7 +9,8 @@
         "pages/weightRecord/weightRecord",
         "pages/achievement/achievement",
         "pages/userInfo/userInfo",
-        "pages/calendar/calendar"
+        "pages/calendar/calendar",
+        "pages/about-us/about-us"
     ],
     "window": {
         "backgroundTextStyle": "light",
