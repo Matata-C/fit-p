@@ -1,13 +1,29 @@
 <!-- pages/userInfo/userInfo.wxml -->
 <view class="container">
+  <!-- 顶部操作按钮 -->
+  <view class="header-actions">
+    <view wx:if="{{!isEditing}}" class="edit-btn" bindtap="onStartEdit">编辑</view>
+    <view wx:if="{{isEditing}}" class="action-btns">
+      <view class="cancel-btn" bindtap="onCancelEdit">取消</view>
+      <view class="save-btn" bindtap="onSaveEdit">保存</view>
+    </view>
+  </view>
+
   <view class="section">
     <view class="info-item">
       <text class="label">头像</text>
-      <image class="avatar" src="{{avatarUrl || '/images/default-avatar.svg'}}"></image>
+      <view class="avatar-edit">
+        <button class="avatar-button" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar" disabled="{{!isEditing}}">
+          <view class="avatar-edit-inner">
+            <image class="avatar" src="{{avatarUrl || '/images/default-avatar.svg'}}"></image>
+          </view>
+        </button>
+      </view>
     </view>
     <view class="info-item">
       <text class="label">昵称</text>
-      <text class="value">{{nickName}}</text>
+      <input wx:if="{{isEditing}}" class="edit-input" value="{{nickName}}" bindinput="onNickNameInput" placeholder="请输入昵称" />
+      <text wx:else class="value">{{nickName}}</text>
     </view>
     <view class="info-item">
       <text class="label">ID</text>
@@ -18,23 +34,31 @@
   <view class="section">
     <view class="info-item">
       <text class="label">性别</text>
-      <picker mode="selector" range="{{genderRange}}" bindchange="onGenderChange">
+      <picker wx:if="{{isEditing}}" mode="selector" range="{{genderRange}}" bindchange="onGenderChange">
         <view class="picker-view">
           <text>{{gender}}</text>
         </view>
       </picker>
+      <text wx:else class="value">{{gender}}</text>
     </view>
     <view class="info-item">
       <text class="label">签名</text>
-      <input class="edit-input" value="{{signature}}" bindinput="onSignatureInput" bindblur="saveSignature" placeholder="点击编辑签名" confirm-type="done" />
+      <input wx:if="{{isEditing}}" class="edit-input" value="{{signature}}" bindinput="onSignatureInput" placeholder="点击编辑签名" confirm-type="done" />
+      <text wx:else class="value">{{signature || '暂无签名'}}</text>
     </view>
     <view class="info-item">
       <text class="label">年龄</text>
-      <input class="edit-input" type="digit" value="{{age}}" bindinput="onAgeInput" placeholder="请输入年龄" confirm-type="done" bindconfirm="saveAge" />
+      <input wx:if="{{isEditing}}" class="edit-input" type="digit" value="{{age}}" bindinput="onAgeInput" placeholder="请输入年龄" confirm-type="done" />
+      <text wx:else class="value">{{age || '未设置'}}</text>
     </view>
     <view class="info-item">
       <text class="label">地区</text>
-      <text class="value">{{region}}</text>
+      <picker wx:if="{{isEditing}}" mode="region" bindchange="onRegionChange">
+        <view class="picker-view">
+          <text>{{region}}</text>
+        </view>
+      </picker>
+      <text wx:else class="value">{{region}}</text>
     </view>
   </view>
 

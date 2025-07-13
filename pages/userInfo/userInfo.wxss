@@ -7,6 +7,42 @@
   flex-direction: column;
 }
 
+/* 顶部操作按钮 */
+.header-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 32rpx;
+}
+
+.edit-btn {
+  padding: 16rpx 32rpx;
+  background-color: #FFD700;
+  color: #333;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.action-btns {
+  display: flex;
+  gap: 16rpx;
+}
+
+.cancel-btn {
+  padding: 16rpx 32rpx;
+  background-color: #f5f5f5;
+  color: #666;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.save-btn {
+  padding: 16rpx 32rpx;
+  background-color: #FFD700;
+  color: #333;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
 .section {
   background-color: #fff;
   margin-bottom: 32rpx;
@@ -22,6 +58,7 @@
   justify-content: space-between;
   border-bottom: 2rpx solid #f5f5f5;
   padding: 24rpx 32rpx;
+  background: #fff;
 }
 
 .info-item:last-child {
@@ -46,10 +83,46 @@
   height: 50rpx;
 }
 
+.avatar-edit {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  background: #fff;
+}
+
+.avatar-edit-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: #fff;
+}
+
 .avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 100rpx;
+  height: 100rpx;
   border-radius: 50%;
+  display: block;
+}
+
+.avatar-button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  background: #fff;
+}
+
+.avatar-button::after {
+  border: none;
+}
+
+.avatar-hint {
+  font-size: 22rpx;
+  color: #bbb;
+  margin-top: 10rpx;
+  text-align: right;
 }
 
 .picker-view {
@@ -89,4 +162,11 @@
   font-size: 28rpx;
   color: #999;
   display: block;
+}
+
+.avatar-arrow-img {
+  width: 32rpx;
+  height: 32rpx;
+  margin-top: 10rpx;
+  margin-right: 4rpx;
 }
