@@ -24,15 +24,22 @@
         "miniprogram": {
             "list": [
                 {
-                    "name": "pages/userInfo/userInfo",
-                    "pathName": "pages/userInfo/userInfo",
+                    "name": "pages/about-us/about-us",
+                    "pathName": "pages/about-us/about-us",
+                    "query": "",
+                    "scene": null,
+                    "launchMode": "default"
+                },
+                {
+                    "name": "pages/profile/profile",
+                    "pathName": "pages/profile/profile",
                     "query": "",
                     "launchMode": "default",
                     "scene": null
                 },
                 {
-                    "name": "pages/profile/profile",
-                    "pathName": "pages/profile/profile",
+                    "name": "pages/userInfo/userInfo",
+                    "pathName": "pages/userInfo/userInfo",
                     "query": "",
                     "launchMode": "default",
                     "scene": null
