@@ -5,8 +5,8 @@ Page({
     currentMonthDays: [],
     prevMonthDays: [],
     nextMonthDays: [],
-    checkedCount: 5, // 示例：本月已打卡5天
-    checkedDates: ['2025-07-01', '2025-07-05', '2025-07-10', '2025-07-15', '2025-07-20']
+    checkedDates: [], 
+    checkedCount: 0   // 实时计算
   },
 
   onLoad() {
@@ -19,6 +19,12 @@ Page({
     const year = date.getFullYear();
     const month = date.getMonth() + 1;
     const today = date.getDate();
+
+    const checkedDates = wx.getStorageSync('checkedDates') || [];
+    this.setData({
+      checkedDates,
+      checkedCount: checkedDates.length // 初始化已打卡天数
+  });
     
     this.setData({
       year,
@@ -57,6 +63,8 @@ Page({
         isChecked: this.data.checkedDates.includes(dateStr)
       });
     }
+
+    this.setData({ currentMonthDays });
     
     // 生成下月开始天数
     const nextMonthDaysCount = 42 - (prevMonthDays.length + currentMonthDays.length);
@@ -81,7 +89,7 @@ Page({
       year--;
     }
     this.setData({ year, month });
-    this.generateCalendarData(year, month, this.data.today);
+    this.initCalendar();
   },
 
   // 切换到下月
@@ -93,7 +101,7 @@ Page({
       year++;
     }
     this.setData({ year, month });
-    this.generateCalendarData(year, month, this.data.today);
+    this.initCalendar();
   },
 
   // 选择日期（打卡功能）
