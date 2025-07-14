@@ -148,6 +148,9 @@
   flex: 0 0 calc(50% - 8rpx);
   box-sizing: border-box;
   margin-bottom: 16rpx;
+  border: 1.5px solid #FFD600;
+  padding: 6px 10px;
+  border-radius: 18px;
 }
 .common-name {
   font-size: 16px;
