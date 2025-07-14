@@ -936,6 +936,24 @@ Page({
       
       // 设置数据更新标志
       wx.setStorageSync('dataUpdated', new Date().getTime());
+
+      // 【新增】同步删除日历中对应的打卡记录
+try {
+  // 获取当前删除的日期（即体重记录的日期）
+  const deletedDate = date;
+  // 获取已有的打卡记录
+  let checkedDates = wx.getStorageSync('checkedDates') || [];
+  // 检查该日期是否在打卡记录中，若存在则删除
+  if (checkedDates.includes(deletedDate)) {
+    checkedDates = checkedDates.filter(d => d !== deletedDate);
+    // 保存更新后的打卡记录
+    wx.setStorageSync('checkedDates', checkedDates);
+    console.log(`同步删除日历打卡记录：${deletedDate}`);
+  }
+} catch (e) {
+  console.error('同步删除打卡记录失败:', e);
+}
+
       
       // 通知其他页面刷新数据
       try {
