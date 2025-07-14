@@ -33,7 +33,7 @@
   <!-- 步数卡片 -->
   <view class="step-card">
     <view class="step-info">
-      <text class="step-date">2025/07/09</text>
+      <text class="step-date">{{todayDate}}</text>
       <text class="step-label">今日步数</text>
       <text class="step-number">26447</text>
       <text class="step-slogan">——生命在于运动——</text>
@@ -43,7 +43,7 @@
 
   <!-- 饮食建议区域 -->
   <view class="diet-section">
-    <text class="diet-title">饮食建议</text>
+    <text class="diet-title card-title">饮食建议 <text class="section-icon">🍽️</text></text>
     <!-- 轮播图容器 -->
   <swiper class="diet-swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="3000" duration="500">
     <!-- 轮播项，可根据实际图片数量增减 -->
@@ -110,7 +110,7 @@
 
     <!-- 用户统计 -->
     <view class="stats-card card">
-      <view class="card-title">我的统计</view>
+      <view class="card-title">我的统计 <text class="section-icon">📈</text></view>
       <view class="stats-grid">
         <view class="stat-item">
           <view class="stat-value">{{userStats.days || 0}}</view>
@@ -134,16 +134,11 @@
     </view>
 
     <!-- 每日健康小贴士 -->
-    
-    <view class="card-title">每日健康小贴士</view>
-      <view class="daily-tip card" style="margin-bottom: 20px; background: linear-gradient(45deg, rgba(255, 235, 59, 0.5), rgba(255, 193, 7, 0.4));">
-        <view class="tip-image"><image class="tip-image" src="/images/爱心1.png"></image></view>
-        <view class="tip-content">{{tip1}}</view>
-      </view>
-      <view class="daily-tip card" style="margin-bottom: 70px;background: linear-gradient(45deg, rgba(255, 235, 59, 0.5), rgba(255, 193, 7, 0.4))">
-        <view class="tip-image"><image class="tip-image " src="/images/健康1.png"></image></view>
-        <view class="tip-content">{{tip2}}</view>
-      </view>
+    <view class="daily-tip card" style="margin-bottom: 70px;">
+      <view class="card-title">每日健康小贴士 <text class="section-icon">🦄</text></view>
+      <view class="tip-content">{{currentTip}}</view>
+    </view>
+
 
     <!-- 体重记录对话框 -->
     <view class="dialog-mask" wx:if="{{showWeightDialog}}">

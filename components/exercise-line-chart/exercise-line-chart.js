@@ -164,10 +164,7 @@ Component({
           ctx.beginPath();
           ctx.arc(x, y, 6, 0, Math.PI * 2);
           ctx.fillStyle = colors[idx];
-          ctx.shadowColor = colors[idx];
-          ctx.shadowBlur = 8;
           ctx.fill();
-          ctx.shadowBlur = 0;
         });
       });
     }
