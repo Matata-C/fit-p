@@ -27,8 +27,8 @@
                     "name": "pages/submitFeedback/submitFeedback",
                     "pathName": "pages/submitFeedback/submitFeedback",
                     "query": "",
-                    "scene": null,
-                    "launchMode": "default"
+                    "launchMode": "default",
+                    "scene": null
                 },
                 {
                     "name": "pages/feedback/feedback",
