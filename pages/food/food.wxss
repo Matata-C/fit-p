@@ -19,7 +19,7 @@
 
 .add-button {
   font-size: 28rpx;
-  color: #ff6b6b;
+  color: #FFB300;
   background-color: rgba(255, 107, 107, 0.1);
   padding: 10rpx 20rpx;
   border-radius: 30rpx;
@@ -66,7 +66,7 @@
 
 .food-calories {
   font-size: 32rpx;
-  color: #ff6b6b;
+  color: #FFB300;
   font-weight: 500;
   margin-right: 16rpx;
 }
@@ -99,7 +99,7 @@
 
 .total-value {
   font-size: 32rpx;
-  color: #ff6b6b;
+  color: #FFB300;
   font-weight: bold;
 }
 
@@ -176,7 +176,7 @@
 
 .common-calories {
   font-size: 26rpx;
-  color: #ff6b6b;
+  color: #FFB300;
 }
 
 .input-group {
@@ -234,7 +234,7 @@
 }
 
 .save-button {
-  background-color: #ff6b6b;
+  background-color: #FFB300;
   color: #fff;
 }
 
@@ -255,7 +255,7 @@
 .convert-button {
   height: 80rpx;
   border-radius: 40rpx;
-  background-color: #1aad19;
+  background-color: #FFD600;
   color: #fff;
   font-size: 30rpx;
   display: flex;
@@ -266,7 +266,7 @@
 
 .converted-value {
   font-size: 32rpx;
-  color: #ff6b6b;
+  color: #FFB300;
   font-weight: bold;
   padding: 10rpx 0;
 } 
