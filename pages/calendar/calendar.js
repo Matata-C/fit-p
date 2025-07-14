@@ -6,7 +6,9 @@ Page({
     prevMonthDays: [],
     nextMonthDays: [],
     checkedDates: [], 
-    checkedCount: 0   // 实时计算
+    checkedCount: 0 ,  // 实时计算
+    todayDateStr: ''  // 新增：存储今日日期（yyyy-mm-dd）
+
   },
 
   onLoad() {
@@ -20,10 +22,17 @@ Page({
     const month = date.getMonth() + 1;
     const today = date.getDate();
 
+    const todayDateStr = `${year}-${month.toString().padStart(2, '0')}-${today.toString().padStart(2, '0')}`;
+
+
     const checkedDates = wx.getStorageSync('checkedDates') || [];
     this.setData({
       checkedDates,
-      checkedCount: checkedDates.length // 初始化已打卡天数
+      checkedCount: checkedDates.length, // 初始化已打卡天数
+      year,
+      month,
+      today,
+      todayDateStr  // 保存今日日期字符串
   });
     
     this.setData({
@@ -106,32 +115,37 @@ Page({
 
   // 选择日期（打卡功能）
   selectDate(e) {
-    const { date } = e.currentTarget.dataset;
-    const { currentMonthDays, checkedDates } = this.data;
+    return;
+    // const { date } = e.currentTarget.dataset;
+
+    // const { todayDateStr } = this.data;  // 获取今日日期字符串
     
-    // 更新选中状态
-    const updatedDays = currentMonthDays.map(day => {
-      if (day.date === date) {
-        day.isChecked = !day.isChecked;
-      }
-      return day;
-    });
+
+    // const { currentMonthDays, checkedDates } = this.data;
     
-    // 更新已打卡日期数组
-    let newCheckedDates = [...checkedDates];
-    if (newCheckedDates.includes(date)) {
-      newCheckedDates = newCheckedDates.filter(d => d !== date);
-    } else {
-      newCheckedDates.push(date);
-    }
+    // // 更新选中状态
+    // const updatedDays = currentMonthDays.map(day => {
+    //   if (day.date === date) {
+    //     day.isChecked = !day.isChecked;
+    //   }
+    //   return day;
+    // });
     
-    this.setData({
-      currentMonthDays: updatedDays,
-      checkedDates: newCheckedDates,
-      checkedCount: newCheckedDates.length
-    });
+    // // 更新已打卡日期数组
+    // let newCheckedDates = [...checkedDates];
+    // if (newCheckedDates.includes(date)) {
+    //   newCheckedDates = newCheckedDates.filter(d => d !== date);
+    // } else {
+    //   newCheckedDates.push(date);
+    // }
     
-    // 实际项目中这里应该调用API保存打卡状态
-    console.log(`打卡状态更新: ${date} - ${updatedDays.find(d => d.date === date).isChecked}`);
+    // this.setData({
+    //   currentMonthDays: updatedDays,
+    //   checkedDates: newCheckedDates,
+    //   checkedCount: newCheckedDates.length
+    // });
+    
+    // // 实际项目中这里应该调用API保存打卡状态
+    // console.log(`打卡状态更新: ${date} - ${updatedDays.find(d => d.date === date).isChecked}`);
   }
 });
