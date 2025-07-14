@@ -1,16 +1,53 @@
 <!--pages/submitFeedback/submitFeedback.wxml-->
-<view class="submit-container">
-  <view class="title">Hello</view>
-  <view class="desc">有什么好的建议可以分享下哦～</view>
-  
-  <view class="feedback-item">
-    <textarea class="content" placeholder="请填写反馈内容" bindinput="onContentInput"></textarea>
+<view class="feedback-container">
+  <view class="feedback-header">
+    <view class="title">Hello</view>
+    <view class="subtitle">有什么好的建议可以分享下哦~</view>
   </view>
 
-  <view class="feedback-item">
-    <text class="label">联系电话</text>
-    <input class="phone" placeholder="请输入手机号" bindinput="onPhoneInput"></input>
+  <view class="form-section">
+  <text class="label">选择问题类型</text>
+  <view class="type-group">
+    <button 
+      class="type-btn {{selectedType === item ? 'active' : ''}}" 
+      bindtap="handleTypeSelect" 
+      data-type="{{item}}"
+      wx:for="{{['投诉用户', '功能异常', '体验问题', '其他']}}"
+      wx:key="*this"
+    >{{item}}</button>
+  </view>
   </view>
 
-  <button class="submit-button" bindtap="submitFeedback">提交</button>
+  <view class="form-section">
+    <text class="label">问题描述</text>
+    <textarea 
+      class="desc-textarea" 
+      placeholder="请详细描述你的问题或建议" 
+      bindinput="handleDescInput"
+      maxlength="500"
+    ></textarea>
+    <text class="word-count">{{descLength}}/500</text>
+
+    <view class="upload-section">
+      <view class="upload-item" wx:for="{{uploadImages}}" wx:key="index">
+        <image class="upload-img" src="{{item}}"></image>
+        <icon class="delete-icon" type="clear" size="20" bindtap="handleDeleteImage" data-index="{{index}}"></icon>
+      </view>
+      <view class="upload-btn" bindtap="handleChooseImage">
+        <image class="camera-icon" src="/images/camera.png"></image>
+      </view>
+      <text class="upload-tip">上传问题截图可以让问题快速解决哦！</text>
+    </view>
+  </view>
+
+  <view class="form-section">
+    <text class="label">联系方式</text>
+    <input 
+      class="contact-input" 
+      placeholder="手机号、邮箱，以便我们回复您" 
+      bindinput="handleContactInput"
+    ></input>
+  </view>
+
+  <button class="submit-btn" bindtap="handleSubmit">提交</button>
 </view>
