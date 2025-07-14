@@ -24,11 +24,18 @@
         "miniprogram": {
             "list": [
                 {
-                    "name": "pages/submitFeedback/submitFeedback",
+                    "name": "",
                     "pathName": "pages/submitFeedback/submitFeedback",
                     "query": "",
                     "scene": null,
                     "launchMode": "default"
+                },
+                {
+                    "name": "pages/submitFeedback/submitFeedback",
+                    "pathName": "pages/submitFeedback/submitFeedback",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
                 },
                 {
                     "name": "pages/feedback/feedback",
@@ -54,13 +61,6 @@
                 {
                     "name": "pages/userInfo/userInfo",
                     "pathName": "pages/userInfo/userInfo",
-                    "query": "",
-                    "launchMode": "default",
-                    "scene": null
-                },
-                {
-                    "name": "pages/profile/profile",
-                    "pathName": "pages/profile/profile",
                     "query": "",
                     "launchMode": "default",
                     "scene": null
