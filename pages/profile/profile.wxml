@@ -78,7 +78,7 @@
                 <button bindtap="closeManualLogin">取消</button>
             </view>
             <view>
-                <button bindtap="submit" type="primary">注册</button>
+                <button  class="submit_button" bindtap="submit" type="primary">注册</button>
             </view>
         </view>
     </view>
