@@ -201,24 +201,6 @@
         <image class="arrow-icon" src="/images/右箭头.svg"></image>
       </view>
     </view>
-    <view class="menu-item">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/喇叭.svg" mode="aspectFit"></image>
-        <text>音效</text>
-      </view>
-      <view class="menu-item-right">
-        <switch checked="{{soundEnabled}}" bindchange="onSoundSwitchChange"></switch>
-      </view>
-    </view>
-    <view class="menu-item">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/手机.svg" mode="aspectFit"></image>
-        <text>震动</text>
-      </view>
-      <view class="menu-item-right">
-        <switch checked="{{vibrationEnabled}}" bindchange="onVibrationSwitchChange"></switch>
-      </view>
-    </view>
     <view class="menu-item" bindtap="navigateToPage" data-url="/pages/about-us/about-us">
       <view class="menu-item-left">
         <image class="menu-icon" src="/images/笑脸.svg" mode="aspectFit"></image>
