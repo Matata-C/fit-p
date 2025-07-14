@@ -4,11 +4,11 @@
   <view class="faq-section">
     <view class="faq-title">常见问题</view>
     <view class="faq-list">
-      <view class="faq-item" bindtap="openModal" data-title="问题1">问题1</view>
-      <view class="faq-item" bindtap="openModal" data-title="问题2">问题2</view>
-      <view class="faq-item" bindtap="openModal" data-title="问题3">问题3</view>
-      <view class="faq-item" bindtap="openModal" data-title="问题4">问题4</view>
-      <view class="faq-item" bindtap="openModal" data-title="问题5">问题5</view>
+      <view class="faq-item" bindtap="openModal" data-title="问题1">账户与安全</view>
+      <view class="faq-item" bindtap="openModal" data-title="问题2">使用指南</view>
+      <view class="faq-item" bindtap="openModal" data-title="问题3">数据丢了怎么办</view>
+      <view class="faq-item" bindtap="openModal" data-title="问题4">如何删除体重记录</view>
+      <view class="faq-item" bindtap="openModal" data-title="问题5">步数记录有偏差</view>
     </view>
   </view>
   <button class="submit-btn" bindtap="navigateToFeedback">提交反馈</button>
