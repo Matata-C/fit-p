@@ -1,11 +1,11 @@
 <!--pages/about-us/about-us.wxml-->
 <view class="container">
   <image class="app-icon" src="/images/app-icon.png"></image>
-  <text class="app-name">Pick记账</text>
-  <text class="app-version">v1.1.4</text>
+  <text class="app-name">TruFit</text>
+  <text class="app-version">v1.1</text>
 
   <button class="btn wechat-btn" bindtap="openWechatService">微信客服</button>
-  <button class="btn email-btn" bindtap="copyEmail">邮箱：supporter@miaoyudao.com</button>
+  <button class="btn email-btn" bindtap="copyEmail">邮箱：Slimora@TruFit.com</button>
 
   <view class="agreement">
     <text class="agreement-item" bindtap="openPrivacyPolicy">隐私政策</text>
@@ -13,6 +13,6 @@
   </view>
 
   <view class="footer">
-    <text class="footer-text">黑ICP备XXXXXXXX</text>
+    <text class="footer-text">ICP备XXXXXXXX</text>
   </view>
 </view>
