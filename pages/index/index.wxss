@@ -353,10 +353,10 @@
 .dialog-footer {
   display: flex;
   justify-content: space-between;
+  gap: 20rpx;
 }
 .dialog-btn {
   flex: 1;
-  margin: 0 10rpx;
   height: 80rpx;
   line-height: 80rpx;
   border-radius: 40rpx;
@@ -365,6 +365,9 @@
   color: #fff;
   border: none;
   font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .dialog-btn.cancel {
   background: #f5f5f5;
@@ -462,5 +465,15 @@
   font-weight: bold;
   border: none;
   box-shadow: 0 2px 12px rgba(255, 214, 0, 0.10);
+}
+
+.stats-card.card {
+  margin: 28px 0;
+  padding: 14px 16px;
+}
+
+.daily-tip.card {
+  margin: 28px 0 60px 0;
+  padding: 14px 16px;
 }
 
