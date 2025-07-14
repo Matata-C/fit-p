@@ -38,5 +38,7 @@
         "tabSize": 4
     },
     "projectArchitecture": "miniProgram",
-    "simulatorPluginLibVersion": {}
+    "simulatorPluginLibVersion": {},
+    "cloudfunctionRoot": "cloudfunctions/",
+    "projectname": "fit-p"
 }

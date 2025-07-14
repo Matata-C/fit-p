@@ -1,0 +1,142 @@
+/* pages/submitFeedback/submitFeedback.wxss */
+.feedback-container {
+  padding: 24rpx;
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.feedback-header {
+  margin-bottom: 32rpx;
+}
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+.subtitle {
+  font-size: 28rpx;
+  color: #666;
+  margin-top: 12rpx;
+}
+
+.form-section {
+  margin-bottom: 44rpx;
+}
+.label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #ff6f91;
+  display: block;
+  margin-top: 20rpx;
+  margin-bottom: 12rpx;
+  margin-left: 12rpx;
+}
+
+.type-group {
+  display: flex;
+  gap: 16rpx;
+}
+
+.type-btn {
+  padding: 16rpx 24rpx;
+  font-size: 26rpx;
+  color: #666;
+  border: 2rpx solid #FFD600;
+  border-radius: 8rpx;
+  background-color: #FFFBE6;
+  white-space: nowrap;
+  margin: 0; 
+  line-height: normal;
+}
+
+.type-btn.active {
+  color: #B07B00 !important;
+  background: linear-gradient(to right,#FFD700, #FFF5CD);
+}
+
+.desc-textarea {
+  width: 100%;
+  min-height: 200rpx;
+  border: 2rpx solid #FFD600;
+  box-shadow: 0 0 12rpx rgba(255, 214, 0, 0.4);
+  border-radius: 8rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+  color: #666;
+  box-sizing: border-box;
+}
+.word-count {
+  text-align: right;
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.upload-section {
+  margin-top: 16rpx;
+}
+.upload-item {
+  display: inline-block;
+  position: relative;
+  width: 120rpx;
+  height: 120rpx;
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+}
+.upload-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 8rpx;
+}
+.delete-icon {
+  position: absolute;
+  top: -10rpx;
+  right: -10rpx;
+  background-color: #fff;
+  border-radius: 50%;
+}
+.upload-btn {
+  width: 120rpx;
+  height: 120rpx;
+  border: 2rpx dashed #f5f5f5;
+  border-radius: 8rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fefefe;
+}
+.camera-icon {
+  width: 100%;
+  height: 100%;
+}
+.upload-tip {
+  font-size: 24rpx;
+  color: #999;
+  margin-top: 8rpx;
+}
+
+.contact-input {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #FFD600;
+  box-shadow: 0 0 12rpx rgba(255, 214, 0, 0.4);
+  border-radius: 8rpx;
+  padding: 0 16rpx;
+  font-size: 26rpx;
+  color: #666;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  width: 600rpx !important;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B07B00;
+  background: linear-gradient(to right,#FFD700, #FFF5CD);
+  font-size: 32rpx;
+  border-radius: 44rpx;
+  margin-top: 200rpx;
+}

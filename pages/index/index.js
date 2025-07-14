@@ -60,6 +60,9 @@ Page({
       '适度的力量训练有助于提高基础代谢率。',
       '小的生活习惯改变可以带来长期效果。'
     ],
+    tip1: '',
+    tip2: '',
+
     needRefresh: false,         // 是否需要刷新数据
     pageReady: false, // 标记页面是否准备好
     showWeightHistoryDialog: false, // 是否显示体重历史记录对话框
@@ -82,9 +85,16 @@ Page({
         title: "减脂期饮食：吃饱又不胖的秘密",
         content: "减脂期饮食关键是「热量缺口+营养充足」，避免过度节食：\n1. 主食选低GI：用糙米、藜麦、玉米替代部分白米白面，延缓血糖上升，增加饱腹感。\n2. 蛋白要充足：每天摄入1.2-1.6g/kg体重的蛋白质（如鸡胸肉、鱼虾、豆腐），减少肌肉流失。\n3. 多吃膳食纤维：绿叶菜（菠菜、西兰花）、菌菇、杂豆等，热量低且饱腹感强。\n4. 烹饪控热量：少油少糖，多用香料（黑胡椒、柠檬汁）调味，避免沙拉酱、红烧等高热量做法。\n5. 三餐分配：早餐占30%、午餐40%、晚餐30%，晚餐尽量在睡前4小时吃完。"
       }
-    ]
+    ],
   },
 
+  goToCalendar() {
+    wx.navigateTo({
+      url: '/pages/calendar/calendar'
+    });
+  },
+
+  
    // 显示弹窗：根据点击的索引获取对应内容
    showPopup(e) {
     const index = e.currentTarget.dataset.index; // 获取轮播项的索引
@@ -136,6 +146,25 @@ Page({
     } catch(e) {
       console.error('首页加载错误:', e);
     }
+    this.getRandomTips();
+  },
+
+  // 封装获取随机小贴士的方法
+  getRandomTips() {
+    const tipsArr = this.data.healthTips;
+    const len = tipsArr.length;
+    // 生成第一个随机索引
+    const index1 = Math.floor(Math.random() * len);
+    // 生成第二个随机索引，确保和第一个不同
+    let index2 = Math.floor(Math.random() * len);
+    while (index2 === index1) {
+      index2 = Math.floor(Math.random() * len);
+    }
+    // 根据索引获取对应小贴士内容并更新数据
+    this.setData({
+      tip1: tipsArr[index1],
+      tip2: tipsArr[index2]
+    });
   },
   
   onShow: function() {
@@ -569,11 +598,31 @@ Page({
         hasTodayWeight: true,
         todayWeight: weight
       });
+
+      try {
+        const today = this.getCurrentDateString();
+        let checkedDates = wx.getStorageSync('checkedDates') || [];
+        // 避免重复添加打卡日期
+        if (!checkedDates.includes(today)) {
+          checkedDates.push(today);
+          wx.setStorageSync('checkedDates', checkedDates);
+          console.log('体重记录同步打卡:', today);
+          
+          this.setData({ checkedCount: checkedDates.length }); 
+        }
+      } catch (e) {
+        console.error('同步打卡日期失败:', e);
+      }
       
       wx.showToast({
         title: '体重记录已保存',
         icon: 'success'
       });
+      const currentPages = getCurrentPages();
+      const calendarPage = currentPages.find(page => page.route === 'pages/calendar/calendar');
+      if (calendarPage) {
+        calendarPage.initCalendar(); // 调用日历页的初始化方法，强制刷新
+      }
     } catch(e) {
       console.error('保存体重记录失败:', e);
       wx.showToast({
@@ -895,6 +944,24 @@ Page({
       
       // 设置数据更新标志
       wx.setStorageSync('dataUpdated', new Date().getTime());
+
+      // 【新增】同步删除日历中对应的打卡记录
+try {
+  // 获取当前删除的日期（即体重记录的日期）
+  const deletedDate = date;
+  // 获取已有的打卡记录
+  let checkedDates = wx.getStorageSync('checkedDates') || [];
+  // 检查该日期是否在打卡记录中，若存在则删除
+  if (checkedDates.includes(deletedDate)) {
+    checkedDates = checkedDates.filter(d => d !== deletedDate);
+    // 保存更新后的打卡记录
+    wx.setStorageSync('checkedDates', checkedDates);
+    console.log(`同步删除日历打卡记录：${deletedDate}`);
+  }
+} catch (e) {
+  console.error('同步删除打卡记录失败:', e);
+}
+
       
       // 通知其他页面刷新数据
       try {

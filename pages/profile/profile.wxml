@@ -1,11 +1,89 @@
 <!--profile.wxml-->
 <view class="container">
-  <view class="header" bindtap="onUserInfoTap">
-  <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
-  <view class="nickname">{{userInfo.nickName}}</view>
-  <view class="login-tip" wx:if="{{!isLoggedIn}}">(点击登录)</view>
+  <view class="header">
+    <!-- 未登录 -->
+    <image wx:if="{{!userInfo.avatarUrl}}" bindtap="onUserInfoTap" class="avatar" src="/images/default-avatar.svg" mode="aspectFill"></image>
+    <view wx:if="{{!userInfo.avatarUrl}}" bindtap="onUserInfoTap" class="nickname">点击登录</view>
+    <!-- 已登录 -->
+    <image wx:if="{{userInfo.avatarUrl}}" class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+    <view wx:if="{{userInfo.avatarUrl}}">
+      <view class="nickname">{{userInfo.nickName}}</view>
+      <!-- 登录后显示编辑资料按钮 -->
+      <view style="text-align:center;margin:20rpx 0;">
+        <text class="edit-profile-btn" bindtap="onEditProfile">查看资料</text>
+      </view>
+    </view>
+  </view>
+ 
+  <!-- 组合式登录弹框 -->
+  <view wx:if="{{userInfo_tank}}">
+    <view class="userInfo_tank_bg" bindtap="closeTank" wx:if="{{userInfo_tank}}"></view>
+    <view class="userInfo_tank {{userInfo_tank?'transfromjoin':'transfromout'}}">
+      <view class="tank_title">
+        <text>选择登录方式</text>
+      </view>
+      
+      <!-- 微信授权登录（主要方式） -->
+      <view class="login-option primary">
+        <button class="wechat-login-btn" bindtap="onWechatLogin">
+          <image class="login-icon" src="/images/wechat-icon.svg" mode="aspectFit"></image>
+          <text>微信授权登录</text>
+        </button>
+        <text class="login-desc">快速获取微信头像和昵称</text>
+      </view>
+      
+      <!-- 手动注册登录（备选方式） -->
+      <view class="login-option">
+        <button class="manual-login-btn" bindtap="showManualLogin">
+          <image class="login-icon" src="/images/manual-icon.svg" mode="aspectFit"></image>
+          <text>手动注册登录</text>
+        </button>
+        <text class="login-desc">自定义头像和昵称</text>
+      </view>
+      
+      <!-- 游客模式（降低门槛） -->
+      <view class="login-option secondary">
+        <button class="guest-login-btn" bindtap="startGuestMode">
+          <image class="login-icon" src="/images/guest-icon.svg" mode="aspectFit"></image>
+          <text>游客模式</text>
+        </button>
+        <text class="login-desc">先体验功能，稍后登录</text>
+      </view>
+      
+      <view class="login-footer">
+        <text class="privacy-tip">登录即表示同意《用户协议》和《隐私政策》</text>
+      </view>
+    </view>
   </view>
   
+  <!-- 手动注册弹框（原有功能保留） -->
+  <view wx:if="{{showManualLogin}}">
+    <view class="userInfo_tank_bg" bindtap="closeManualLogin" wx:if="{{showManualLogin}}"></view>
+    <view class="userInfo_tank {{showManualLogin?'transfromjoin':'transfromout'}}">
+        <view class="tank_title">
+            <text>手动注册登录</text>
+        </view>
+        <view class="tank_content">
+            <text>头像：</text>
+            <button class="avatar_button" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+                <image class="avatar_url" src="{{avatarUrl}}"></image>
+            </button>
+        </view>
+        <view class="tank_content">
+            <text>昵称：</text>
+            <input form-type='submit' bindblur="getNickName" placeholder="请输入昵称" type="nickname" />
+        </view>
+        <view class="confirm_button">
+            <view>
+                <button bindtap="closeManualLogin">取消</button>
+            </view>
+            <view>
+                <button  class="submit_button" bindtap="submit" type="primary">注册</button>
+            </view>
+        </view>
+    </view>
+  </view>
+
   <view class="stats-section">
     <view class="stats-title">我的统计</view>
     <view class="stats-row">
@@ -123,42 +201,6 @@
         <image class="arrow-icon" src="/images/右箭头.svg"></image>
       </view>
     </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/account/account">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/钱包.svg" mode="aspectFit"></image>
-        <text>资产账户</text>
-      </view>
-      <view class="menu-item-right">
-        <image class="arrow-icon" src="/images/右箭头.svg"></image>
-      </view>
-    </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/sport/sport">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/跑步.svg" mode="aspectFit"></image>
-        <text>运动管理</text>
-      </view>
-      <view class="menu-item-right">
-        <image class="arrow-icon" src="/images/右箭头.svg"></image>
-      </view>
-    </view>
-    <view class="menu-item">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/喇叭.svg" mode="aspectFit"></image>
-        <text>音效</text>
-      </view>
-      <view class="menu-item-right">
-        <switch checked="{{soundEnabled}}" bindchange="onSoundSwitchChange"></switch>
-      </view>
-    </view>
-    <view class="menu-item">
-      <view class="menu-item-left">
-        <image class="menu-icon" src="/images/手机.svg" mode="aspectFit"></image>
-        <text>震动</text>
-      </view>
-      <view class="menu-item-right">
-        <switch checked="{{vibrationEnabled}}" bindchange="onVibrationSwitchChange"></switch>
-      </view>
-    </view>
     <view class="menu-item" bindtap="navigateToPage" data-url="/pages/about-us/about-us">
       <view class="menu-item-left">
         <image class="menu-icon" src="/images/笑脸.svg" mode="aspectFit"></image>
@@ -168,7 +210,7 @@
         <image class="arrow-icon" src="/images/右箭头.svg"></image>
       </view>
     </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages">
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/feedback/feedback">
       <view class="menu-item-left">
         <image class="menu-icon" src="/images/信封.svg" mode="aspectFit"></image>
         <text>意见反馈</text>

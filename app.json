@@ -7,7 +7,12 @@
         "pages/goal/goal",
         "pages/profile/profile",
         "pages/weightRecord/weightRecord",
-        "pages/achievement/achievement"
+        "pages/achievement/achievement",
+        "pages/userInfo/userInfo",
+        "pages/calendar/calendar",
+        "pages/about-us/about-us",
+        "pages/feedback/feedback",
+        "pages/submitFeedback/submitFeedback"
     ],
     "window": {
         "backgroundTextStyle": "light",

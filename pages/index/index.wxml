@@ -26,7 +26,7 @@
       <image class="arrow-right" src="/images/去返回右(Go Back)_爱给网_aigei_com.png"></image> <!-- 需替换实际箭头图标路径 -->
     </view>
     <view class="header-right">
-      <image class="calendar-icon" src="/images/日历_爱给网_aigei_com.png"></image> <!-- 需替换实际日历图标路径 -->
+      <image class="calendar-icon" src="/images/日历_爱给网_aigei_com.png" bindtap="goToCalendar"></image> <!-- 需替换实际日历图标路径 -->
     </view>
   </view>
 
@@ -138,6 +138,7 @@
       <view class="card-title">每日健康小贴士 <text class="section-icon">🦄</text></view>
       <view class="tip-content">{{currentTip}}</view>
     </view>
+
 
     <!-- 体重记录对话框 -->
     <view class="dialog-mask" wx:if="{{showWeightDialog}}">
