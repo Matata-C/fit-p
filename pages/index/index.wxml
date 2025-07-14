@@ -33,7 +33,7 @@
   <!-- 步数卡片 -->
   <view class="step-card">
     <view class="step-info">
-      <text class="step-date">2025/07/09</text>
+      <text class="step-date">{{todayDate}}</text>
       <text class="step-label">今日步数</text>
       <text class="step-number">26447</text>
       <text class="step-slogan">——生命在于运动——</text>
@@ -43,7 +43,7 @@
 
   <!-- 饮食建议区域 -->
   <view class="diet-section">
-    <text class="diet-title">饮食建议</text>
+    <text class="diet-title card-title">饮食建议 <text class="section-icon">🍽️</text></text>
     <!-- 轮播图容器 -->
   <swiper class="diet-swiper" indicator-dots="{{true}}" autoplay="{{true}}" interval="3000" duration="500">
     <!-- 轮播项，可根据实际图片数量增减 -->
@@ -87,7 +87,7 @@
     <!-- 添加体重历史记录按钮，放在体重记录按钮旁边 -->
     <view class="weight-buttons">
       <view class="weight-record-btn" bindtap="showWeightDialog">记录体重</view>
-      <view class="weight-history-btn" bindtap="showWeightHistory" style="padding-top: 13px;font-weight: 700;border-radius: 45rpx;">历史记录</view>
+      <view class="weight-history-btn" bindtap="showWeightHistory">历史记录</view>
     </view>
 
     <!-- 显示今日体重记录 -->
@@ -110,7 +110,7 @@
 
     <!-- 用户统计 -->
     <view class="stats-card card">
-      <view class="card-title">我的统计</view>
+      <view class="card-title">我的统计 <text class="section-icon">📈</text></view>
       <view class="stats-grid">
         <view class="stat-item">
           <view class="stat-value">{{userStats.days || 0}}</view>
@@ -135,7 +135,7 @@
 
     <!-- 每日健康小贴士 -->
     <view class="daily-tip card" style="margin-bottom: 70px;">
-      <view class="card-title">每日健康小贴士</view>
+      <view class="card-title">每日健康小贴士 <text class="section-icon">🦄</text></view>
       <view class="tip-content">{{currentTip}}</view>
     </view>
 

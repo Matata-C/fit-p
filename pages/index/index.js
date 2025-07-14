@@ -64,6 +64,7 @@ Page({
     pageReady: false, // 标记页面是否准备好
     showWeightHistoryDialog: false, // 是否显示体重历史记录对话框
     weightHistoryRecords: [],    // 体重历史记录列表
+    todayDate: '', // 新增字段，首页步数日期
 
     howModal: false, // 控制弹窗显示/隐藏
     currentDiet: {}, // 当前显示的饮食知识
@@ -103,8 +104,11 @@ Page({
   onLoad: function () {
     console.log('首页加载');
     
-    // 标记页面已准备好
+    // 设置今日日期
+    const now = new Date();
+    const todayDate = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')}`;
     this.setData({
+      todayDate,
       pageReady: true
     });
     
@@ -137,6 +141,11 @@ Page({
   onShow: function() {
     // 确保TabBar选中首页
     tabBarManager.setSelectedTab(0);
+    
+    // 每次显示页面时也刷新今日日期
+    const now = new Date();
+    const todayDate = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')}`;
+    this.setData({ todayDate });
     
     // 检查是否有数据更新标志
     try {

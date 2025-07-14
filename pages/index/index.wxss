@@ -1,7 +1,10 @@
 /**index.wxss**/
+/* 首页风格统一为分析/成就页风格 */
+
 .container {
   padding: 24px 16px 16px 16px;
   min-height: 100vh;
+  background: #fff;
 }
 
 /* 顶部栏样式 */
@@ -10,46 +13,52 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 10px;
-  background-color: #eee;
+  padding: 18px 18px;
+  background-color: #fffbe6;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(255, 214, 0, 0.08);
+  margin-bottom: 18px;
 }
 .header-left .dropdown {
   display: flex;
   align-items: center;
 }
 .dropdown-text {
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: #ff6f91;
   margin-right: 5px;
+  font-weight: bold;
 }
 .dropdown-icon {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
 }
 .header-middle {
   display: flex;
   align-items: center;
 }
 .arrow-left, .arrow-right {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   margin: 0 8px;
 }
 .date-text {
-  font-size: 14px;
-  color: #333;
+  font-size: 16px;
+  color: #222;
+  font-weight: bold;
 }
 .header-right .calendar-icon {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
 }
 
-/* 步数卡片样式 */
+/* 今日步数卡片 */
 .step-card {
-  background-color: #FFD700;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 10px;
+  background-color: #fffbe6;
+  border-radius: 24px;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
+  padding: 24px 20px;
+  margin-bottom: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -59,143 +68,120 @@
   flex-direction: column;
 }
 .step-date {
-  font-size: 14px;
-  color: #333;
+  font-size: 15px;
+  color: #888;
   margin-bottom: 4px;
 }
 .step-label {
-  font-size: 14px;
-  color: #333;
+  font-size: 15px;
+  color: #ff6f91;
   margin-bottom: 8px;
+  font-weight: bold;
 }
 .step-number {
-  font-size: 24px;
+  font-size: 32px;
   font-weight: bold;
-  color: #000;
+  color: #FFD600;
   margin-bottom: 4px;
 }
 .step-slogan {
-  font-size: 12px;
-  color: #666;
+  font-size: 13px;
+  color: #bfa100;
 }
 .step-icon {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
 }
 
 /* 饮食建议区域样式 */
-
-.diet-content{
-  margin-top: 50px;
-}
 .diet-title {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: #ff6f91;
   margin-bottom: 10px;
   margin-left: 5px;
 }
-/* 轮播图容器样式 */
 .diet-swiper {
-  height: 180px; /* 可根据图片和布局调整高度，要容纳 diet-item */
+  height: 180px;
 }
-
 .diet-item {
-  border-radius: 10px;
+  border-radius: 16px;
   height: 160px;
   margin-bottom: 16px;
-  position: relative; /* 关键：开启相对定位 */
-  overflow: hidden; /* 防止文字超出容器 */
-  /* 增加点击反馈 */
+  position: relative;
+  overflow: hidden;
   cursor: pointer;
+  box-shadow: 0 2px 8px rgba(255, 214, 0, 0.08);
 }
-
 .foods {
   margin-top: 6px;
   width: 100%;
   height: 150px;
-  border-radius: 8px;
-  display: block; /* 消除图片底部间隙 */
+  border-radius: 12px;
+  display: block;
 }
-
-/* 文字容器：绝对定位到图片左下方 */
 .diet-text-container {
-  position: absolute; /* 基于父容器定位 */
-  left: 10px; /* 左间距 */
-  bottom: 15px; /* 底部间距 */
-  z-index: 10; /* 确保文字在图片上方显示 */
+  position: absolute;
+  left: 10px;
+  bottom: 15px;
+  z-index: 10;
 }
-
 .diet-content {
-  color: rgb(255, 255, 255); /* 文字颜色（白色更适配图片背景） */
-  font-size: 15px; /* 文字大小 */
-  font-weight: 650; /* 文字粗细 */
-  text-shadow: 0 5px 5px rgba(0,0,0,0.3); /* 文字阴影，增强可读性 */
+  color: #fff;
+  font-size: 16px;
+  font-weight: 650;
+  text-shadow: 0 5px 5px rgba(0,0,0,0.3);
 }
 
 /* 弹窗样式 */
-/* 遮罩层 */
 .popup-mask {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* 遮罩层在底层 */
+  z-index: 999;
 }
-/* 弹窗容器 */
 .popup-container {
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   width: 85%;
-  max-height: 70vh; /* 限制最大高度，超出可滚动 */
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px 15px;
-  z-index: 1000; /* 弹窗在遮罩层上方 */
-  overflow-y: auto; /* 内容过多时可滚动 */
+  max-height: 70vh;
+  background-color: #fffbe6;
+  border-radius: 28px;
+  padding: 28px 18px;
+  z-index: 1000;
+  overflow-y: auto;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
 }
-/* 弹窗标题 */
 .popup-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  color: #333;
+  color: #ff6f91;
   margin-bottom: 15px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #FFD600;
 }
-/* 弹窗内容 */
 .popup-content {
-  font-size: 14px;
-  color: #666;
-  line-height: 1.6; /* 行高增加可读性 */
+  font-size: 15px;
+  color: #888;
+  line-height: 1.6;
 }
-/* 关闭按钮 */
 .popup-close {
   position: absolute;
   top: 15px;
   right: 15px;
-  font-size: 20px;
-  color: #999;
+  font-size: 22px;
+  color: #FFD600;
   cursor: pointer;
 }
 .popup-close:active {
-  color: #333; /* 点击时变色反馈 */
+  color: #ff6f91;
 }
 
-.section-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #222;
-  margin: 24px 0 12px 0;
-  letter-spacing: 1px;
-}
+/* 卡片通用样式 */
 .card {
-  margin: 16px 0;
-  padding: 20px 18px;
+  margin: 18px 0;
+  padding: 24px 20px;
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
@@ -203,1264 +189,22 @@
   transition: box-shadow 0.2s;
 }
 .card-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
-  color: #222;
-  margin-bottom: 6px;
+  color: #ff6f91;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.section-icon {
+  font-size: 20px;
+  margin-left: 4px;
 }
 .card-content {
-  font-size: 15px;
+  font-size: 16px;
   color: #888;
   margin-left: 8px;
-}
-.button {
-  background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
-  color: #fff;
-  border: none;
-  border-radius: 18px;
-  padding: 12px 32px;
-  font-size: 17px;
-  font-weight: bold;
-  box-shadow: 0 2px 12px rgba(255, 152, 0, 0.15);
-  transition: transform 0.1s;
-}
-.button:active {
-  transform: scale(0.96);
-}
-
-.header {
-  background-color: white;
-  border-radius: 15rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
-}
-
-.title {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin-bottom: 30rpx;
-  color: #333;
-}
-
-.progress-container {
-  width: 100%;
-  background-color: #f5f5f5;
-  height: 16rpx;
-  border-radius: 8rpx;
-  margin-bottom: 30rpx;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  margin-top: 20rpx;
-}
-
-.progress-bar {
-  height: 100%;
-  position: absolute;
-  left: 0;
-  top: 0;
-  max-width: 100%;
-  border-radius: 8rpx;
-  transition: width 0.5s ease;
-}
-
-.theoretical-bar {
-  background-color: #FFC107; /* 黄色 */
-  z-index: 1;
-}
-
-.target-bar {
-  background-color: #FFD700; /* 蓝色 */
-  z-index: 2;
-}
-
-.actual-bar {
-  background-color: #FFD700; /* 绿色 */
-  z-index: 3;
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-bottom: 20rpx;
-  margin-top: 10rpx;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-right: 20rpx;
-  margin-bottom: 10rpx;
-  flex: 0 0 auto;
-}
-
-.legend-color {
-  width: 16rpx;
-  height: 16rpx;
-  margin-right: 8rpx;
-  border-radius: 4rpx;
-}
-
-.legend-text {
-  font-size: 24rpx;
-  color: #666;
-}
-
-.stats-section {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  border-radius: 15rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.stat-value {
-  font-size: 40rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
-}
-
-.stat-label {
-  font-size: 24rpx;
-  color: #666;
-}
-
-.action-section {
-  display: flex;
-  justify-content: space-between;
-  background-color: white;
-  border-radius: 15rpx;
-  padding: 30rpx;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
-}
-
-.action-button {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.action-icon {
-  width: 80rpx;
-  height: 80rpx;
-  margin-bottom: 15rpx;
-}
-
-.action-text {
-  font-size: 28rpx;
-  color: #333;
-}
-
-/* 体重记录对话框 - 以整个窗口为背景 */
-.weight-dialog-container {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10000;
-  background-color: transparent; /* 透明背景 */
-}
-
-.weight-dialog-content {
-  width: 90vw; /* 使用视窗宽度单位，确保响应式 */
-  max-width: 600rpx; /* 限制最大宽度 */
-  background-color: white;
-  border-radius: 16rpx;
-  padding: 40rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.15);
-  /* 确保居中 */
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.weight-dialog-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin-bottom: 20rpx;
-  text-align: center;
-  color: #333;
-}
-
-.weight-dialog-subtitle {
-  font-size: 28rpx;
-  color: #666;
-  margin-bottom: 30rpx;
-  text-align: center;
-}
-
-.weight-input {
-  border: 1px solid #ddd;
-  border-radius: 8rpx;
-  padding: 24rpx;
-  font-size: 36rpx;
-  margin-bottom: 40rpx;
-  width: 100%;
-  box-sizing: border-box;
-  height: 100rpx;
-}
-
-.weight-dialog-buttons {
-  display: flex;
-  justify-content: space-between;
-}
-
-.cancel-button, .save-button {
-  flex: 1;
-  margin: 0 10rpx;
-  border-radius: 8rpx;
-  font-size: 32rpx;
-  height: 90rpx;
-  line-height: 90rpx;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cancel-button {
-  background-color: #f5f5f5;
-  color: #666;
-}
-
-.save-button {
-  background-color: #FFD700;
-  color: white;
-}
-
-.health-tip {
-  background-color: #e3f2fd;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  margin-top: 20rpx;
-}
-
-.tip-text {
-  font-size: 26rpx;
-  color: #1976d2;
-  line-height: 1.5;
-}
-
-/* 体重记录弹窗 */
-.weight-dialog {
-  width: 80%;
-  background-color: #fff;
-  border-radius: 12rpx;
-  overflow: hidden;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.2);
-}
-
-.weight-dialog-title {
-  padding: 30rpx;
-  text-align: center;
-  font-size: 34rpx;
-  font-weight: bold;
-  color: #333;
-  border-bottom: 1rpx solid #f0f0f0;
-}
-
-.weight-dialog-content {
-  padding: 30rpx;
-}
-
-.weight-input {
-  background-color: #f5f5f5;
-  border-radius: 8rpx;
-  padding: 20rpx;
-  font-size: 32rpx;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.weight-dialog-buttons {
-  display: flex;
-  border-top: 1rpx solid #f0f0f0;
-}
-
-.cancel-btn, .save-btn {
-  flex: 1;
-  padding: 24rpx 0;
-  text-align: center;
-  font-size: 32rpx;
-  background-color: transparent;
-  border-radius: 0;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: auto;
-}
-
-.cancel-btn {
-  color: #666;
-  border-right: 1rpx solid #f0f0f0;
-}
-
-.save-btn {
-  color: #4a90e2;
-  font-weight: 500;
-}
-
-.cancel-btn::after, .save-btn::after {
-  border: none;
-}
-
-/* 进度显示部分 */
-.progress-container {
-  background-color: #fff;
-  border-radius: 12rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.progress-title {
-  font-size: 34rpx;
-  font-weight: 600;
-  margin-bottom: 30rpx;
-  color: #333;
-}
-
-.progress-bars {
-  margin-bottom: 30rpx;
-}
-
-.progress-bar-container {
-  width: 100%;
-  padding: 5rpx 0;
-}
-
-.progress-bar-wrapper {
-  height: 20rpx;
-  background-color: #f5f5f5;
-  border-radius: 10rpx;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  border: 1rpx solid #e8e8e8;
-}
-
-.theoretical-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #FFC107 0%, #FFD54F 100%);
-  border-radius: 10rpx;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 5rpx rgba(255, 193, 7, 0.5);
-}
-
-.progress-bar.target {
-  background-color: #2196f3;
-}
-
-.progress-bar.actual {
-  background-color: #4CAF50; /* 绿色 - 实际消耗 */
-}
-
-.legend {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10rpx;
-  min-width: 30%;
-}
-
-.legend-color {
-  width: 20rpx;
-  height: 20rpx;
-  border-radius: 4rpx;
-  margin-right: 10rpx;
-}
-
-.legend-color.theoretical {
-  background-color: #FFC107; /* 黄色 - 理论消耗 */
-}
-
-.legend-color.target {
-  background-color: #2196f3;
-}
-
-.legend-color.actual {
-  background-color: #4CAF50; /* 绿色 - 实际消耗 */
-}
-
-.legend-text {
-  font-size: 24rpx;
-  color: #666;
-}
-
-/* 快速行动按钮 */
-.quick-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30rpx;
-}
-
-.action-button {
-  flex: 1;
-  background-color: #fff;
-  border-radius: 12rpx;
-  padding: 20rpx;
-  margin: 0 10rpx;
-  text-align: center;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.action-button:first-child {
-  margin-left: 0;
-}
-
-.action-button:last-child {
-  margin-right: 0;
-}
-
-.button-icon {
-  font-size: 44rpx;
-  margin-bottom: 10rpx;
-}
-
-.button-text {
-  font-size: 26rpx;
-  color: #333;
-}
-
-/* 数据统计部分 */
-.stats-container {
-  background-color: #fff;
-  border-radius: 12rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.stats-title {
-  font-size: 34rpx;
-  font-weight: 600;
-  margin-bottom: 30rpx;
-  color: #333;
-}
-
-.stats-grid {
-  display: flex;
-  justify-content: space-between;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.stat-number {
-  font-size: 40rpx;
-  font-weight: 600;
-  color: #4a90e2;
-  margin-bottom: 10rpx;
-}
-
-.stat-label {
-  font-size: 24rpx;
-  color: #666;
-}
-
-/* 每日贴士部分 */
-.daily-tips {
-  background-color: #fff;
-  border-radius: 12rpx;
-  padding: 30rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.tip-title {
-  font-size: 34rpx;
-  font-weight: 600;
-  margin-bottom: 20rpx;
-  color: #333;
-}
-
-.tip-content {
-  font-size: 28rpx;
-  color: #666;
-  line-height: 1.5;
-}
-
-/* 今日记录区域 */
-.today-section {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  position: relative;
-}
-
-.today-section::after {
-  content: '';
-  position: absolute;
-  right: 30rpx;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32rpx;
-  height: 32rpx;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23cccccc'%3E%3Cpath d='M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.today-section:active {
-  background-color: #f8f8f8;
-}
-
-.no-record {
-  padding: 40rpx 0;
-  text-align: center;
-  color: #999;
-  font-size: 28rpx;
-}
-
-.weight-record {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20rpx 0;
-}
-
-.weight-value {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 10rpx;
-}
-
-.record-time {
-  font-size: 24rpx;
-  color: #999;
-}
-
-/* 最近记录区域 */
-.recent-section {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.view-more {
-  font-size: 24rpx;
-  color: #666;
-}
-
-.records-list {
-  max-height: 300rpx;
-  overflow-y: auto;
-}
-
-.record-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #eee;
-}
-
-.record-item:last-child {
-  border-bottom: none;
-}
-
-.record-item .date {
-  color: #666;
-  font-size: 28rpx;
-}
-
-.record-item .weight {
-  color: #333;
-  font-size: 28rpx;
-  font-weight: bold;
-}
-
-.no-records {
-  text-align: center;
-  color: #999;
-  padding: 30rpx 0;
-}
-
-/* 食物和运动记录模块 */
-.food-section,
-.exercise-section {
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20rpx;
-}
-
-.add-btn {
-  font-size: 28rpx;
-  color: #FFD700;
-}
-
-.food-list,
-.exercise-list {
-  max-height: 500rpx;
-  overflow-y: auto;
-}
-
-.food-item,
-.exercise-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx 0;
-  border-bottom: 1rpx solid #eee;
-}
-
-.food-item:last-child,
-.exercise-item:last-child {
-  border-bottom: none;
-}
-
-.food-info,
-.exercise-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.food-name,
-.exercise-name {
-  font-size: 28rpx;
-  color: #333;
-  margin-bottom: 6rpx;
-}
-
-.food-time,
-.exercise-time {
-  font-size: 24rpx;
-  color: #999;
-}
-
-.food-calories,
-.exercise-calories {
-  display: flex;
-  align-items: center;
-  font-size: 28rpx;
-  color: #333;
-}
-
-.delete-btn {
-  margin-left: 20rpx;
-  width: 40rpx;
-  height: 40rpx;
-  border-radius: 50%;
-  background: #f5f5f5;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #999;
-  font-size: 32rpx;
-}
-
-.total-calories {
-  display: flex;
-  justify-content: space-between;
-  padding: 20rpx 0 0;
-  border-top: 1rpx solid #eee;
-  margin-top: 10rpx;
-}
-
-.total-calories .label {
-  font-size: 28rpx;
-  color: #666;
-}
-
-.total-calories .value {
-  font-size: 28rpx;
-  color: #333;
-  font-weight: bold;
-}
-
-/* 食物和运动记录对话框 */
-.food-dialog,
-.exercise-dialog {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  visibility: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
-}
-
-.food-dialog.show,
-.exercise-dialog.show {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* 使用已有的对话框样式 */
-.food-dialog .dialog-content,
-.exercise-dialog .dialog-content {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  right: auto;
-  bottom: auto;
-  width: 80%;
-  background: #fff;
-  border-radius: 16rpx;
-  padding: 40rpx 30rpx;
-  transform: translate(-50%, -50%) scale(0.9);
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  opacity: 0;
-  text-align: center;
-}
-
-.food-dialog.show .dialog-content,
-.exercise-dialog.show .dialog-content {
-  transform: translate(-50%, -50%) scale(1);
-  opacity: 1;
-}
-
-/* 总体进度条样式 */
-.total-progress-container {
-  padding: 30rpx 0;
-}
-
-.progress-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 30rpx;
-}
-
-.progress-percentage {
-  font-size: 48rpx;
-  font-weight: bold;
-  color: #333;
-  line-height: 1.2;
-}
-
-.progress-label {
-  font-size: 24rpx;
-  color: #666;
-  margin-top: 8rpx;
-}
-
-.bar-progress {
-  height: 24rpx;
-  background: transparent;
-  border-radius: 12rpx;
-  position: relative;
-  margin-bottom: 30rpx;
-  overflow: hidden;
-}
-
-.bar-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: #f5f5f5;
-  border-radius: 12rpx;
-}
-
-.bar-fill {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: #FFD700;
-  border-radius: 12rpx;
-  transition: width 0.5s ease;
-}
-
-.weight-summary {
-  display: flex;
-  justify-content: space-between;
-}
-
-.weight-summary-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.weight-summary-item .weight-label {
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 8rpx;
-}
-
-.weight-summary-item .weight-value {
-  font-size: 28rpx;
-  color: #333;
-  font-weight: 500;
-}
-
-/* 添加虚线分隔符 */
-.divider {
-  height: 0;
-  border-top: 2rpx dashed #cccccc;
-  margin: 30rpx 0;
-  width: 100%;
-}
-
-/* 体重进度模块 */
-.weight-progress-section {
-  background-color: white;
-  border-radius: 15rpx;
-  padding: 30rpx;
-  margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.weight-progress-container {
-  width: 100%;
-  background-color: #f5f5f5;
-  height: 16rpx;
-  border-radius: 8rpx;
-  margin-bottom: 30rpx;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.weight-progress-bar {
-  height: 100%;
-  background-color: #FFD700; /* 绿色 */
-  border-radius: 8rpx;
-  transition: width 0.5s ease;
-}
-
-.weight-progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20rpx;
-}
-
-.weight-info-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-}
-
-.weight-label {
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 6rpx;
-  text-align: center;
-}
-
-.weight-value {
-  font-size: 30rpx;
-  font-weight: 500;
-  color: #333;
-  text-align: center;
-}
-
-/* 添加明确的进度条样式 */
-.multi-progress-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 24rpx;
-  margin-bottom: 30rpx;
-}
-
-.progress-item {
-  display: flex;
-  align-items: flex-start;
-  margin-bottom: 15rpx;
-}
-
-.progress-label {
-  width: 130rpx;
-  font-size: 28rpx;
-  color: #666;
-  padding-top: 8rpx;
-}
-
-.progress-bar-wrapper {
-  flex: 1;
-  height: 24rpx;
-  background-color: transparent;
-  border-radius: 12rpx;
-  overflow: hidden;
-  position: relative;
-  margin: 0 15rpx;
-  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
-}
-
-.progress-value {
-  width: 120rpx;
-  font-size: 26rpx;
-  color: #333;
-  text-align: right;
-  flex-shrink: 0;
-}
-
-/* 目标消耗背景 */
-.progress-bar-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #E0E0E0; /* 淡灰色作为目标消耗背景 */
-  border-radius: 12rpx;
-}
-
-.progress-bar {
-  height: 100%;
-  border-radius: 12rpx;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: width 0.5s ease;
-  z-index: 1;
-}
-
-.progress-bar.theoretical {
-  background-color: #FFC107; /* 黄色 - 理论消耗 */
-}
-
-.progress-bar.actual {
-  background-color: #FFD700; /* 绿色 - 实际消耗 */
-}
-
-/* 目标消耗数值显示 */
-.progress-target {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  margin-top: 5rpx;
-}
-
-.progress-target .progress-label {
-  color: #FFD700; /* 蓝色 - 目标消耗 */
-  font-weight: 500;
-}
-
-/* 进度文字 */
-.progress-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff; /* 白色文字 */
-  font-size: 24rpx;
-  font-weight: 500;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* 文字阴影提高可读性 */
-}
-
-/* 体重进度容器样式保持不变 */
-.weight-progress-container {
-  width: 100%;
-  background-color: #f5f5f5;
-  height: 16rpx;
-  border-radius: 8rpx;
-  margin-bottom: 30rpx;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-/* 添加单进度条容器样式 */
-.single-progress-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  gap: 24rpx;
-  margin-bottom: 30rpx;
-}
-
-/* 消耗详情解释样式 */
-.consumption-explanation {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20rpx;
-  padding: 0 15rpx;
-}
-
-.explanation-item {
-  display: flex;
-  align-items: center;
-  margin-right: 20rpx;
-}
-
-.explanation-color {
-  width: 16rpx;
-  height: 16rpx;
-  margin-right: 8rpx;
-  border-radius: 4rpx;
-}
-
-.theoretical-color {
-  background-color: #FFC107; /* 黄色 - 理论消耗 */
-}
-
-.target-color {
-  background-color: #EAEAEA; /* 淡灰色 - 目标消耗 */
-}
-
-.actual-color {
-  background-color: #FFD700; /* 绿色 - 实际消耗 */
-}
-
-.explanation-text {
-  font-size: 24rpx;
-  color: #666;
-}
-
-/* 进度条颜色样式 */
-.progress-bar.theoretical {
-  background-color: #FFC107; /* 黄色 - 理论消耗 */
-}
-
-.progress-bar.actual {
-  background-color: #FFD700; /* 绿色 - 实际消耗 */
-}
-
-/* 图例色块样式 */
-.explanation-color.theoretical-color {
-  background-color: #FFC107; /* 黄色 - 理论消耗 */
-}
-
-.explanation-color.target-color {
-  background-color: #EAEAEA; /* 淡灰色 - 目标消耗 */
-}
-
-.explanation-color.actual-color {
-  background-color: #FFD700; /* 绿色 - 实际消耗 */
-}
-
-/* 体重记录按钮 */
-.weight-record-btn {
-  width: 100%;
-  height: 90rpx;
-  line-height: 90rpx;
-  background-color: #FFD700;
-  color: #fff;
-  text-align: center;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  margin: 20rpx 0 30rpx;
-  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.1);
-}
-
-/* 按钮公共样式 */
-.action-btn {
-  flex: 1;
-  margin: 0 10rpx;
-  height: 90rpx;
-  line-height: 90rpx;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  font-weight: bold;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* 对话框内容 */
-.dialog-content input {
-  border: 1rpx solid #ddd;
-  border-radius: 8rpx;
-  padding: 20rpx;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 32rpx;
-  height: 90rpx;
-}
-
-/* 对话框按钮 */
-.dialog-btn {
-  flex: 1;
-  margin: 0 10rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx;
-  font-size: 30rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* 进度条值 */
-.progress-value {
-  position: absolute;
-  right: 10rpx;
-  top: -30rpx;
-  font-size: 28rpx;
-  color: #666;
-  width: 200rpx;
-  text-align: right;
-}
-
-/* 浮动体重按钮 */
-.weight-btn {
-  position: fixed;
-  top: 20rpx;
-  right: 20rpx;
-  width: 120rpx;
-  height: 120rpx;
-  background-color: #FFD700;
-  color: #fff;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 32rpx;
-  font-weight: bold;
-  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.2);
-  z-index: 100;
-}
-
-/* 卡片样式 */
-.card {
-  background-color: #fff;
-  border-radius: 16rpx;
-  padding: 30rpx;
-  margin-bottom: 30rpx;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.05);
-}
-
-.card-title {
-  font-size: 34rpx;
-  font-weight: bold;
-  margin-bottom: 20rpx;
-  color: #333;
-}
-
-/* 消耗进度条 */
-.consumption-progress {
-  margin-top: 20rpx;
-}
-
-.multi-progress-container {
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.progress-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 15rpx;
-}
-
-.progress-label {
-  width: 100rpx;
-  font-size: 28rpx;
-  color: #666;
-}
-
-.progress-bar-wrapper {
-  flex: 1;
-  position: relative;
-  height: 18rpx;
-  background-color: #eaeaea;
-  border-radius: 9rpx;
-  overflow: hidden;
-}
-
-.theoretical-bar {
-  position: absolute;
-  height: 100%;
-  background-color: #FFC107;
-  border-radius: 9rpx;
-}
-
-.actual-bar {
-  position: absolute;
-  height: 100%;
-  background-color: #FFD700;
-  border-radius: 9rpx;
-}
-
-.progress-value {
-  position: absolute;
-  right: 10rpx;
-  top: -25rpx;
-  font-size: 24rpx;
-  color: #666;
-  width: 180rpx;
-  text-align: right;
-}
-
-/* 体重记录 */
-.weight-record {
-  text-align: center;
-}
-
-.weight-value {
-  font-size: 40rpx;
-  font-weight: bold;
-  color: #333;
-}
-
-/* 体重进度 */
-.progress-container {
-  margin-top: 20rpx;
-}
-
-.progress-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15rpx;
-  font-size: 28rpx;
-  color: #666;
 }
 
 /* 统计卡片 */
@@ -1468,21 +212,18 @@
   display: flex;
   justify-content: space-between;
 }
-
 .stat-item {
   flex: 1;
   text-align: center;
 }
-
 .stat-value {
   font-size: 36rpx;
   font-weight: bold;
-  color: #333;
+  color: #FFD600;
 }
-
 .stat-label {
   font-size: 24rpx;
-  color: #666;
+  color: #888;
   margin-top: 10rpx;
 }
 
@@ -1492,7 +233,6 @@
   justify-content: space-between;
   margin-bottom: 30rpx;
 }
-
 .action-btn {
   flex: 1;
   margin: 0 10rpx;
@@ -1501,165 +241,18 @@
   border-radius: 45rpx;
   font-size: 32rpx;
   font-weight: bold;
-}
-
-.exercise-btn {
-  background-color: #FFD700;
-  color: rgb(51, 51, 51);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.food-btn {
-  background-color: #FFD700;
-  color: rgb(51, 51, 51);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* 每日贴士 */
-.tip-content {
-  font-size: 28rpx;
-  color: #666;
-  line-height: 1.5;
-}
-
-/* 对话框 */
-.dialog-mask {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.dialog {
-  width: 80%;
-  background-color: #fff;
-  border-radius: 16rpx;
-  padding: 40rpx;
-}
-
-.dialog-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 30rpx;
-}
-
-.dialog-content {
-  margin-bottom: 30rpx;
-}
-
-.dialog-content input {
-  border: 1rpx solid #ddd;
-  border-radius: 8rpx;
-  padding: 20rpx;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.dialog-footer {
-  display: flex;
-  justify-content: space-between;
-}
-
-.dialog-btn {
-  flex: 1;
-  margin: 0 10rpx;
-  height: 80rpx;
-  line-height: 80rpx;
-  border-radius: 40rpx;
-  font-size: 30rpx;
-}
-
-.cancel {
-  background-color: #f2f2f2;
-  color: #666;
-}
-
-.confirm {
-  background-color: #FFD700;
+  background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
   color: #fff;
-}
-
-.progress-content {
-  flex: 1;
+  box-shadow: 0 2px 12px rgba(255, 152, 0, 0.15);
+  border: none;
   display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.progress-value {
-  font-size: 24rpx;
-  color: #666;
-  margin-bottom: 8rpx;
-  text-align: right;
-  position: static;
-  width: auto;
-}
-
-.progress-bar-container {
-  width: 100%;
-  padding: 5rpx 0;
-}
-
-.progress-bar-wrapper {
-  height: 20rpx;
-  background-color: #f5f5f5;
-  border-radius: 10rpx;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  border: 1rpx solid #e8e8e8;
-}
-
-.theoretical-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #FFC107 0%, #FFD54F 100%);
-  border-radius: 10rpx;
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: width 0.5s ease;
-  box-shadow: 0 0 5rpx rgba(255, 193, 7, 0.5);
-}
-
-/* 加载中样式 */
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #f5f5f5;
+  align-items: center;
+  transition: transform 0.1s;
 }
-
-.loading-icon {
-  width: 80rpx;
-  height: 80rpx;
-  border: 6rpx solid #f3f3f3;
-  border-top: 6rpx solid #FFD700;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20rpx;
-}
-
-.loading-text {
-  font-size: 28rpx;
-  color: #666;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.action-btn:active {
+  transform: scale(0.96);
+  background: #FFD600;
 }
 
 /* 体重按钮区域 */
@@ -1668,31 +261,118 @@
   justify-content: space-between;
   margin: 20rpx 0;
 }
-
-.weight-record-btn {
-  background-color: #FFD700;
-  color: rgb(51, 51, 51);
+.weight-record-btn, .weight-history-btn {
+  background: linear-gradient(90deg, #FFD600 0%, #FFF6D1 100%) !important;
+  color: #b07b00 !important;
   text-align: center;
-  line-height: 90rpx;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  font-weight: bold;
+  line-height: 90rpx;
+  border-radius: 45rpx;
+  font-size: 32rpx;
+  font-weight: bold;
   flex: 1;
   margin: 0 10rpx;
-  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(255, 214, 0, 0.13);
+  border: none;
+  height: 90rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.weight-history-btn {
-  background-color: #FFD700;
-  color: rgb(51, 51, 51);
+/* 体重进度 */
+.weight-progress.card {
+  background: #fffbe6;
+  border-left: 8px solid #FFD600;
+}
+.progress-container {
+  width: 100%;
+  background-color: #f5f5f5;
+  height: 16rpx;
+  border-radius: 8rpx;
+  margin-bottom: 30rpx;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  margin-top: 20rpx;
+}
+.progress-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.progress-percentage {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #FFD600;
+  line-height: 1.2;
+}
+.progress-label {
+  font-size: 24rpx;
+  color: #888;
+  margin-top: 8rpx;
+}
+
+/* 对话框样式 */
+.dialog-mask {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.dialog {
+  width: 80%;
+  background-color: #fffbe6;
+  border-radius: 28px;
+  padding: 40rpx;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
+}
+.dialog-title {
+  font-size: 20px;
+  font-weight: bold;
   text-align: center;
-  line-height: 90rpx;
-  border-radius: 45rpx;
-  font-size: 32rpx;
-  font-weight: bold;
+  margin-bottom: 30rpx;
+  color: #ff6f91;
+}
+.dialog-content {
+  margin-bottom: 30rpx;
+}
+.dialog-content input {
+  border: 1rpx solid #FFD600;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 32rpx;
+  height: 90rpx;
+  background: #fff;
+}
+.dialog-footer {
+  display: flex;
+  justify-content: space-between;
+}
+.dialog-btn {
   flex: 1;
   margin: 0 10rpx;
-  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
+  color: #fff;
+  border: none;
+  font-weight: bold;
+}
+.dialog-btn.cancel {
+  background: #f5f5f5;
+  color: #888;
+}
+.dialog-btn.confirm {
+  background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
+  color: #fff;
 }
 
 /* 历史记录对话框样式 */
@@ -1702,60 +382,85 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  background: #fffbe6;
+  border-radius: 28px;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
 }
-
 .history-content {
   flex: 1;
   overflow-y: auto;
   max-height: 60vh;
   padding: 0;
 }
-
 .history-list {
   width: 100%;
 }
-
 .history-header {
   display: flex;
   padding: 20rpx 0;
-  border-bottom: 1px solid #eee;
-  background-color: #f8f8f8;
+  border-bottom: 1px solid #FFD600;
+  background-color: #fffbe6;
   font-weight: bold;
   font-size: 28rpx;
+  color: #ff6f91;
 }
-
 .history-item {
   display: flex;
   padding: 20rpx 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #FFD600;
   font-size: 28rpx;
 }
-
 .header-date, .item-date {
   flex: 2;
   padding-left: 20rpx;
 }
-
 .header-weight, .item-weight {
   flex: 1;
   text-align: center;
 }
-
 .header-action {
   flex: 1;
   text-align: center;
 }
-
 .item-delete {
   flex: 1;
   text-align: center;
   color: #E53935;
 }
-
 .no-records {
   padding: 40rpx;
   text-align: center;
-  color: #999;
+  color: #bbb;
   font-size: 28rpx;
+}
+
+/* 贴士 */
+.tip-content {
+  font-size: 18px;
+  color: #ffb300;
+  line-height: 1.5;
+  font-weight: bold;
+}
+
+/* 其他细节样式可根据需要继续补充 */
+.daily-tip .card-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff6f91;
+  margin-bottom: 8px;
+}
+.daily-tip .tip-content {
+  font-size: 15px;
+  color: #ffb300;
+  line-height: 1.7;
+  font-weight: normal;
+}
+
+.action-btn, .weight-record-btn, .weight-history-btn, .dialog-btn.confirm {
+  background: linear-gradient(90deg, #FFD600 0%, #FFF6D1 100%) !important;
+  color: #b07b00 !important;
+  font-weight: bold;
+  border: none;
+  box-shadow: 0 2px 12px rgba(255, 214, 0, 0.10);
 }
 
