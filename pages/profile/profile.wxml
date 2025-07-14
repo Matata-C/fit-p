@@ -228,7 +228,7 @@
         <image class="arrow-icon" src="/images/右箭头.svg"></image>
       </view>
     </view>
-    <view class="menu-item" bindtap="navigateToPage" data-url="/pages">
+    <view class="menu-item" bindtap="navigateToPage" data-url="/pages/feedback/feedback">
       <view class="menu-item-left">
         <image class="menu-icon" src="/images/信封.svg" mode="aspectFit"></image>
         <text>意见反馈</text>

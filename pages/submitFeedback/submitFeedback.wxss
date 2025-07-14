@@ -1,0 +1,66 @@
+/* pages/submitFeedback/submitFeedback.wxss */
+.submit-container {
+  padding: 24rpx;
+  background-color: #fff;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 50rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.desc {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 40rpx;
+}
+
+.feedback-item {
+  margin-bottom: 32rpx;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.content {
+  width: 100%;
+  min-height: 200rpx;
+  border: 2rpx solid #f5f5f5;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  font-size: 28rpx;
+  color: #666;
+  box-sizing: border-box;
+}
+
+.phone {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #f5f5f5;
+  border-radius: 8rpx;
+  padding: 0 16rpx;
+  font-size: 26rpx;
+  color: #666;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  width: 300rpx;
+  height: 88rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #FFD700;
+  color: #333;
+  font-size: 32rpx;
+  border-radius: 44rpx;
+  margin-top: 30rpx;
+}

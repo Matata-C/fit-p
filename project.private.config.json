@@ -24,11 +24,25 @@
         "miniprogram": {
             "list": [
                 {
-                    "name": "pages/about-us/about-us",
-                    "pathName": "pages/about-us/about-us",
+                    "name": "pages/submitFeedback/submitFeedback",
+                    "pathName": "pages/submitFeedback/submitFeedback",
                     "query": "",
                     "scene": null,
                     "launchMode": "default"
+                },
+                {
+                    "name": "pages/feedback/feedback",
+                    "pathName": "pages/feedback/feedback",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
+                },
+                {
+                    "name": "pages/about-us/about-us",
+                    "pathName": "pages/about-us/about-us",
+                    "query": "",
+                    "launchMode": "default",
+                    "scene": null
                 },
                 {
                     "name": "pages/profile/profile",

@@ -1,0 +1,16 @@
+<!--pages/submitFeedback/submitFeedback.wxml-->
+<view class="submit-container">
+  <view class="title">Hello</view>
+  <view class="desc">有什么好的建议可以分享下哦～</view>
+  
+  <view class="feedback-item">
+    <textarea class="content" placeholder="请填写反馈内容" bindinput="onContentInput"></textarea>
+  </view>
+
+  <view class="feedback-item">
+    <text class="label">联系电话</text>
+    <input class="phone" placeholder="请输入手机号" bindinput="onPhoneInput"></input>
+  </view>
+
+  <button class="submit-button" bindtap="submitFeedback">提交</button>
+</view>
