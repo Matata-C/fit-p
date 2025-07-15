@@ -32,7 +32,7 @@
 .cancel-btn {
   width: 80rpx;
   padding: 16rpx 32rpx;
-  background-color: #f5f5f5;
+  background: linear-gradient(to right, #F5F5F5, #FFF);
   color: #666;
   border-radius: 12rpx;
   font-size: 28rpx;
@@ -51,6 +51,7 @@
 .section {
   background-color: #fff;
   margin-bottom: 32rpx;
+  border: 3rpx solid #FFD600;
   border-radius: 16rpx;
   box-shadow: 0 0 12rpx rgba(255, 214, 0, 0.4);
   overflow: hidden;
@@ -61,9 +62,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2rpx solid #f5f5f5;
+  border-bottom: 2rpx solid rgba(255, 215, 0, 0.2);
   padding: 24rpx 32rpx;
-  background: #fff;
+  background: #FFFBE6;
 }
 
 .info-item:last-child {
@@ -99,7 +100,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  background: #fff;
+  background: #FFFBE6;
 }
 
 .avatar {
