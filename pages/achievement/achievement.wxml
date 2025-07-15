@@ -10,13 +10,11 @@
         <view class="achieve-content">
           <view class="achieve-header">
             <text class="achieve-name">{{item.name}}</text>
-            <block wx:if="{{item.unlocked}}">
-              <text class="achieve-reward">{{item.reward}}</text>
-            </block>
-            <block wx:else>
-              <text class="achieve-reward locked">未解锁</text>
-              <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
-            </block>
+            <text class="achieve-reward" wx:if="{{item.unlocked}}">{{item.reward}}</text>
+            <text class="achieve-reward locked" wx:else>{{item.reward}}</text>
+          </view>
+          <view class="achieve-btn-row" wx:if="{{!item.unlocked}}">
+            <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
           </view>
           <view class="achieve-detail">
             <text class="achieve-type">{{item.type}}</text>
