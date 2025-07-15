@@ -11,7 +11,7 @@
   flex-direction: column;
   align-items: center;
   padding: 40rpx 0;
-  margin-bottom: 30rpx;
+  margin: 30rpx 0;
   background-color: #FFFBE6;
   border-radius: 12rpx;
   box-shadow: 0 0 12rpx rgba(255, 214, 0, 0.4);
