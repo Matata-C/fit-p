@@ -11,7 +11,7 @@
   background: linear-gradient(135deg, #ffcc23, #ffe797);
   color: rgb(24, 24, 24);
   padding: 30rpx 30rpx 60rpx;
-  border-radius: 0 0 40rpx 40rpx;
+  border-radius: 40rpx;
   position: relative;
   overflow: hidden;
 }
