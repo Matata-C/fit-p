@@ -12,7 +12,8 @@
         "pages/calendar/calendar",
         "pages/about-us/about-us",
         "pages/feedback/feedback",
-        "pages/submitFeedback/submitFeedback"
+        "pages/submitFeedback/submitFeedback",
+        "pages/step/step"
     ],
     "window": {
         "backgroundTextStyle": "light",

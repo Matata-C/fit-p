@@ -31,7 +31,7 @@
   </view>
 
   <!-- 步数卡片 -->
-  <view class="step-card">
+  <view class="step-card" bindtap="navigateToStepDetail">
     <view class="step-info">
       <text class="step-date">{{todayDate}}</text>
       <text class="step-label">今日步数</text>

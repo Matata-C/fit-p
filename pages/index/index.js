@@ -88,6 +88,13 @@ Page({
     ],
   },
 
+  // 新增：跳转到今日步数界面
+  navigateToStepDetail() {
+    wx.navigateTo({
+      url: '/pages/step/step'  // 假设新页面路径为 pages/step/step
+    });
+  },
+
   goToCalendar() {
     wx.navigateTo({
       url: '/pages/calendar/calendar'
