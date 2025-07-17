@@ -5,7 +5,7 @@
   min-height: 100vh;
 }
 .section-title {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: bold;
   color: #ff6f91;
   margin: 24px 0 12px 0;
@@ -70,11 +70,11 @@
 .achieve-reward, .achieve-reward.locked {
   position: absolute;
   right: 24px;
-  top: 60px;
+  top: 80px;
   margin: 0;
   background: #FFD600;
   color: #fff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: bold;
   border-radius: 8px;
   padding: 1px 8px;
@@ -104,7 +104,7 @@
 .leaderboard-item {
   display: flex;
   align-items: center;
-  padding: 14px 16px;
+  padding: 11px 16px;
   margin-bottom: 12px;
   border-radius: 18px;
   background: #fff;
@@ -140,7 +140,7 @@
   flex: 1;
   margin-left: 8px;
   color: #ff6f91;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 500;
 }
 .score {
@@ -168,7 +168,7 @@
 .voice-tab {
   font-size: 15px;
   color: #ff6f91;
-  padding: 8px 18px;
+  padding: 6px 12px;
   border-radius: 16px;
   background: #fff8e1;
   font-weight: 500;
@@ -207,7 +207,7 @@
   position: relative;
 }
 .voice-text {
-  font-size: 15px;
+  font-size: 14px;
   color: #FFB300;
   text-align: center;
   line-height: 1.5;
@@ -225,21 +225,21 @@
   justify-content: space-between;
   z-index: 1;
 }
-.voice-btn, .voice-add-btn, .voice-like-btn, .voice-copy-btn, .voice-share-btn, .voice-autoplay-btn {
+.voice-btn, .voice-like-btn, .voice-copy-btn, .voice-share-btn, .voice-autoplay-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   white-space: nowrap;
   text-align: center;
-  height: 36px;
+  height: 28px;
   min-width: 0;
   background: linear-gradient(90deg, #FFD600 60%, #ffe066 100%);
   color: #fff;
   border: none;
   border-radius: 16px;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: bold;
-  padding: 0 18px;
+  padding: 0 6px;
   margin: 0;
   box-shadow: 0 2px 8px #FFD60033;
   transition: background 0.2s, color 0.2s, transform 0.1s;
@@ -247,7 +247,7 @@
 .voice-like-btn, .voice-copy-btn, .voice-share-btn, .voice-autoplay-btn {
   background: #fffbe6;
   color: #FFD600;
-  border: 1.5px solid #FFD600;
+  border: 1px solid #FFD600;
 }
 .voice-btn:active, .voice-add-btn:active {
   background: #FFB300;
@@ -271,7 +271,7 @@
   min-width: 0;
   border: 1.5px solid #FFD600;
   border-radius: 16px;
-  padding: 9px 12px;
+  padding: 5px 10px;
   font-size: 14px;
   background: #fff;
   color: #222;
@@ -282,28 +282,42 @@
   width: 54px;
   min-width: 36px;
   max-width: 72px;
-  height: 32px;
+  height: 28px;
   margin-left: 0;
-  padding: 0;
-  font-size: 14px;
-  border-radius: 14px;
+  padding: 0 6px;
+  font-size: 13px;
+  border-radius: 16px;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(90deg, #FFD600 60%, #ffe066 100%);
   box-shadow: 0 2px 8px #FFD60033;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  text-align: center;
+  transition: background 0.2s, color 0.2s, transform 0.1s;
+}
+.voice-add-btn:active {
+  background: #FFB300;
+  transform: scale(0.97);
 }
 .go-btn {
-  width: 80px;
+  width: 60px;
   min-width: 45px;
   max-width: 80px;
   background: linear-gradient(90deg, #FFA726 0%, #FFD600 100%);
   color: #fff;
   border: none;
   border-radius: 12px;
-  padding: 2px 0;
-  font-size: 12px;
+  padding: 2px 4px;
+  font-size: 11px;
   font-weight: bold;
   height: 22px;
   line-height: 18px;
   margin-left: 8px;
-  margin-right: 90px;
+  margin-right: 80px;
   margin-top: 0;
   box-shadow: 0 2px 8px rgba(255, 214, 0, 0.10);
   align-items: center;

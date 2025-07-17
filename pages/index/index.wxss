@@ -189,7 +189,7 @@
   transition: box-shadow 0.2s;
 }
 .card-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #ff6f91;
   margin-bottom: 8px;
@@ -447,7 +447,7 @@
 
 /* 其他细节样式可根据需要继续补充 */
 .daily-tip .card-title {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #ff6f91;
   margin-bottom: 8px;
