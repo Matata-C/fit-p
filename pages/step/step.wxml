@@ -16,17 +16,8 @@
     
         <view class="steps-text">
           <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
+          <text class="rest-step">剩余{{stepRemaining}}步</text>
         </view>
-      </view>
-      
-      <view class="step-goal">
-        <text class="goal-text">今日目标</text>
-        <text class="goal-value">{{stepGoal}}步</text>
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{progressPercent}}%"></view>
-        </view>
-        <text class="progress-text">{{progressPercent}}% 已完成</text>
-        <text class="rest-step">剩余{{stepRemaining}}步</text>
       </view>
     </view>
   </view>

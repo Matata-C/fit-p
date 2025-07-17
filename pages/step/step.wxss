@@ -8,7 +8,7 @@
 
 /* 顶部核心功能区 */
 .top-section {
-  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  background: #ffe46a;
   color: rgb(24, 24, 24);
   padding: 30rpx 30rpx 60rpx;
   border-radius: 40rpx;
@@ -35,7 +35,7 @@
 .step-container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .step-wrapper {
@@ -68,45 +68,8 @@
   height: 100%;
 }
 .progress-canvas {
-  width: 90%;
-  height: 90%;
-}
-
-.step-goal {
-  width: 320rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 20rpx;
-}
-
-.goal-text {
-  font-size: 32rpx;
-  opacity: 0.9;
-}
-
-.goal-value {
-  font-size: 36rpx;
-  font-weight: 500;
-}
-
-.progress-bar {
-  height: 12rpx;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 6rpx;
-  overflow: hidden;
-}
-
-.progress-fill {
+  width: 100%;
   height: 100%;
-  background-color: white;
-  border-radius: 6rpx;
-  transition: width 1s ease-in-out;
-}
-
-.progress-text {
-  font-size: 28rpx;
-  opacity: 0.8;
-  text-align: right;
 }
 
 .rest-step{
