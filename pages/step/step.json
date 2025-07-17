@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "今日步数",
+  "navigationBarBackgroundColor": "#FFD700",
+  "navigationBarTextStyle": "black",
+  "component": true,
+  "usingComponents": {}
+}

@@ -64,7 +64,7 @@
 
   <button class="logout-btn" bindtap="onLogout">退出登录</button>
   <view class="bottom-info">
-    <text class="desc">Pick记账免费为用户提供安全高效的云同步</text>
+    <text class="desc">TruFit免费为用户提供安全高效的云同步</text>
     <text class="delete-account" bindtap="onDeleteAccount">注销账号</text>
   </view>
 </view>

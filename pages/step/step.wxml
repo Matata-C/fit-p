@@ -1,0 +1,85 @@
+<view class="container">
+  <!-- 顶部核心功能区 -->
+  <view class="top-section">
+    <view class="date-info">
+      <text class="weekday">{{currentWeekday}}</text>
+      <text class="date">{{currentDate}}</text>
+    </view>
+    
+    <view class="step-container">
+      <view class="step-circle">
+        <text class="step-count">{{todaySteps}}</text>
+        <text class="step-unit">步</text>
+        <view class="progress-ring">
+          <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+        </view>
+      </view>
+      
+      <view class="step-goal">
+        <text class="goal-text">今日目标</text>
+        <text class="goal-value">{{stepGoal}}步</text>
+        <view class="progress-bar">
+          <view class="progress-fill" style="width: {{progressPercent}}%"></view>
+        </view>
+        <text class="progress-text">{{progressPercent}}% 已完成</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 数据转化区 -->
+  <view class="conversion-section">
+    <view class="section-title">今日数据转化</view>
+    <view class="conversion-cards">
+      <view class="conversion-card">
+        <icon class="conversion-icon" type="location" size="20" color="#3498db"></icon>
+        <text class="conversion-value">{{distance}}公里</text>
+        <text class="conversion-label">距离</text>
+      </view>
+      <view class="conversion-card">
+        <icon class="conversion-icon" type="success" size="20" color="#2ecc71"></icon>
+        <text class="conversion-value">{{calories}}千卡</text>
+        <text class="conversion-label">消耗</text>
+      </view>
+      <view class="conversion-card">
+        <icon class="conversion-icon" type="clock" size="20" color="#f39c12"></icon>
+        <text class="conversion-value">{{duration}}分钟</text>
+        <text class="conversion-label">时长</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 时间轴记录 -->
+  <view class="timeline-section">
+    <view class="section-title">本周记录</view>
+    <view class="timeline">
+      <view wx:for="{{weekSteps}}" wx:key="index" class="timeline-item">
+        <view class="timeline-dot {{item.date === currentDate ? 'active' : ''}}"></view>
+        <view class="timeline-content">
+          <view class="timeline-date">{{item.weekday}}</view>
+          <view class="timeline-steps">{{item.steps}}步</view>
+          <view class="timeline-bar">
+            <view class="timeline-bar-fill" style="height: {{item.percent}}%"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部功能入口 -->
+  <view class="bottom-section">
+    <view class="bottom-menu">
+      <navigator url="/pages/ranking/ranking" class="menu-item">
+        <icon type="friend" size="24" color="#7f8c8d"></icon>
+        <text class="menu-text">排行榜</text>
+      </navigator>
+      <navigator url="/pages/history/history" class="menu-item">
+        <icon type="list" size="24" color="#7f8c8d"></icon>
+        <text class="menu-text">历史</text>
+      </navigator>
+      <navigator url="/pages/settings/settings" class="menu-item">
+        <icon type="setting" size="24" color="#7f8c8d"></icon>
+        <text class="menu-text">去运动</text>
+      </navigator>
+    </view>
+  </view>
+</view>

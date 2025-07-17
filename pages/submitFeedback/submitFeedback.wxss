@@ -4,13 +4,14 @@
   background-color: #fff;
   min-height: 100vh;
   box-sizing: border-box;
+  background: linear-gradient(to bottom,#FFD600, #FFFBE6);
 }
 
 .feedback-header {
   margin-bottom: 32rpx;
 }
 .title {
-  font-size: 40rpx;
+  font-size: 52rpx;
   font-weight: bold;
   color: #333;
 }
@@ -21,16 +22,18 @@
 }
 
 .form-section {
-  margin-bottom: 44rpx;
+  background-color: #fffbe6;
+  border-radius: 20rpx;
+  margin-bottom: 26rpx;
+  padding: 16rpx 12rpx;
 }
 .label {
   font-size: 28rpx;
   font-weight: bold;
   color: #ff6f91;
   display: block;
-  margin-top: 20rpx;
-  margin-bottom: 12rpx;
-  margin-left: 12rpx;
+  margin-bottom: 16rpx;
+  margin-left: 10rpx;
 }
 
 .type-group {
@@ -42,8 +45,8 @@
   padding: 16rpx 24rpx;
   font-size: 26rpx;
   color: #666;
-  border: 2rpx solid #FFD600;
-  border-radius: 8rpx;
+  border: 3rpx solid #FFD600;
+  border-radius: 30rpx;
   background-color: #FFFBE6;
   white-space: nowrap;
   margin: 0; 
@@ -51,8 +54,8 @@
 }
 
 .type-btn.active {
-  color: #B07B00 !important;
-  background: linear-gradient(to right,#FFD700, #FFF5CD);
+  color: #fff !important;
+  background:#FFD600;
 }
 
 .desc-textarea {
@@ -65,6 +68,7 @@
   font-size: 26rpx;
   color: #666;
   box-sizing: border-box;
+  background-color: #FFFEF8;
 }
 .word-count {
   text-align: right;
@@ -126,6 +130,7 @@
   font-size: 26rpx;
   color: #666;
   box-sizing: border-box;
+  background-color: #FFFEF8;
 }
 
 .submit-btn {

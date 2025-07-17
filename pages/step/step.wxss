@@ -1,0 +1,277 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fffec1;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* 顶部核心功能区 */
+.top-section {
+  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  color: rgb(24, 24, 24);
+  padding: 30rpx 30rpx 60rpx;
+  border-radius: 40rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.date-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+}
+
+.weekday {
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 32rpx;
+  opacity: 0.9;
+}
+
+.step-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.step-circle {
+  position: relative;
+  width: 280rpx;
+  height: 280rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.step-count {
+  font-size: 60rpx;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.step-unit {
+  font-size: 32rpx;
+  margin-top: 10rpx;
+  opacity: 0.9;
+  z-index: 1;
+}
+
+.progress-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.progress-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.step-goal {
+  width: 320rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.goal-text {
+  font-size: 32rpx;
+  opacity: 0.9;
+}
+
+.goal-value {
+  font-size: 36rpx;
+  font-weight: 500;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: white;
+  border-radius: 6rpx;
+  transition: width 1s ease-in-out;
+}
+
+.progress-text {
+  font-size: 28rpx;
+  opacity: 0.8;
+  text-align: right;
+}
+
+/* 数据转化区 */
+.conversion-section {
+  padding: 30rpx;
+  margin-top: -20rpx;
+}
+
+.section-title {
+  margin-top: 10px;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #ff6f91;
+  margin-bottom: 25rpx;
+}
+
+.conversion-cards {
+  display: flex;
+  justify-content: space-between;
+  gap: 20rpx;
+}
+
+.conversion-card {
+  flex: 1;
+  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  border-radius: 20rpx;
+  padding: 30rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+
+.conversion-card:active {
+  transform: translateY(4rpx);
+}
+
+.conversion-icon {
+  margin-bottom: 15rpx;
+}
+
+.conversion-value {
+  font-size: 36rpx;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 5rpx;
+}
+
+.conversion-label {
+  font-size: 28rpx;
+  color: #7f8c8d;
+}
+
+/* 时间轴记录 */
+.timeline-section {
+  padding: 0 30rpx 30rpx;
+  flex: 1;
+}
+
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  border-radius: 20rpx;
+  padding: 50rpx 20rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.timeline-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 14%;
+}
+
+.timeline-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 15rpx;
+  position: relative;
+}
+
+.timeline-dot.active {
+  background-color: #ff6f91;
+}
+
+.timeline-dot.active::after {
+  content: '';
+  position: absolute;
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  border: 1px solid rgba(52, 152, 219, 0.3);
+  top: -7rpx;
+  left: -7rpx;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+.timeline-date {
+  font-size: 26rpx;
+  color: #1a1a1a;
+  margin-bottom: 15rpx;
+}
+
+.timeline-steps {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: rgb(71, 71, 71);
+  margin-bottom: 15rpx;
+}
+
+.timeline-bar {
+  width: 20rpx;
+  flex: 1;
+  background-color: #f1f1f1;
+  border-radius: 10rpx;
+  position: relative;
+  min-height: 120rpx;
+}
+
+.timeline-bar-fill {
+  width: 100%;
+  background: linear-gradient(to top, #ff3967, #ff6f91);
+  border-radius: 10rpx;
+  position: absolute;
+  bottom: 0;
+  transition: height 1s ease-out;
+}
+
+/* 底部功能入口 */
+.bottom-section {
+  border-top: 1px solid #eee;
+  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  border-radius: 20px;
+}
+
+.bottom-menu {
+  display: flex;
+  justify-content: space-around;
+  padding: 20rpx 0;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #000000;
+  text-decoration: none;
+}
+
+.menu-text {
+  font-size: 24rpx;
+  margin-top: 10rpx;
+}
