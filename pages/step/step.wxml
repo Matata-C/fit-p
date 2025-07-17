@@ -7,11 +7,15 @@
     </view>
     
     <view class="step-container">
-      <view class="step-circle">
-        <text class="step-count">{{todaySteps}}</text>
-        <text class="step-unit">步</text>
-        <view class="progress-ring">
-          <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+      <view class="step-wrapper">
+        <view class="step-circle">
+          <view class="progress-ring">
+            <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+          </view>
+        </view>
+    
+        <view class="steps-text">
+          <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
         </view>
       </view>
       
@@ -22,6 +26,7 @@
           <view class="progress-fill" style="width: {{progressPercent}}%"></view>
         </view>
         <text class="progress-text">{{progressPercent}}% 已完成</text>
+        <text class="rest-step">剩余{{stepRemaining}}步</text>
       </view>
     </view>
   </view>

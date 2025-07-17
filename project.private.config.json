@@ -24,6 +24,13 @@
         "miniprogram": {
             "list": [
                 {
+                    "name": "pages/step/step",
+                    "pathName": "pages/step/step",
+                    "query": "",
+                    "scene": null,
+                    "launchMode": "default"
+                },
+                {
                     "name": "pages/food/food",
                     "pathName": "pages/food/food",
                     "query": "",

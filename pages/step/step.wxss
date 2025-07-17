@@ -38,27 +38,28 @@
   justify-content: space-between;
 }
 
+.step-wrapper {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+}
+
 .step-circle {
   position: relative;
   width: 280rpx;
   height: 280rpx;
+}
+
+.steps-text {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column; 
+  align-items: center; 
 }
 
 .step-count {
-  font-size: 60rpx;
+  font-size: 54rpx;
   font-weight: bold;
-  z-index: 1;
-}
-
-.step-unit {
-  font-size: 32rpx;
-  margin-top: 10rpx;
-  opacity: 0.9;
-  z-index: 1;
+  color: white;
 }
 
 .progress-ring {
@@ -66,10 +67,9 @@
   width: 100%;
   height: 100%;
 }
-
 .progress-canvas {
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
 }
 
 .step-goal {
@@ -107,6 +107,13 @@
   font-size: 28rpx;
   opacity: 0.8;
   text-align: right;
+}
+
+.rest-step{
+  text-align: right;
+  font-size: 28rpx;
+  opacity: 0.8;
+  margin-top: 10rpx;
 }
 
 /* 数据转化区样式 */

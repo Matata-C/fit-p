@@ -9,6 +9,7 @@ Page({
     calories: 320,
     duration: 65,
     weekSteps: [],
+    stepRemaining:0,
      // 数据转化区相关数据
      caloriesBurned: 0,       // 消耗热量
      calorieEquivalent: '',   // 热量等价物
@@ -23,7 +24,6 @@ Page({
   onLoad() {
     this.initDate();
     this.initWeekSteps();
-    this.drawProgressRing();
     // 初始化日期
     const now = new Date();
     const year = now.getFullYear();
@@ -35,6 +35,7 @@ Page({
     
     // 获取微信运动数据
     this.getWeRunData();
+    this.calcStepRemaining();
   },
 
   // 获取微信运动数据
@@ -46,6 +47,7 @@ Page({
           wx.authorize({
             scope: 'scope.werun',
             success: () => {
+              this.setData({ isAuthorized: true });
               this.fetchWeRunData();
             },
             fail: () => {
@@ -53,12 +55,14 @@ Page({
                 title: '需要授权微信运动才能获取步数',
                 icon: 'none'
               });
-              // 模拟数据用于展示
-              this.calculateConversions(7852);
+              // 使用默认步数模拟数据（保持与之前逻辑一致）
+              this.setData({ todaySteps: 7852, isAuthorized: false });
+              this.updateProgressAndDraw(); // 新增：更新进度并绘制
             }
           });
         } else {
           // 已授权，直接获取数据
+          this.setData({ isAuthorized: true });
           this.fetchWeRunData();
         }
       }
@@ -70,14 +74,13 @@ Page({
     wx.getWeRunData({
       success: (res) => {
         // 注意：真实项目中需要解密res.encryptedData获取步数
-        // 这里使用模拟数据进行演示
+        // 这里使用模拟数据进行演示（实际开发需替换为解密逻辑）
         const mockSteps = 7852; // 模拟步数
-        this.setData({
-          todaySteps: mockSteps
+        this.setData({ todaySteps: mockSteps }, () => {
+          this.updateProgressAndDraw(); // 新增：更新进度并绘制
+          this.initWeekSteps(); // 重新初始化本周数据，确保今日步数正确
+          this.calcStepRemaining();
         });
-        
-        // 计算转化数据
-        this.calculateConversions(mockSteps);
       },
       fail: (err) => {
         console.error('获取步数失败', err);
@@ -85,8 +88,11 @@ Page({
           title: '获取步数失败',
           icon: 'none'
         });
-        // 模拟数据用于展示
-        this.calculateConversions(7852);
+        // 使用默认步数模拟数据
+        this.setData({ todaySteps: 7852 }, () => {
+          this.updateProgressAndDraw();
+          this.initWeekSteps();
+        });
       }
     });
   },
@@ -153,6 +159,72 @@ Page({
     });
   },
 
+   //更新进度百分比并绘制环形进度条
+   updateProgressAndDraw() {
+    const { todaySteps, stepGoal } = this.data;
+    const progressPercent = Math.min(Math.round((todaySteps / stepGoal) * 100), 100);
+    
+    this.setData({ progressPercent }, () => {
+      this.drawProgressRing(); // 确保进度百分比更新后再绘制
+    });
+  },
+
+  // 绘制环形进度条
+  drawProgressRing() {
+    wx.createSelectorQuery().select('.progress-canvas')
+      .fields({ node: true, size: true })
+      .exec((res) => {
+        if (!res || !res[0] || !res[0].node) return;
+        
+        const canvas = res[0].node;
+        const ctx = canvas.getContext('2d');
+        const dpr = wx.getSystemInfoSync().pixelRatio;
+       
+        canvas.width = res[0].width * dpr;
+        canvas.height = res[0].height * dpr;
+        ctx.scale(dpr, dpr);
+        
+        const width = res[0].width; 
+        const height = res[0].height; 
+        const radius = (width - 10) / 2; 
+        const centerX = width / 2; 
+        const centerY = height / 2; 
+        const lineWidth = 12; 
+        
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+        ctx.lineWidth = lineWidth;
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        ctx.stroke();
+        
+        const progress = this.data.progressPercent / 100;
+        const startAngle = -0.5 * Math.PI; 
+        const endAngle = startAngle + 2 * Math.PI * progress; 
+      
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.lineWidth = lineWidth;
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, '#ff6f91'); 
+        gradient.addColorStop(1, '#ffb3c6');
+        ctx.strokeStyle = gradient;
+
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      });
+  },
+
+  //计算剩余步数
+  calcStepRemaining() {
+    const { stepGoal, todaySteps } = this.data;
+    // 确保结果不为负数（如果今日步数超过目标，显示0）
+    const remaining = Math.max(stepGoal - todaySteps, 0);
+    this.setData({
+      stepRemaining:
+   remaining
+    });
+  },
+  
   // 初始化日期
   initDate() {
     const now = new Date();
@@ -207,37 +279,5 @@ Page({
     this.setData({
       weekSteps: weekData
     });
-  },
-
-  // 绘制环形进度条
-  drawProgressRing() {
-    const ctx = wx.createCanvasContext('progressRing');
-    const width = 280; // 画布宽度
-    const height = 280; // 画布高度
-    const radius = (width - 30) / 2; // 圆环半径
-    const centerX = width / 2; // 圆心x坐标
-    const centerY = height / 2; // 圆心y坐标
-    const lineWidth = 12; // 圆环宽度
-    
-    // 绘制背景圆环
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.setLineWidth(lineWidth);
-    ctx.setStrokeStyle('rgba(255, 255, 255, 0.2)');
-    ctx.stroke();
-    
-    // 绘制进度圆环
-    const progress = this.data.progressPercent / 100;
-    const startAngle = -0.5 * Math.PI; // 开始角度（-90度）
-    const endAngle = startAngle + 2 * Math.PI * progress; // 结束角度
-    
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-    ctx.setLineWidth(lineWidth);
-    ctx.setStrokeStyle('white');
-    ctx.setLineCap('round');
-    ctx.stroke();
-    
-    ctx.draw();
   }
 });
