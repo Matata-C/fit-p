@@ -1,35 +1,33 @@
 <view class="container">
   <!-- 顶部核心功能区 -->
-  <view class="top-section">
-    <view class="date-info">
-      <text class="weekday">{{currentWeekday}}</text>
-      <text class="date">{{currentDate}}</text>
-    </view>
-    
-    <view class="step-container">
-      <view class="step-wrapper">
-        <view class="step-circle">
-          <view class="progress-ring">
-            <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
-          </view>
-        </view>
-    
-        <view class="steps-text">
-          <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
-        </view>
-      </view>
-      
-      <view class="step-goal">
-        <text class="goal-text">今日目标</text>
-        <text class="goal-value">{{stepGoal}}步</text>
-        <view class="progress-bar">
-          <view class="progress-fill" style="width: {{progressPercent}}%"></view>
-        </view>
-        <text class="progress-text">{{progressPercent}}% 已完成</text>
-        <text class="rest-step">剩余{{stepRemaining}}步</text>
-      </view>
+  <view class="step-card">
+  <view class="step-card-left">
+    <!-- 环形进度条，可用canvas或第三方组件 -->
+    <canvas canvas-id="progressCircle" class="progress-circle"></canvas>
+    <view class="step-count">
+      {{currentStep}}/{{targetStep}}
     </view>
   </view>
+  <view class="step-card-right">
+    <view class="step-card-header">
+      <text class="weekday">{{weekday}}</text>
+      <text class="date">{{date}}</text>
+    </view>
+    <view class="step-goal">
+      <text>今日目标</text>
+      <text class="goal-num">{{targetStep}}步</text>
+    </view>
+    <view class="step-progress-bar">
+      <view class="progress-bar-bg">
+        <view class="progress-bar-fg" style="width: {{percent}}%;"></view>
+      </view>
+    </view>
+    <view class="step-progress-info">
+      <text>{{percent}}% 已完成</text>
+      <text>剩余{{remainStep}}步</text>
+    </view>
+  </view>
+</view>
   
   <!-- 数据转化区 -->
 
@@ -66,7 +64,7 @@
   
   <!-- 时间轴记录 -->
   <view class="timeline-section">
-    <view class="section-title">今日分时段步数</view>
+    <view class="section-title"><text>今日分时段步数</text></view>
     <view class="period-list">
       <view wx:for="{{todayPeriods}}" wx:key="index" class="period-item">
         <view class="period-label">{{item.label}}</view>

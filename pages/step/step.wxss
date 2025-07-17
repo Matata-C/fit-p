@@ -7,113 +7,83 @@
 }
 
 /* 顶部核心功能区 */
-.top-section {
-  background: linear-gradient(135deg, #ffcc23, #ffe797);
-  color: rgb(24, 24, 24);
-  padding: 30rpx 30rpx 60rpx;
-  border-radius: 40rpx;
-  position: relative;
-  overflow: hidden;
-}
-
-.date-info {
+.step-card {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 40rpx;
+  background: #ffe066;
+  border-radius: 24px;
+  padding: 24px 16px 16px 16px;
+  margin: 16px;
+  box-shadow: 0 4px 24px rgba(255, 214, 0, 0.13);
 }
-
-.weekday {
-  font-size: 36rpx;
-  font-weight: 500;
-}
-
-.date {
-  font-size: 32rpx;
-  opacity: 0.9;
-}
-
-.step-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.step-wrapper {
-  display: flex;
-  flex-direction: column; 
-  align-items: center; 
-}
-
-.step-circle {
-  position: relative;
-  width: 280rpx;
-  height: 280rpx;
-}
-
-.steps-text {
-  display: flex;
-  flex-direction: column; 
-  align-items: center; 
-}
-
-.step-count {
-  font-size: 54rpx;
-  font-weight: bold;
-  color: white;
-}
-
-.progress-ring {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-.progress-canvas {
-  width: 90%;
-  height: 90%;
-}
-
-.step-goal {
-  width: 320rpx;
+.step-card-left {
   display: flex;
   flex-direction: column;
-  gap: 20rpx;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
 }
-
-.goal-text {
-  font-size: 32rpx;
-  opacity: 0.9;
+.progress-circle {
+  width: 90px;
+  height: 90px;
 }
-
-.goal-value {
-  font-size: 36rpx;
-  font-weight: 500;
+.step-count {
+  font-size: 28px;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 8px;
 }
-
-.progress-bar {
-  height: 12rpx;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 6rpx;
-  overflow: hidden;
+.step-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
-.progress-fill {
-  height: 100%;
-  background-color: white;
-  border-radius: 6rpx;
-  transition: width 1s ease-in-out;
+.step-card-header {
+  display: flex;
+  justify-content: space-between;
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
-
-.progress-text {
-  font-size: 28rpx;
-  opacity: 0.8;
-  text-align: right;
+.weekday {
+  font-weight: bold;
 }
-
-.rest-step{
-  text-align: right;
-  font-size: 28rpx;
-  opacity: 0.8;
-  margin-top: 10rpx;
+.date {
+  font-size: 15px;
+}
+.step-goal {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+.goal-num {
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 8px;
+}
+.step-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #fffde7;
+  border-radius: 4px;
+  margin: 8px 0;
+  position: relative;
+}
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background: #fffde7;
+  border-radius: 4px;
+}
+.progress-bar-fg {
+  height: 8px;
+  background: #ff6f91;
+  border-radius: 4px;
+}
+.step-progress-info {
+  display: flex;
+  justify-content: space-between;
+  color: #888;
+  font-size: 14px;
 }
 
 /* 数据转化区样式 */
