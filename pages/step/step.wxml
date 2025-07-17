@@ -7,11 +7,15 @@
     </view>
     
     <view class="step-container">
-      <view class="step-circle">
-        <text class="step-count">{{todaySteps}}</text>
-        <text class="step-unit">步</text>
-        <view class="progress-ring">
-          <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+      <view class="step-wrapper">
+        <view class="step-circle">
+          <view class="progress-ring">
+            <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+          </view>
+        </view>
+    
+        <view class="steps-text">
+          <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
         </view>
       </view>
       
@@ -22,31 +26,43 @@
           <view class="progress-fill" style="width: {{progressPercent}}%"></view>
         </view>
         <text class="progress-text">{{progressPercent}}% 已完成</text>
+        <text class="rest-step">剩余{{stepRemaining}}步</text>
       </view>
     </view>
   </view>
   
   <!-- 数据转化区 -->
-  <view class="conversion-section">
-    <view class="section-title">今日数据转化</view>
-    <view class="conversion-cards">
-      <view class="conversion-card">
-        <icon class="conversion-icon" type="location" size="20" color="#3498db"></icon>
-        <text class="conversion-value">{{distance}}公里</text>
-        <text class="conversion-label">距离</text>
-      </view>
-      <view class="conversion-card">
-        <icon class="conversion-icon" type="success" size="20" color="#2ecc71"></icon>
-        <text class="conversion-value">{{calories}}千卡</text>
-        <text class="conversion-label">消耗</text>
-      </view>
-      <view class="conversion-card">
-        <icon class="conversion-icon" type="clock" size="20" color="#f39c12"></icon>
-        <text class="conversion-value">{{duration}}分钟</text>
-        <text class="conversion-label">时长</text>
+
+  <view class="section-title">
+    <text>数据转化</text>
+    
+  </view>
+
+<view class="data-conversion-area">  
+  <view class="conversion-cards">
+    <!-- 消耗热量卡片 -->
+    <view class="conversion-card">
+      <view class="card-icon energy-icon">🔥</view>
+      <view class="card-content">
+        <view class="data-label">消耗热量</view>
+        <view class="data-value">{{caloriesBurned}} 千卡</view>
+        <view class="equivalent">相当于 1{{calorieEquivalent}}</view>
       </view>
     </view>
+    <view class="section-divider"></view>
+    <!-- 运动效果卡片 -->
+    <view class="conversion-card">
+      <view class="card-icon effect-icon">💪</view>
+      <view class="card-content">
+        <view class="data-label">运动效果</view>
+        <view class="data-value">{{exerciseEffect}}</view>
+        <view class="equivalent">相当于 {{exerciseEquivalent}}</view>
+      </view>
+    </view>
+    
+    
   </view>
+</view>
   
   <!-- 时间轴记录 -->
   <view class="timeline-section">
