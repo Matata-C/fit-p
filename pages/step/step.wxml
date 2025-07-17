@@ -1,11 +1,24 @@
 <view class="container">
   <!-- 顶部核心功能区 -->
-  <view class="step-card">
-  <view class="step-card-left">
-    <!-- 环形进度条，可用canvas或第三方组件 -->
-    <canvas canvas-id="progressCircle" class="progress-circle"></canvas>
-    <view class="step-count">
-      {{currentStep}}/{{targetStep}}
+  <view class="top-section">
+    <view class="date-info">
+      <text class="weekday">{{currentWeekday}}</text>
+      <text class="date">{{currentDate}}</text>
+    </view>
+    
+    <view class="step-container">
+      <view class="step-wrapper">
+        <view class="step-circle">
+          <view class="progress-ring">
+            <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
+          </view>
+        </view>
+    
+        <view class="steps-text">
+          <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
+          <text class="rest-step">剩余{{stepRemaining}}步</text>
+        </view>
+      </view>
     </view>
   </view>
   <view class="step-card-right">
@@ -93,4 +106,4 @@
       </navigator>
     </view>
   </view>
-</view>
+
