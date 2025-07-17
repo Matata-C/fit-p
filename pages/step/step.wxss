@@ -111,10 +111,12 @@
 
 /* 数据转化区样式 */
 .data-conversion-area {
+  border: 3px solid #FFD600;
+  border-radius: 28px;
+  box-shadow: 0 2px 12px rgba(255, 214, 0, 0.08);
   padding: 16px;
   margin-bottom: 20px;
   background-color: #ffffff;
-  border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
@@ -146,7 +148,7 @@
 .conversion-card {
   flex: 1;
   min-width: 120px;
-  padding: 16px;
+  padding: 10px;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -170,7 +172,7 @@
 }
 
 .effect-icon {
-  background-color: #e6f7ff;
+  background-color: #fffec1;
   color: #1890ff;
 }
 

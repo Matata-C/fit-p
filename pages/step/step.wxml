@@ -40,8 +40,8 @@
       <view class="card-icon energy-icon">🔥</view>
       <view class="card-content">
         <view class="data-label">消耗热量</view>
-        <view class="data-value">320<!--用于示例数据-->{{caloriesBurned}} 千卡</view>
-        <view class="equivalent">相当于 1个汉堡 <!--用于示例数据-->{{calorieEquivalent}}</view>
+        <view class="data-value">{{caloriesBurned}} 千卡</view>
+        <view class="equivalent">相当于 1{{calorieEquivalent}}</view>
       </view>
     </view>
     <view class="section-divider"></view>
@@ -50,8 +50,8 @@
       <view class="card-icon effect-icon">💪</view>
       <view class="card-content">
         <view class="data-label">运动效果</view>
-        <view class="data-value">{{exerciseEffect}}良好活动<!--用于示例数据--></view>
-        <view class="equivalent">相当于 {{exerciseEquivalent}}游泳20分钟<!--用于示例数据--></view>
+        <view class="data-value">{{exerciseEffect}}</view>
+        <view class="equivalent">相当于 {{exerciseEquivalent}}</view>
       </view>
     </view>
     
