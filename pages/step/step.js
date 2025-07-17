@@ -8,12 +8,17 @@ Page({
     distance: 5.9,
     calories: 320,
     duration: 65,
-    weekSteps: []
+    // weekSteps: [] // Remove weekSteps
+    todayPeriods: [
+      { label: '早', steps: 2500, percent: 40 },
+      { label: '中', steps: 3200, percent: 60 },
+      { label: '晚', steps: 2152, percent: 35 }
+    ]
   },
 
   onLoad() {
     this.initDate();
-    this.initWeekSteps();
+    // this.initWeekSteps(); // Remove weekSteps init
     this.drawProgressRing();
   },
 
@@ -31,47 +36,7 @@ Page({
     });
   },
 
-  // 初始化本周步数数据
-  initWeekSteps() {
-    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-    const now = new Date();
-    const currentDay = now.getDay();
-    const currentMonth = now.getMonth() + 1;
-    const currentDate = now.getDate();
-    
-    const weekData = [];
-    // 生成本周数据
-    for (let i = 0; i < 7; i++) {
-      // 计算日期
-      const dateDiff = i - currentDay;
-      const stepDate = new Date(now);
-      stepDate.setDate(currentDate + dateDiff);
-      
-      // 随机生成步数 (周末步数更多)
-      let steps;
-      if (i === 0 || i === 6) { // 周末
-        steps = Math.floor(Math.random() * 5000) + 8000;
-      } else if (i === currentDay) { // 今天
-        steps = this.data.todaySteps;
-      } else { // 工作日
-        steps = Math.floor(Math.random() * 4000) + 5000;
-      }
-      
-      // 计算百分比
-      const percent = Math.min(Math.round((steps / this.data.stepGoal) * 100), 100);
-      
-      weekData.push({
-        weekday: weekdays[i],
-        date: `${currentMonth}月${stepDate.getDate()}日`,
-        steps: steps,
-        percent: percent
-      });
-    }
-    
-    this.setData({
-      weekSteps: weekData
-    });
-  },
+  // Remove initWeekSteps function
 
   // 绘制环形进度条
   drawProgressRing() {

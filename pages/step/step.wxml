@@ -50,17 +50,14 @@
   
   <!-- 时间轴记录 -->
   <view class="timeline-section">
-    <view class="section-title">本周记录</view>
-    <view class="timeline">
-      <view wx:for="{{weekSteps}}" wx:key="index" class="timeline-item">
-        <view class="timeline-dot {{item.date === currentDate ? 'active' : ''}}"></view>
-        <view class="timeline-content">
-          <view class="timeline-date">{{item.weekday}}</view>
-          <view class="timeline-steps">{{item.steps}}步</view>
-          <view class="timeline-bar">
-            <view class="timeline-bar-fill" style="height: {{item.percent}}%"></view>
-          </view>
-        </view>
+    <view class="section-title">今日分时段步数</view>
+    <view class="period-list">
+      <view wx:for="{{todayPeriods}}" wx:key="index" class="period-item">
+        <view class="period-label">{{item.label}}</view>
+        <progress percent="{{item.percent}}" stroke-width="15" active 
+          color="{{item.label === '早' ? '#FFD600' : (item.label === '中' ? '#FFB6B9' : '#A0E7E5')}}" 
+          backgroundColor="#FFF6D1" border-radius="8" class="period-progress-bar"/>
+        <view class="period-steps">{{item.steps}}步</view>
       </view>
     </view>
   </view>
