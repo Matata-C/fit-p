@@ -272,7 +272,7 @@
 /* 底部功能入口 */
 .bottom-section {
   border-top: 1px solid #eee;
-  background: #ffb300;
+  background: #ffe46a;
   border-radius: 20px;
 }
 
@@ -302,7 +302,7 @@
 .menu-text {
   font-size: 28rpx;
   font-weight: bold;
-  color: #fff;
+  color: rgb(109, 109, 109);
   letter-spacing: 2rpx;
   margin: 10rpx;
   transition: color 0.3s;
