@@ -8,9 +8,16 @@ Page({
     remainStep: 2148,
     date: '2025年7月17日',
     weekday: '周四',
-    distance: 5.9,
     calories: 320,
     duration: 65,
+    todaySteps: 0,
+    // 数据转化区相关数据
+    caloriesBurned: 0,       // 消耗热量
+    calorieEquivalent: '',   // 热量等价物
+    exerciseEffect: '',      // 运动效果描述
+    exerciseEquivalent: '',  // 运动效果等价物
+    distance: 0,             // 距离
+    distanceEquivalent: ''  , // 距离等价物
     // weekSteps: [] // Remove weekSteps
     todayPeriods: [
       { label: '早', steps: 2500, percent: 40 },
@@ -25,6 +32,17 @@ Page({
     this.initDate();
     // this.initWeekSteps(); // Remove weekSteps init
     this.drawProgressRing();
+    // 初始化日期
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    this.setData({
+      currentDate: `${year}年${month}月${day}日`
+    });
+    
+    // 获取微信运动数据
+    this.getWeRunData();
   },
 
   // 获取微信运动数据
@@ -36,7 +54,6 @@ Page({
           wx.authorize({
             scope: 'scope.werun',
             success: () => {
-              this.setData({ isAuthorized: true });
               this.fetchWeRunData();
             },
             fail: () => {
@@ -44,14 +61,12 @@ Page({
                 title: '需要授权微信运动才能获取步数',
                 icon: 'none'
               });
-              // 使用默认步数模拟数据（保持与之前逻辑一致）
-              this.setData({ todaySteps: 7852, isAuthorized: false });
-              this.updateProgressAndDraw(); // 新增：更新进度并绘制
+              // 模拟数据用于展示
+              this.calculateConversions(7852);
             }
           });
         } else {
           // 已授权，直接获取数据
-          this.setData({ isAuthorized: true });
           this.fetchWeRunData();
         }
       }
@@ -63,13 +78,14 @@ Page({
     wx.getWeRunData({
       success: (res) => {
         // 注意：真实项目中需要解密res.encryptedData获取步数
-        // 这里使用模拟数据进行演示（实际开发需替换为解密逻辑）
+        // 这里使用模拟数据进行演示
         const mockSteps = 7852; // 模拟步数
-        this.setData({ todaySteps: mockSteps }, () => {
-          this.updateProgressAndDraw(); // 新增：更新进度并绘制
-          this.initWeekSteps(); // 重新初始化本周数据，确保今日步数正确
-          this.calcStepRemaining();
+        this.setData({
+          todaySteps: mockSteps
         });
+        
+        // 计算转化数据
+        this.calculateConversions(mockSteps);
       },
       fail: (err) => {
         console.error('获取步数失败', err);
@@ -77,11 +93,8 @@ Page({
           title: '获取步数失败',
           icon: 'none'
         });
-        // 使用默认步数模拟数据
-        this.setData({ todaySteps: 7852 }, () => {
-          this.updateProgressAndDraw();
-          this.initWeekSteps();
-        });
+        // 模拟数据用于展示
+        this.calculateConversions(7852);
       }
     });
   },
