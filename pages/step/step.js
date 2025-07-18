@@ -2,15 +2,13 @@ Page({
   data: {
     currentWeekday: '',
     currentDate: '',
-    currentStep: 7852,
-    targetStep: 10000,
-    percent: 79,
-    remainStep: 2148,
-    date: '2025年7月17日',
-    weekday: '周四',
+    todaySteps: 0,
+    stepGoal: 10000,
+    distance: 5.9,
     calories: 320,
     duration: 65,
-    todaySteps: 0,
+    weekSteps: [],
+    stepRemaining: 0,
     // 数据转化区相关数据
     caloriesBurned: 0,       // 消耗热量
     calorieEquivalent: '',   // 热量等价物
@@ -26,12 +24,9 @@ Page({
     ]
   },
 
-
-
   onLoad() {
     this.initDate();
     // this.initWeekSteps(); // Remove weekSteps init
-    this.drawProgressRing();
     // 初始化日期
     const now = new Date();
     const year = now.getFullYear();
@@ -43,6 +38,7 @@ Page({
     
     // 获取微信运动数据
     this.getWeRunData();
+    this.calcStepRemaining();
   },
 
   // 获取微信运动数据
@@ -54,6 +50,7 @@ Page({
           wx.authorize({
             scope: 'scope.werun',
             success: () => {
+              this.setData({ isAuthorizes: true});
               this.fetchWeRunData();
             },
             fail: () => {
@@ -61,12 +58,14 @@ Page({
                 title: '需要授权微信运动才能获取步数',
                 icon: 'none'
               });
-              // 模拟数据用于展示
-              this.calculateConversions(7852);
+              // 使用默认步数模拟数据（保持与之前逻辑一致）
+              this.setData({ todaySteps: 7852, isAuthorized: false });
+              this.updateProgressAndDraw();
             }
           });
         } else {
           // 已授权，直接获取数据
+          this.setData({ isAuthorized: true});
           this.fetchWeRunData();
         }
       }
@@ -80,12 +79,10 @@ Page({
         // 注意：真实项目中需要解密res.encryptedData获取步数
         // 这里使用模拟数据进行演示
         const mockSteps = 7852; // 模拟步数
-        this.setData({
-          todaySteps: mockSteps
+        this.setData({ todaySteps: mockSteps }, () => {
+          this.updateProgressAndDraw(); // 新增：更新进度并绘制
+          this.calcStepRemaining();
         });
-        
-        // 计算转化数据
-        this.calculateConversions(mockSteps);
       },
       fail: (err) => {
         console.error('获取步数失败', err);
@@ -93,8 +90,10 @@ Page({
           title: '获取步数失败',
           icon: 'none'
         });
-        // 模拟数据用于展示
-        this.calculateConversions(7852);
+        // 使用默认步数模拟数据
+        this.setData({ todaySteps: 7852 }, () => {
+          this.updateProgressAndDraw();
+        });
       }
     });
   },
@@ -242,36 +241,4 @@ Page({
   },
 
   // Remove initWeekSteps function
-
-  // 绘制环形进度条
-  drawProgressRing() {
-    const ctx = wx.createCanvasContext('progressRing');
-    const width = 280; // 画布宽度
-    const height = 280; // 画布高度
-    const radius = (width - 30) / 2; // 圆环半径
-    const centerX = width / 2; // 圆心x坐标
-    const centerY = height / 2; // 圆心y坐标
-    const lineWidth = 12; // 圆环宽度
-    
-    // 绘制背景圆环
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    ctx.setLineWidth(lineWidth);
-    ctx.setStrokeStyle('rgba(255, 255, 255, 0.2)');
-    ctx.stroke();
-    
-    // 绘制进度圆环
-    const progress = this.data.progressPercent / 100;
-    const startAngle = -0.5 * Math.PI; // 开始角度（-90度）
-    const endAngle = startAngle + 2 * Math.PI * progress; // 结束角度
-    
-    ctx.beginPath();
-    ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-    ctx.setLineWidth(lineWidth);
-    ctx.setStrokeStyle('white');
-    ctx.setLineCap('round');
-    ctx.stroke();
-    
-    ctx.draw();
-  }
 });

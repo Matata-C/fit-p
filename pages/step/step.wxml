@@ -13,7 +13,6 @@
             <canvas type="2d" canvas-id="progressRing" class="progress-canvas"></canvas>
           </view>
         </view>
-    
         <view class="steps-text">
           <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
           <text class="rest-step">剩余{{stepRemaining}}步</text>
@@ -21,26 +20,7 @@
       </view>
     </view>
   </view>
-  <view class="step-card-right">
-    <view class="step-card-header">
-      <text class="weekday">{{weekday}}</text>
-      <text class="date">{{date}}</text>
-    </view>
-    <view class="step-goal">
-      <text>今日目标</text>
-      <text class="goal-num">{{targetStep}}步</text>
-    </view>
-    <view class="step-progress-bar">
-      <view class="progress-bar-bg">
-        <view class="progress-bar-fg" style="width: {{percent}}%;"></view>
-      </view>
-    </view>
-    <view class="step-progress-info">
-      <text>{{percent}}% 已完成</text>
-      <text>剩余{{remainStep}}步</text>
-    </view>
-  </view>
-</view>
+
   
   <!-- 数据转化区 -->
 
@@ -106,4 +86,4 @@
       </navigator>
     </view>
   </view>
-
+</view>
