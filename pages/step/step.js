@@ -2,12 +2,14 @@ Page({
   data: {
     currentWeekday: '',
     currentDate: '',
-    todaySteps: 0,
-    stepGoal: 10000,
-    distance: 5.9,
+    currentStep: 7852,
+    targetStep: 10000,
+    date: '2025年7月17日',
+    weekday: '周四',
     calories: 320,
     duration: 65,
-    weekSteps: [],
+    todaySteps: 0,
+    stepGoal: 10000,
     stepRemaining: 0,
     // 数据转化区相关数据
     caloriesBurned: 0,       // 消耗热量
@@ -50,7 +52,6 @@ Page({
           wx.authorize({
             scope: 'scope.werun',
             success: () => {
-              this.setData({ isAuthorizes: true});
               this.fetchWeRunData();
             },
             fail: () => {
@@ -58,14 +59,12 @@ Page({
                 title: '需要授权微信运动才能获取步数',
                 icon: 'none'
               });
-              // 使用默认步数模拟数据（保持与之前逻辑一致）
-              this.setData({ todaySteps: 7852, isAuthorized: false });
               this.updateProgressAndDraw();
+              this.calculateConversions(7852);
             }
           });
         } else {
           // 已授权，直接获取数据
-          this.setData({ isAuthorized: true});
           this.fetchWeRunData();
         }
       }
@@ -83,6 +82,7 @@ Page({
           this.updateProgressAndDraw(); // 新增：更新进度并绘制
           this.calcStepRemaining();
         });
+        this.calculateConversions(mockSteps);
       },
       fail: (err) => {
         console.error('获取步数失败', err);
@@ -90,10 +90,7 @@ Page({
           title: '获取步数失败',
           icon: 'none'
         });
-        // 使用默认步数模拟数据
-        this.setData({ todaySteps: 7852 }, () => {
-          this.updateProgressAndDraw();
-        });
+        this.calculateConversions(7852);
       }
     });
   },
