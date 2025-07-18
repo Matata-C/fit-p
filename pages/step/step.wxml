@@ -76,10 +76,12 @@
         <icon type="friend" size="24" color="#7f8c8d"></icon>
         <text class="menu-text">排行榜</text>
       </navigator>
+      <view class="menu-divider"></view>
       <navigator url="/pages/history/history" class="menu-item">
         <icon type="list" size="24" color="#7f8c8d"></icon>
         <text class="menu-text">历史</text>
       </navigator>
+      <view class="menu-divider"></view>
       <navigator url="/pages/settings/settings" class="menu-item">
         <icon type="setting" size="24" color="#7f8c8d"></icon>
         <text class="menu-text">去运动</text>

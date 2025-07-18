@@ -8,10 +8,11 @@
 .top-section {
   background: #ffe46a;
   color: rgb(24, 24, 24);
-  padding: 30rpx 30rpx 60rpx;
+  padding: 30rpx 30rpx 30rpx;
   border-radius: 40rpx;
   position: relative;
   overflow: hidden;
+  font-family: 'PingFang SC', 'HarmonyOS_Regular', 'MiSans', 'Arial Rounded MT Bold', sans-serif;
 }
 
 .date-info {
@@ -21,13 +22,24 @@
 }
 
 .weekday {
-  font-size: 36rpx;
-  font-weight: 500;
+  font-size: 38rpx;
+  font-weight: bold;
+  color: #ff6f91;
+  background: #fffbe6;
+  border-radius: 18rpx;
+  padding: 6rpx 22rpx;
+  box-shadow: 0 2px 8px #FFD60033;
+  font-family: inherit;
 }
 
 .date {
   font-size: 32rpx;
   opacity: 0.9;
+  color: #ffb300;
+  background: #fffbe6;
+  border-radius: 18rpx;
+  padding: 6rpx 18rpx;
+  font-family: inherit;
 }
 
 .step-container {
@@ -45,6 +57,7 @@
   position: relative;
   width: 280rpx;
   height: 280rpx;
+  margin-bottom: 36rpx;
 }
 .steps-text {
   display: flex;
@@ -52,15 +65,25 @@
   align-items: center; 
 }
 .step-count {
-  font-size: 54rpx;
+  font-size: 60rpx;
   font-weight: bold;
-  color: #fff;
+  color: #ff6f91;
+  text-shadow: 0 4rpx 12rpx #ffd6e6;
+  font-family: inherit;
+  background: #fffbe6;
+  border-radius: 24rpx;
+  padding: 10rpx 30rpx;
+  margin-bottom: 8rpx;
 }
 .rest-step {
   text-align: right;
   font-size: 28rpx;
-  opacity: 0.8;
-  margin-top: 10rpx;
+  opacity: 0.85;
+  color: #ffb300;
+  background: #fffbe6;
+  border-radius: 16rpx;
+  padding: 4rpx 16rpx;
+  font-family: inherit;
 }
 .progress-ring {
   position: absolute;
@@ -77,7 +100,7 @@
   border: 3px solid #FFD600;
   border-radius: 28px;
   box-shadow: 0 2px 12px rgba(255, 214, 0, 0.08);
-  padding: 16px;
+  padding: 4px 8px;
   margin: 13px;
   background-color: #ffffff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -249,7 +272,7 @@
 /* 底部功能入口 */
 .bottom-section {
   border-top: 1px solid #eee;
-  background: linear-gradient(135deg, #ffcc23, #ffe797);
+  background: #ffb300;
   border-radius: 20px;
 }
 
@@ -265,11 +288,38 @@
   align-items: center;
   color: #000000;
   text-decoration: none;
+  position: relative;
+  padding: 0 8rpx;
+}
+.menu-item:hover .menu-text,
+.menu-item:active .menu-text {
+  color: #ffe46a;
+  background: rgba(255,255,255,0.08);
+  border-radius: 10rpx;
+  transition: background 0.2s;
 }
 
 .menu-text {
-  font-size: 24rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2rpx;
   margin-top: 10rpx;
+  transition: color 0.3s;
+}
+.menu-item:active .menu-text,
+.menu-item.selected .menu-text {
+  color: #ffe46a;
+}
+
+.menu-divider {
+  width: 2rpx;
+  height: 36rpx;
+  background: #fff;
+  opacity: 0.4;
+  align-self: center;
+  border-radius: 1rpx;
+  margin: 0 18rpx;
 }
 
 /* 分时段步数可爱风格 */
@@ -283,6 +333,7 @@
   padding: 36rpx 24rpx 24rpx 24rpx;
   margin-top: 10rpx;
   border: 3px solid #FFD600;
+  margin-bottom: 40rpx;
 }
 .period-item {
   display: flex;

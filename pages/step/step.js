@@ -184,10 +184,10 @@ Page({
         
         const width = res[0].width; 
         const height = res[0].height; 
-        const radius = (width - 10) / 2; 
+        const lineWidth = 10; 
+        const radius = (width - lineWidth) / 2; 
         const centerX = width / 2; 
         const centerY = height / 2; 
-        const lineWidth = 12; 
         
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
@@ -209,6 +209,17 @@ Page({
 
         ctx.lineCap = 'round';
         ctx.stroke();
+
+        // 在圆环中心绘制百分比和“完成”字样
+        ctx.font = `bold ${Math.floor(width / 4)}px Arial`;
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const percentText = `${this.data.progressPercent}%`;
+        ctx.fillText(percentText, centerX, centerY - width / 12);
+        ctx.font = `bold ${Math.floor(width / 8)}px Arial`;
+        ctx.fillStyle = '#fff';
+        ctx.fillText('完成', centerX, centerY + width / 6);
       });
   },
 
