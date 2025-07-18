@@ -13,7 +13,9 @@
         "pages/about-us/about-us",
         "pages/feedback/feedback",
         "pages/submitFeedback/submitFeedback",
-        "pages/step/step"
+        "pages/step/step",
+        "pages/ranking/ranking",
+        "pages/history/history"
     ],
     "window": {
         "backgroundTextStyle": "light",

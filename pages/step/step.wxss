@@ -304,7 +304,7 @@
   font-weight: bold;
   color: #fff;
   letter-spacing: 2rpx;
-  margin-top: 10rpx;
+  margin: 10rpx;
   transition: color 0.3s;
 }
 .menu-item:active .menu-text,
@@ -319,7 +319,6 @@
   opacity: 0.4;
   align-self: center;
   border-radius: 1rpx;
-  margin: 0 18rpx;
 }
 
 /* 分时段步数可爱风格 */

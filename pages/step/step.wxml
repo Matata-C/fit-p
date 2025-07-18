@@ -82,7 +82,7 @@
         <text class="menu-text">历史</text>
       </navigator>
       <view class="menu-divider"></view>
-      <navigator url="/pages/settings/settings" class="menu-item">
+      <navigator url="/pages/index/index" class="menu-item">
         <icon type="setting" size="24" color="#7f8c8d"></icon>
         <text class="menu-text">去运动</text>
       </navigator>
