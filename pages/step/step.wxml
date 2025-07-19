@@ -23,12 +23,11 @@
 
   
   <!-- 数据转化区 -->
-
-  <view class="section-title">
-    <text>数据转化</text>
-    
+  <view class="shujuline-section">
+    <view class="section-title">
+      <text>数据转化</text> 
+    </view>
   </view>
-
 <view class="data-conversion-area">  
   <view class="conversion-cards">
     <!-- 消耗热量卡片 -->
