@@ -27,8 +27,8 @@
                     "name": "pages/step/step",
                     "pathName": "pages/step/step",
                     "query": "",
-                    "scene": null,
-                    "launchMode": "default"
+                    "launchMode": "default",
+                    "scene": null
                 },
                 {
                     "name": "pages/food/food",
