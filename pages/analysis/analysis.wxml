@@ -44,8 +44,11 @@
         />
       </view>
 
-      <!-- 本月运动数据饼图 -->
+      <!-- 今日运动分类饼图 -->
       <view class="cute-yellow-border">
+        <view class="calendar-title-pink">
+          今日运动分类 <text class="section-icon">🍰</text>
+        </view>
         <exercise-pie-chart pieData="{{pieData}}" />
       </view>
 

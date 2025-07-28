@@ -12,7 +12,7 @@
       <view class="exercise-item" wx:for="{{exerciseRecords}}" wx:key="index">
         <view class="exercise-info">
           <view class="exercise-name">{{item.name}}</view>
-          <view class="exercise-time">{{item.time}} <block wx:if="{{item.duration}}">| 时长: {{item.duration}} 小时</block></view>
+          <view class="exercise-time">{{item.time}} <block wx:if="{{item.duration || item.durationText}}">| 时长: {{formatDuration(item.duration) || item.durationText || item.duration + '小时'}}</block></view>
         </view>
         <view class="calories-info">
           <view class="exercise-calories">{{item.caloriesBurned}} 千卡</view>

@@ -7,7 +7,7 @@
       <view class="legend-item">
         <view class="legend-icon">{{item.icon}}</view>
         <view class="legend-color" style="background: {{item.color}}"></view>
-        <view class="legend-text">{{item.name}} {{item.value}}%</view>
+        <view class="legend-text">{{item.name}} {{item.percentage}}%</view>
       </view>
     </block>
   </view>

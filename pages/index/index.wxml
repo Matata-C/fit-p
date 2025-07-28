@@ -31,11 +31,11 @@
   </view>
 
   <!-- 步数卡片 -->
-  <view class="step-card" bindtap="navigateToStepDetail">
+  <view class="step-card" bindtap="navigateToStepDetail" bindlongpress="toggleDebug">
     <view class="step-info">
       <text class="step-date">{{todayDate}}</text>
       <text class="step-label">今日步数</text>
-      <text class="step-number">26447</text>
+      <text class="step-number">{{todaySteps}}</text>
       <text class="step-slogan">——生命在于运动——</text>
     </view>
     <image class="step-icon" src="/images/跑步(1).png"></image> <!-- 需替换实际跑步图标路径 -->
@@ -131,6 +131,16 @@
     <view class="action-buttons">
       <button class="action-btn exercise-btn" bindtap="goToExercise" style="margin: 0 6px;">记录运动</button>
       <button class="action-btn food-btn" bindtap="goToFood" style="margin: 0 6px;">记录饮食</button>
+    </view>
+    
+    <!-- 调试信息（开发时使用） -->
+    <view class="debug-info card" wx:if="{{showDebug}}">
+      <view class="card-title">调试信息</view>
+      <view class="debug-item">步数: {{todaySteps}}</view>
+      <view class="debug-item">卡路里: {{todayCalories}}</view>
+      <view class="debug-item">时长: {{todayDuration}}分钟</view>
+      <view class="debug-item">体重: {{todayWeight}}公斤</view>
+      <view class="debug-item">运动分类: {{exerciseCategories}}</view>
     </view>
 
     <!-- 每日健康小贴士 -->
