@@ -13,11 +13,11 @@ Page({
     commonExercises: [
       { name: '快走', caloriesPerHour: 300, unit: '小时' },
       { name: '慢跑', caloriesPerHour: 500, unit: '小时' },
-      { name: '骑自行车', caloriesPerHour: 450, unit: '小时' },
+      { name: '篮球', caloriesPerHour: 600, unit: '小时' },
       { name: '游泳', caloriesPerHour: 600, unit: '小时' },
       { name: '跳绳', caloriesPerHour: 750, unit: '小时' },
       { name: '瑜伽', caloriesPerHour: 250, unit: '小时' },
-      { name: '健身操', caloriesPerHour: 400, unit: '小时' },
+      { name: '举重', caloriesPerHour: 400, unit: '小时' },
       { name: '力量训练', caloriesPerHour: 350, unit: '小时' }
     ]
   },
@@ -143,10 +143,26 @@ Page({
       });
       return;
     }
+    // 将时长转换为分钟数
+    let durationInMinutes = 0;
+    const durationStr = this.data.duration.toString();
+    if (durationStr.includes('小时')) {
+      const hours = parseFloat(durationStr.replace('小时', ''));
+      durationInMinutes = Math.round(hours * 60);
+    } else if (durationStr.includes('分钟')) {
+      const minutes = parseFloat(durationStr.replace('分钟', ''));
+      durationInMinutes = Math.round(minutes);
+    } else {
+      // 如果只是数字，假设是小时
+      const hours = parseFloat(durationStr);
+      durationInMinutes = Math.round(hours * 60);
+    }
+    
     const newRecord = {
       id: Date.now().toString(), 
       name: this.data.exerciseName,
-      duration: this.data.duration,
+      duration: durationInMinutes, // 保存为分钟数
+      durationText: this.data.duration, // 保存原始文本用于显示
       caloriesBurned: this.data.caloriesBurned,
       time: new Date().toLocaleTimeString()
     };
@@ -162,6 +178,10 @@ Page({
     this.saveRecordsToStorage(updatedRecords);
     this.updateHomeTheoreticalConsumption();
     this.updateHomeActualConsumption();
+    
+    // 设置数据更新标志，通知其他页面刷新数据
+    wx.setStorageSync('dataUpdated', Date.now());
+    
     wx.showToast({
       title: '运动记录已保存',
       icon: 'success'
@@ -182,6 +202,10 @@ Page({
           this.saveRecordsToStorage(updatedRecords);
           this.updateHomeTheoreticalConsumption();
           this.updateHomeActualConsumption();
+          
+          // 设置数据更新标志，通知其他页面刷新数据
+          wx.setStorageSync('dataUpdated', Date.now());
+          
           wx.showToast({
             title: '记录已删除',
             icon: 'success'
@@ -295,5 +319,29 @@ Page({
       total += Number(item.caloriesBurned) || 0;
     });
     return total;
+  },
+  /**
+   * 格式化时长（分钟）为“X小时Y分钟”或“X分钟”
+   */
+  formatDuration: function(duration) {
+    console.log('formatDuration 输入:', duration, typeof duration);
+    
+    // 如果是字符串格式（如"1小时"），直接返回
+    if (typeof duration === 'string' && (duration.includes('小时') || duration.includes('分钟'))) {
+      return duration;
+    }
+    
+    duration = Number(duration) || 0;
+    console.log('formatDuration 转换后:', duration);
+    
+    if (duration < 60) {
+      return duration + '分钟';
+    } else if (duration % 60 === 0) {
+      return (duration / 60) + '小时';
+    } else {
+      const hour = Math.floor(duration / 60);
+      const min = duration % 60;
+      return hour + '小时' + min + '分钟';
+    }
   }
 }) 

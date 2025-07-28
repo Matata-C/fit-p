@@ -2,6 +2,7 @@
 const weightUtil = require('../../utils/weightUtil');
 const dateUtil = require('../../utils/dateUtil');
 const tabBarManager = require('../../utils/tabBarManager');
+const dataSync = require('../../utils/dataSync');
 const app = getApp()
 
 
@@ -48,6 +49,12 @@ Page({
     todayWeight: '',           // 今日体重值
     inputWeight: '',           // 体重输入值
     showWeightDialog: false,   // 是否显示体重记录对话框
+    // 步数相关数据
+    todaySteps: 0,             // 今日步数
+    todayCalories: 0,          // 今日消耗卡路里
+    todayDuration: 0,          // 今日运动时长
+    showDebug: false,          // 调试信息显示开关
+    exerciseCategories: '',    // 运动分类数据（调试用）
     // 健康小贴士数组
     healthTips: [
       '适量的有氧运动有助于消耗脂肪。',
@@ -181,7 +188,12 @@ Page({
     
     // 每次显示页面时也刷新今日日期
     const now = new Date();
-    const todayDate = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')}`;
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1;
+    const day = now.getDate();
+    const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const weekday = weekdays[now.getDay()];
+    const todayDate = `${year}.${month}.${day} ${weekday}`;
     this.setData({ todayDate });
     
     // 检查是否有数据更新标志
@@ -284,6 +296,7 @@ Page({
       this.loadConsumptionData();
       this.loadUserStats();
       this.checkTodayWeight();
+      this.loadTodaySteps();
     } catch(e) {
       console.error('刷新数据失败:', e);
     }
@@ -420,6 +433,36 @@ Page({
     }
   },
   
+  loadTodaySteps: function() {
+    try {
+      const todayData = dataSync.getTodayCompleteData();
+      const exerciseCategories = dataSync.getTodayExerciseCategories();
+      
+      this.setData({
+        todaySteps: todayData.steps,
+        todayCalories: todayData.calories,
+        todayDuration: todayData.duration,
+        exerciseCategories: JSON.stringify(exerciseCategories.map(item => ({
+          name: item.name,
+          percentage: item.percentage + '%',
+          calories: item.originalValue + 'kcal'
+        })), null, 2)
+      });
+      
+      console.log('首页今日数据更新:', todayData);
+      console.log('运动分类数据:', exerciseCategories);
+    } catch(e) {
+      console.error('加载今日步数数据失败:', e);
+    }
+  },
+
+  // 切换调试信息显示
+  toggleDebug: function() {
+    this.setData({
+      showDebug: !this.data.showDebug
+    });
+  },
+
   checkTodayWeight: function() {
     try {
       var today = this.getCurrentDateString();

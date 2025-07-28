@@ -96,6 +96,10 @@
 }
 
 /* 数据转化区样式 */
+.shujuline-section{
+  padding: 0 30rpx 0;
+  flex: 1;
+}
 .data-conversion-area {
   border: 3px solid #FFD600;
   border-radius: 28px;
@@ -293,7 +297,7 @@
 }
 .menu-item:hover .menu-text,
 .menu-item:active .menu-text {
-  color: #ffe46a;
+  
   background: rgba(255,255,255,0.08);
   border-radius: 10rpx;
   transition: background 0.2s;
@@ -306,10 +310,6 @@
   letter-spacing: 2rpx;
   margin: 10rpx;
   transition: color 0.3s;
-}
-.menu-item:active .menu-text,
-.menu-item.selected .menu-text {
-  color: #ffe46a;
 }
 
 .menu-divider {

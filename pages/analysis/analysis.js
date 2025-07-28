@@ -3,6 +3,7 @@ const weightUtil = require('../../utils/weightUtil');
 const dateUtil = require('../../utils/dateUtil');
 const tabBarManager = require('../../utils/tabBarManager');
 const dataRepair = require('../../utils/dataRepair');
+const dataSync = require('../../utils/dataSync');
 const app = getApp()
 
 Page({
@@ -54,6 +55,14 @@ Page({
     console.log('分析页面加载');
     
     tabBarManager.initTabBarForPage(1);
+    
+    // 测试运动分类功能
+    dataSync.testExerciseCategorization();
+    // 测试百分比计算功能
+    dataSync.testPercentageCalculation();
+    
+    // 添加一些测试运动数据用于演示
+    this.addTestExerciseData();
     
     this.repairDataIfNeeded();
     
@@ -125,6 +134,8 @@ Page({
           this.loadWeightRecords();
           setTimeout(() => {
             this.syncStatisticsWithUserStats();
+            this.updateCoreData(); // 确保核心数据也更新
+            this.updatePieChart(); // 确保饼图数据也更新
           }, 100);
           
           console.log('数据已重新加载');
@@ -178,6 +189,7 @@ Page({
     this.updateCoreData();
     this.updateExerciseChart();
     this.updateExerciseCalendar();
+    this.updatePieChart();
   },
   preloadWeightRecords() {
     try {
@@ -503,44 +515,24 @@ Page({
     }
   },
   updateCoreData() {
-    // 获取今日日期
-    const today = this.getCurrentDateString ? this.getCurrentDateString() : (new Date()).toISOString().slice(0, 10);
-    // 获取运动数据
-    let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
-    let todayRecords = exerciseRecords[today] || [];
-    let steps = 0;
-    let duration = 0;
-    let calories = 0;
-    todayRecords.forEach(record => {
-      steps += record.steps ? Number(record.steps) : 0;
-      duration += record.minutes ? Number(record.minutes) : (record.duration ? Number(record.duration) : 0);
-      calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
-    });
-    // 体重
-    let weight = 0;
-    let weightRecords = wx.getStorageSync('weightRecordsArray') || [];
-    if (weightRecords.length > 0) {
-      weightRecords.sort((a, b) => new Date(b.date) - new Date(a.date));
-      weight = weightRecords[0].weight;
-    }
-    // 进度条百分比（可自定义目标值）
-    const stepsGoal = 10000;
-    const durationGoal = 60;
-    const caloriesGoal = 400;
-    const weightGoal = 50;
+    // 使用统一的数据同步工具获取今日数据
+    const todayData = dataSync.getTodayDataWithProgress();
+    
     this.setData({
       coreData: {
-        date: today,
-        steps,
-        stepsPercent: Math.min(100, Math.round(steps / stepsGoal * 100)),
-        duration,
-        durationPercent: Math.min(100, Math.round(duration / durationGoal * 100)),
-        calories,
-        caloriesPercent: Math.min(100, Math.round(calories / caloriesGoal * 100)),
-        weight,
-        weightPercent: weightGoal && weight ? Math.max(0, Math.min(100, Math.round((weightGoal / weight) * 100))) : 0
+        date: todayData.date,
+        steps: todayData.steps,
+        stepsPercent: todayData.stepsPercent,
+        duration: todayData.duration,
+        durationPercent: todayData.durationPercent,
+        calories: todayData.calories,
+        caloriesPercent: todayData.caloriesPercent,
+        weight: todayData.weight,
+        weightPercent: todayData.weightPercent
       }
     });
+    
+    console.log('分析页面核心数据更新:', todayData);
   },
   updateExerciseChart() {
     // 获取本周日期
@@ -551,24 +543,45 @@ Page({
       weekDates.push(d);
     }
     const dateLabels = weekDates.map(d => `${d.getMonth() + 1}/${d.getDate()}`);
+    
     // 获取本地运动数据
     let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
     const stepsData = [];
     const durationData = [];
     const caloriesData = [];
+    
     weekDates.forEach(d => {
       const key = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
       const records = exerciseRecords[key] || [];
       let steps = 0, duration = 0, calories = 0;
+      
       records.forEach(record => {
         steps += record.steps ? Number(record.steps) : 0;
         duration += record.minutes ? Number(record.minutes) : (record.duration ? Number(record.duration) : 0);
         calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
       });
+      
+      // 如果运动记录中没有数据，尝试从微信运动获取步数
+      if (steps === 0) {
+        try {
+          const weRunData = wx.getStorageSync('weRunData') || {};
+          if (weRunData[key] && weRunData[key].stepInfoList && weRunData[key].stepInfoList.length > 0) {
+            steps = weRunData[key].stepInfoList[0].step || 0;
+            // 根据步数估算卡路里
+            if (calories === 0 && steps > 0) {
+              calories = Math.round(steps * 0.04);
+            }
+          }
+        } catch (e) {
+          console.log('获取微信运动数据失败');
+        }
+      }
+      
       stepsData.push(steps);
       durationData.push(duration);
       caloriesData.push(calories);
     });
+    
     this.setData({
       exerciseChart: {
         dateLabels,
@@ -578,6 +591,41 @@ Page({
       }
     });
   },
+  updatePieChart() {
+    // 使用统一的数据同步工具获取运动分类数据
+    const pieData = dataSync.getTodayExerciseCategories();
+    
+    console.log('分析页面 - 饼图数据更新:', pieData);
+    console.log('分析页面 - 当前日期:', dataSync.getCurrentDateString());
+    
+    this.setData({
+      pieData: pieData
+    });
+  },
+
+  // 添加测试运动数据
+  addTestExerciseData() {
+    const today = dataSync.getCurrentDateString();
+    const exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+    
+    // 检查今天是否已有数据
+    if (!exerciseRecords[today] || exerciseRecords[today].length === 0) {
+      console.log('添加测试运动数据');
+      
+      const testRecords = [
+        { name: '快走', caloriesBurned: 150, duration: 30 },
+        { name: '慢跑', caloriesBurned: 200, duration: 25 },
+        { name: '力量训练', caloriesBurned: 100, duration: 20 },
+        { name: '瑜伽', caloriesBurned: 50, duration: 15 }
+      ];
+      
+      exerciseRecords[today] = testRecords;
+      wx.setStorageSync('exerciseRecords', exerciseRecords);
+      
+      console.log('测试运动数据已添加:', testRecords);
+    }
+  },
+
   updateExerciseCalendar() {
     // 临时写死一组monthData用于测试热力图
     const monthData = {};
@@ -594,6 +642,8 @@ Page({
     this.setData({ period });
     this.updateChartData(period);
   },
+
+
   onPhotoRecognize() {
     wx.chooseImage({
       count: 1,
