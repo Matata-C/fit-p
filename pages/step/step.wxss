@@ -96,6 +96,10 @@
 }
 
 /* 数据转化区样式 */
+.shujuline-section{
+  padding: 0 30rpx 0;
+  flex: 1;
+}
 .data-conversion-area {
   border: 3px solid #FFD600;
   border-radius: 28px;
@@ -272,7 +276,7 @@
 /* 底部功能入口 */
 .bottom-section {
   border-top: 1px solid #eee;
-  background: #ffb300;
+  background: #ffe46a;
   border-radius: 20px;
 }
 
@@ -293,7 +297,7 @@
 }
 .menu-item:hover .menu-text,
 .menu-item:active .menu-text {
-  color: #ffe46a;
+  
   background: rgba(255,255,255,0.08);
   border-radius: 10rpx;
   transition: background 0.2s;
@@ -302,14 +306,10 @@
 .menu-text {
   font-size: 28rpx;
   font-weight: bold;
-  color: #fff;
+  color: rgb(109, 109, 109);
   letter-spacing: 2rpx;
-  margin-top: 10rpx;
+  margin: 10rpx;
   transition: color 0.3s;
-}
-.menu-item:active .menu-text,
-.menu-item.selected .menu-text {
-  color: #ffe46a;
 }
 
 .menu-divider {
@@ -319,7 +319,6 @@
   opacity: 0.4;
   align-self: center;
   border-radius: 1rpx;
-  margin: 0 18rpx;
 }
 
 /* 分时段步数可爱风格 */
