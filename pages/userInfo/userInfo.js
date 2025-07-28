@@ -235,7 +235,27 @@ Page({
           // 清除本地数据
           wx.removeStorageSync('userInfo');
           wx.removeStorageSync('isLoggedIn');
-          
+          // 清除目标设置相关数据
+          wx.removeStorageSync('gender');
+          wx.removeStorageSync('age');
+          wx.removeStorageSync('height');
+          wx.removeStorageSync('currentWeight');
+          wx.removeStorageSync('goalWeight');
+          wx.removeStorageSync('dailyGoal');
+          wx.removeStorageSync('dailyTargetConsumption');
+          wx.removeStorageSync('bmr');
+          wx.removeStorageSync('calculatedBMR');
+          wx.removeStorageSync('goalData');
+           // 清除体重记录相关数据
+          wx.removeStorageSync('weightRecords');
+          wx.removeStorageSync('weightRecordsArray');
+          wx.removeStorageSync('todayWeight');
+          wx.removeStorageSync('checkedDates');
+          wx.removeStorageSync('userStats');
+          wx.removeStorageSync('analysisStatistics');
+          wx.removeStorageSync('consumptionRecords');
+          // 设置数据更新标志，通知其他页面刷新
+          wx.setStorageSync('dataUpdated', new Date().getTime());
           // 返回上一页并刷新
           wx.navigateBack({
             success: () => {

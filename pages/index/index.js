@@ -38,6 +38,7 @@ Page({
     theoreticalValue: 0,       // 理论消耗值
     targetValue: 0,            // 目标消耗值
     actualValue: 0,            // 实际消耗值
+    weightHistoryRecords: [],
     weightPercentage: 0,       // 体重进度百分比
     totalWeightLoss: 0,        // 总减重
     goalWeight: 0,             // 目标体重
@@ -217,8 +218,63 @@ Page({
         console.error('刷新数据失败:', e);
       }
     }
+    
+    // 检查是否已退出登录（通过 userInfo 是否存在）
+    try {
+      const userInfo = wx.getStorageSync('userInfo');
+      if (!userInfo) {
+        // 如果用户已退出登录，重置体重相关数据
+        this.resetWeightData();
+      }
+    } catch (e) {
+      console.error('检查用户信息失败:', e);
+    }
+  },
+   
+  //重置体重相关数据
+  resetWeightData: function() {
+    this.setData({
+      weightHistoryRecords: [],
+      hasTodayWeight: false,
+      todayWeight: '',
+      userStats: {
+        days: 0,
+        averageConsumption: 0,
+        totalWeightLoss: 0,
+        startWeight: 0,
+        currentWeight: 0
+      },
+      // 重置其他与体重相关的显示数据
+      theoreticalValue: 0,
+      targetValue: 0,
+      actualValue: 0,
+      weightPercentage: 0,
+      totalWeightLoss: 0,
+      goalWeight: 0
+    });
+    
+    console.log('体重相关数据已重置');
   },
   
+  checkDataSynchronization: function() {
+    try {
+      const goalData = wx.getStorageSync('goalData') || {};
+      const weightRecords = wx.getStorageSync('weightRecords') || {};
+      const today = this.getCurrentDateString();
+      
+      // 检查goalData中的当前体重是否与今日记录一致
+      if (goalData.currentWeight && weightRecords[today] !== undefined && 
+          goalData.currentWeight !== weightRecords[today]) {
+        console.log('检测到数据不一致，正在同步...');
+        
+        // 以goalData为准（因为这是用户主动设置的目标）
+        this.updateWeightRecord(goalData.currentWeight, today);
+      }
+    } catch (e) {
+      console.error('数据同步检查失败:', e);
+    }
+  },
+
   refreshData: function() {
     try {
       // 先刷新用户统计，确保总减重计算正确
@@ -367,36 +423,26 @@ Page({
   checkTodayWeight: function() {
     try {
       var today = this.getCurrentDateString();
-      var weightRecords = wx.getStorageSync('weightRecords') || {};
+      var goalData = wx.getStorageSync('goalData') || {};
       var todayWeightRecord = wx.getStorageSync('todayWeight');
       
-      // 首先检查是否有永久性的今日体重记录
-      if (todayWeightRecord && todayWeightRecord.date === today) {
-        this.setData({
-          hasTodayWeight: true,
-          todayWeight: todayWeightRecord.weight
-        });
-        return;
+      // 优先使用goalData中的当前体重
+      var displayWeight = goalData.currentWeight || null;
+      
+      // 如果没有goalData中的体重，则检查今日记录
+      if (displayWeight === null) {
+        if (todayWeightRecord && todayWeightRecord.date === today) {
+          displayWeight = todayWeightRecord.weight;
+        } else {
+          var weightRecords = wx.getStorageSync('weightRecords') || {};
+          displayWeight = weightRecords[today] || null;
+        }
       }
       
-      // 如果没有永久性记录，则检查体重记录对象
-      if (weightRecords[today]) {
-        this.setData({
-          hasTodayWeight: true,
-          todayWeight: weightRecords[today]
-        });
-        
-        // 同时设置永久性记录，确保下次能正确显示
-        wx.setStorageSync('todayWeight', {
-          date: today,
-          weight: weightRecords[today]
-        });
-      } else {
-        this.setData({
-          hasTodayWeight: false,
-          todayWeight: ''
-        });
-      }
+      this.setData({
+        hasTodayWeight: displayWeight !== null,
+        todayWeight: displayWeight || ''
+      });
     } catch(e) {
       console.error('检查今日体重记录失败:', e);
     }
@@ -422,223 +468,280 @@ Page({
   },
   
   saveWeight: function() {
-    if (!this.data.inputWeight) {
-      wx.showToast({
-        title: '请输入体重',
-        icon: 'none'
-      });
-      return;
-    }
+  if (!this.data.inputWeight) {
+    wx.showToast({
+      title: '请输入体重',
+      icon: 'none'
+    });
+    return;
+  }
+  
+  var weight = parseFloat(this.data.inputWeight);
+  if (isNaN(weight) || weight <= 0) {
+    wx.showToast({
+      title: '请输入有效的体重',
+      icon: 'none'
+    });
+    return;
+  }
+  
+  try {
+    var today = this.getCurrentDateString();
     
-    var weight = parseFloat(this.data.inputWeight);
-    if (isNaN(weight) || weight <= 0) {
-      wx.showToast({
-        title: '请输入有效的体重',
-        icon: 'none'
-      });
-      return;
-    }
+    // 获取并更新体重记录（对象格式）
+    var weightRecords = wx.getStorageSync('weightRecords') || {};
+    weightRecords[today] = weight;
+    wx.setStorageSync('weightRecords', weightRecords);
     
+    // 同时更新数组格式的体重记录，用于分析页面
+    var weightRecordsArray = [];
     try {
-      var today = this.getCurrentDateString();
+      // 尝试获取已有的数组格式记录
+      var existingArray = wx.getStorageSync('weightRecordsArray');
+      if (Array.isArray(existingArray)) {
+        weightRecordsArray = existingArray;
+      } else {
+        // 如果不是数组或为空，从对象格式转换
+        for (var date in weightRecords) {
+          if (weightRecords.hasOwnProperty(date)) {
+            weightRecordsArray.push({
+              date: date,
+              weight: weightRecords[date]
+            });
+          }
+        }
+      }
       
-      // 获取并更新体重记录（对象格式）
-      var weightRecords = wx.getStorageSync('weightRecords') || {};
-      weightRecords[today] = weight;
-      wx.setStorageSync('weightRecords', weightRecords);
+      // 检查是否已存在当天记录
+      var existingIndex = -1;
+      for (var i = 0; i < weightRecordsArray.length; i++) {
+        if (weightRecordsArray[i].date === today) {
+          existingIndex = i;
+          break;
+        }
+      }
       
-      // 同时更新数组格式的体重记录，用于分析页面
-      var weightRecordsArray = [];
-      try {
-        // 尝试获取已有的数组格式记录
-        var existingArray = wx.getStorageSync('weightRecordsArray');
-        if (Array.isArray(existingArray)) {
-          weightRecordsArray = existingArray;
-        } else {
-          // 如果不是数组或为空，从对象格式转换
-          for (var date in weightRecords) {
-            if (weightRecords.hasOwnProperty(date)) {
-              weightRecordsArray.push({
-                date: date,
-                weight: weightRecords[date]
-              });
+      if (existingIndex >= 0) {
+        // 更新已存在的记录
+        weightRecordsArray[existingIndex].weight = weight;
+      } else {
+        // 添加新记录
+        weightRecordsArray.push({
+          date: today,
+          weight: weight
+        });
+      }
+      
+      // 保存数组格式记录
+      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
+    } catch (e) {
+      console.error('保存数组格式体重记录失败:', e);
+    }
+    
+    // 设置永久性今日体重记录
+    wx.setStorageSync('todayWeight', {
+      date: today,
+      weight: weight
+    });
+    
+    // 【新增】同步更新goalData中的当前体重
+    this.syncCurrentWeightToGoalData(weight);
+    
+    // 强制刷新用户统计数据，确保总减重正确计算
+    this.refreshUserStats();
+    
+    // 强制设置数据更新标志，确保其他页面更新数据
+    wx.setStorageSync('dataUpdated', new Date().getTime());
+    
+    // 【新增】手动计算分析页面上的统计数据并同步到userStats
+    try {
+      // 从按日期排序的weightRecordsArray计算总减重
+      if (weightRecordsArray.length >= 2) {
+        // 复制并按日期排序（从早到晚）
+        var sortedRecords = [...weightRecordsArray].sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
+        
+        // 获取最早和最新的体重记录
+        var firstWeight = parseFloat(sortedRecords[0].weight) || 0;
+        var latestWeight = parseFloat(sortedRecords[sortedRecords.length - 1].weight) || 0;
+        
+        // 计算总减重
+        var totalLost = firstWeight - latestWeight;
+        
+        // 计算平均减重速度
+        const firstDate = new Date(sortedRecords[0].date);
+        const latestDate = new Date(sortedRecords[sortedRecords.length - 1].date);
+        
+        let daysDiff = 1; // 默认值为1，避免除以零
+        if (!isNaN(firstDate) && !isNaN(latestDate)) {
+          daysDiff = Math.max(1, Math.round((latestDate - firstDate) / (24 * 60 * 60 * 1000)));
+        }
+        
+        const avgSpeed = parseFloat((totalLost / daysDiff).toFixed(2));
+        
+        // 预计达到目标所需天数
+        let daysToGoal = 0;
+        const goalData = wx.getStorageSync('goalData') || {};
+        const targetWeight = parseFloat(goalData.goalWeight);
+        
+        if (!isNaN(targetWeight) && targetWeight > 0 && avgSpeed > 0 && latestWeight > targetWeight) {
+          daysToGoal = Math.ceil((latestWeight - targetWeight) / avgSpeed);
+        }
+        
+        // 只有当总减重为正值时才更新
+        if (totalLost > 0) {
+          // 【新增】更新analysisStatistics
+          const analysisStatistics = {
+            totalLost: totalLost.toFixed(1),
+            avgSpeed: avgSpeed,
+            daysToGoal: daysToGoal,
+            startWeight: firstWeight,
+            currentWeight: latestWeight,
+            lastUpdated: new Date().getTime()
+          };
+          
+          // 保存分析统计结果
+          wx.setStorageSync('analysisStatistics', analysisStatistics);
+          console.log('保存体重记录时更新分析统计数据:', analysisStatistics);
+          
+          // 更新userStats中的totalWeightLoss
+          var userStats = wx.getStorageSync('userStats') || {};
+          userStats.totalWeightLoss = parseFloat(totalLost.toFixed(1));
+          userStats.startWeight = firstWeight; // 也更新起始体重
+          userStats.currentWeight = latestWeight; // 更新当前体重
+          
+          // 保存更新的userStats
+          wx.setStorageSync('userStats', userStats);
+          console.log('已同步更新userStats中的totalWeightLoss:', totalLost.toFixed(1));
+        }
+      }
+    } catch (e) {
+      console.error('同步分析统计数据失败:', e);
+    }
+    
+    // 通知其他页面刷新数据
+    try {
+      // 获取页面栈
+      var pages = getCurrentPages();
+      if (pages && pages.length > 0) {
+        // 遍历所有页面，设置刷新标志
+        pages.forEach(function(page) {
+          if (page && page.setData) {
+            page.setData({
+              needRefresh: true
+            });
+            
+            // 如果页面有refreshData方法，调用它
+            if (typeof page.refreshData === 'function') {
+              page.refreshData();
+            }
+            
+            // 特别处理：如果是分析页面，调用其calculateStatistics方法
+            if (page.route === 'pages/analysis/analysis' && typeof page.calculateStatistics === 'function') {
+              page.calculateStatistics();
             }
           }
-        }
-        
-        // 检查是否已存在当天记录
-        var existingIndex = -1;
-        for (var i = 0; i < weightRecordsArray.length; i++) {
-          if (weightRecordsArray[i].date === today) {
-            existingIndex = i;
-            break;
-          }
-        }
-        
-        if (existingIndex >= 0) {
-          // 更新已存在的记录
-          weightRecordsArray[existingIndex].weight = weight;
-        } else {
-          // 添加新记录
-          weightRecordsArray.push({
-            date: today,
-            weight: weight
-          });
-        }
-        
-        // 保存数组格式记录
-        wx.setStorageSync('weightRecordsArray', weightRecordsArray);
-      } catch (e) {
-        console.error('保存数组格式体重记录失败:', e);
+        });
       }
+    } catch (e) {
+      console.error('通知页面刷新失败:', e);
+    }
+    
+    // 关闭对话框并刷新数据
+    this.setData({
+      showWeightDialog: false,
+      hasTodayWeight: true,
+      todayWeight: weight
+    });
+
+    try {
+      const today = this.getCurrentDateString();
+      let checkedDates = wx.getStorageSync('checkedDates') || [];
+      // 避免重复添加打卡日期
+      if (!checkedDates.includes(today)) {
+        checkedDates.push(today);
+        wx.setStorageSync('checkedDates', checkedDates);
+        console.log('体重记录同步打卡:', today);
+        
+        this.setData({ checkedCount: checkedDates.length }); 
+      }
+    } catch (e) {
+      console.error('同步打卡日期失败:', e);
+    }
+    
+    wx.showToast({
+      title: '体重记录已保存',
+      icon: 'success'
+    });
+    const currentPages = getCurrentPages();
+    const calendarPage = currentPages.find(page => page.route === 'pages/calendar/calendar');
+    if (calendarPage) {
+      calendarPage.initCalendar(); // 调用日历页的初始化方法，强制刷新
+    }
+  } catch(e) {
+    console.error('保存体重记录失败:', e);
+    wx.showToast({
+      title: '保存失败',
+      icon: 'none'
+    });
+  }
+},
+
+//同步当前体重到goalData
+  syncCurrentWeightToGoalData: function(weight) {
+  try {
+    var goalData = wx.getStorageSync('goalData') || {};
+    
+    // 只有当当前体重发生变化时才更新
+    if (goalData.currentWeight !== weight) {
+      goalData.currentWeight = weight;
+      goalData.lastUpdated = new Date().getTime();
+      wx.setStorageSync('goalData', goalData);
+      
+      // 设置数据更新标志
+      wx.setStorageSync('dataUpdated', new Date().getTime());
+      
+      console.log('当前体重已同步到目标数据:', weight);
+    }
+  } catch (e) {
+    console.error('同步当前体重失败:', e);
+  }
+  },
+  
+  updateWeightRecord: function(weight, date) {
+    try {
+      date = date || this.getCurrentDateString();
+      
+      // 更新对象格式记录
+      var weightRecords = wx.getStorageSync('weightRecords') || {};
+      weightRecords[date] = weight;
+      wx.setStorageSync('weightRecords', weightRecords);
+      
+      // 更新数组格式记录
+      var weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
+      const existingIndex = weightRecordsArray.findIndex(item => item.date === date);
+      
+      const newRecord = { date: date, weight: weight };
+      if (existingIndex >= 0) {
+        weightRecordsArray[existingIndex] = newRecord;
+      } else {
+        weightRecordsArray.unshift(newRecord);
+      }
+      
+      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
       
       // 设置永久性今日体重记录
       wx.setStorageSync('todayWeight', {
-        date: today,
+        date: date,
         weight: weight
       });
-      
-      // 强制刷新用户统计数据，确保总减重正确计算
-      this.refreshUserStats();
-      
-      // 强制设置数据更新标志，确保其他页面更新数据
-      wx.setStorageSync('dataUpdated', new Date().getTime());
-      
-      // 【新增】手动计算分析页面上的统计数据并同步到userStats
-      try {
-        // 从按日期排序的weightRecordsArray计算总减重
-        if (weightRecordsArray.length >= 2) {
-          // 复制并按日期排序（从早到晚）
-          var sortedRecords = [...weightRecordsArray].sort((a, b) => {
-            return new Date(a.date) - new Date(b.date);
-          });
-          
-          // 获取最早和最新的体重记录
-          var firstWeight = parseFloat(sortedRecords[0].weight) || 0;
-          var latestWeight = parseFloat(sortedRecords[sortedRecords.length - 1].weight) || 0;
-          
-          // 计算总减重
-          var totalLost = firstWeight - latestWeight;
-          
-          // 计算平均减重速度
-          const firstDate = new Date(sortedRecords[0].date);
-          const latestDate = new Date(sortedRecords[sortedRecords.length - 1].date);
-          
-          let daysDiff = 1; // 默认值为1，避免除以零
-          if (!isNaN(firstDate) && !isNaN(latestDate)) {
-            daysDiff = Math.max(1, Math.round((latestDate - firstDate) / (24 * 60 * 60 * 1000)));
-          }
-          
-          const avgSpeed = parseFloat((totalLost / daysDiff).toFixed(2));
-          
-          // 预计达到目标所需天数
-          let daysToGoal = 0;
-          const goalData = wx.getStorageSync('goalData') || {};
-          const targetWeight = parseFloat(goalData.goalWeight);
-          
-          if (!isNaN(targetWeight) && targetWeight > 0 && avgSpeed > 0 && latestWeight > targetWeight) {
-            daysToGoal = Math.ceil((latestWeight - targetWeight) / avgSpeed);
-          }
-          
-          // 只有当总减重为正值时才更新
-          if (totalLost > 0) {
-            // 【新增】更新analysisStatistics
-            const analysisStatistics = {
-              totalLost: totalLost.toFixed(1),
-              avgSpeed: avgSpeed,
-              daysToGoal: daysToGoal,
-              startWeight: firstWeight,
-              currentWeight: latestWeight,
-              lastUpdated: new Date().getTime()
-            };
-            
-            // 保存分析统计结果
-            wx.setStorageSync('analysisStatistics', analysisStatistics);
-            console.log('保存体重记录时更新分析统计数据:', analysisStatistics);
-            
-            // 更新userStats中的totalWeightLoss
-            var userStats = wx.getStorageSync('userStats') || {};
-            userStats.totalWeightLoss = parseFloat(totalLost.toFixed(1));
-            userStats.startWeight = firstWeight; // 也更新起始体重
-            userStats.currentWeight = latestWeight; // 更新当前体重
-            
-            // 保存更新的userStats
-            wx.setStorageSync('userStats', userStats);
-            console.log('已同步更新userStats中的totalWeightLoss:', totalLost.toFixed(1));
-          }
-        }
-      } catch (e) {
-        console.error('同步分析统计数据失败:', e);
-      }
-      
-      // 通知其他页面刷新数据
-      try {
-        // 获取页面栈
-        var pages = getCurrentPages();
-        if (pages && pages.length > 0) {
-          // 遍历所有页面，设置刷新标志
-          pages.forEach(function(page) {
-            if (page && page.setData) {
-              page.setData({
-                needRefresh: true
-              });
-              
-              // 如果页面有refreshData方法，调用它
-              if (typeof page.refreshData === 'function') {
-                page.refreshData();
-              }
-              
-              // 特别处理：如果是分析页面，调用其calculateStatistics方法
-              if (page.route === 'pages/analysis/analysis' && typeof page.calculateStatistics === 'function') {
-                page.calculateStatistics();
-              }
-            }
-          });
-        }
-      } catch (e) {
-        console.error('通知页面刷新失败:', e);
-      }
-      
-      // 关闭对话框并刷新数据
-      this.setData({
-        showWeightDialog: false,
-        hasTodayWeight: true,
-        todayWeight: weight
-      });
-
-      try {
-        const today = this.getCurrentDateString();
-        let checkedDates = wx.getStorageSync('checkedDates') || [];
-        // 避免重复添加打卡日期
-        if (!checkedDates.includes(today)) {
-          checkedDates.push(today);
-          wx.setStorageSync('checkedDates', checkedDates);
-          console.log('体重记录同步打卡:', today);
-          
-          this.setData({ checkedCount: checkedDates.length }); 
-        }
-      } catch (e) {
-        console.error('同步打卡日期失败:', e);
-      }
-      
-      wx.showToast({
-        title: '体重记录已保存',
-        icon: 'success'
-      });
-      const currentPages = getCurrentPages();
-      const calendarPage = currentPages.find(page => page.route === 'pages/calendar/calendar');
-      if (calendarPage) {
-        calendarPage.initCalendar(); // 调用日历页的初始化方法，强制刷新
-      }
-    } catch(e) {
-      console.error('保存体重记录失败:', e);
-      wx.showToast({
-        title: '保存失败',
-        icon: 'none'
-      });
+    } catch (e) {
+      console.error('更新体重记录失败:', e);
+      throw e;
     }
   },
-  
+
   updateUserStats: function(currentWeight) {
     try {
       var userStats = wx.getStorageSync('userStats') || {

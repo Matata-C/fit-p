@@ -497,9 +497,28 @@ Page({
       this.loadUserStats();
       this.loadGoalData();
     }
-    
+    this.checkDataSynchronization();
     // 确保TabBar选中个人页
     tabBarManager.setSelectedTab(3);
+  },
+
+  checkDataSynchronization: function() {
+    try {
+      const goalData = wx.getStorageSync('goalData') || {};
+      const weightRecords = wx.getStorageSync('weightRecords') || {};
+      const today = this.getCurrentDateString();
+      
+      // 检查goalData中的当前体重是否与今日记录一致
+      if (goalData.currentWeight && weightRecords[today] !== undefined && 
+          goalData.currentWeight !== weightRecords[today]) {
+        console.log('检测到数据不一致，正在同步...');
+        
+        // 以goalData为准（因为这是用户主动设置的目标）
+        this.updateWeightRecord(goalData.currentWeight, today);
+      }
+    } catch (e) {
+      console.error('数据同步检查失败:', e);
+    }
   },
 
   // 加载用户信息
@@ -598,25 +617,22 @@ Page({
   // 加载目标设置数据
   loadGoalData: function() {
     try {
-      var gender = wx.getStorageSync('gender') || 'male';
-      var age = wx.getStorageSync('age') || '';
-      var height = wx.getStorageSync('height') || '';
-      var currentWeight = wx.getStorageSync('currentWeight') || '';
-      var goalWeight = wx.getStorageSync('goalWeight') || '';
-      var dailyGoal = wx.getStorageSync('dailyGoal') || '';
-      var dailyTargetConsumption = wx.getStorageSync('dailyTargetConsumption') || '';
-
+      // 优先从goalData加载（因为这是权威数据源）
+      var goalData = wx.getStorageSync('goalData') || {};
+      var currentWeight = goalData.currentWeight || wx.getStorageSync('currentWeight') || '';
+      
       this.setData({
-        gender: gender,
-        age: age,
-        height: height,
+        gender: goalData.gender || 'male',
+        age: goalData.age || '',
+        height: goalData.height || '',
         currentWeight: currentWeight,
-        goalWeight: goalWeight,
-        dailyGoal: dailyGoal,
-        dailyTargetConsumption: dailyTargetConsumption
+        goalWeight: goalData.goalWeight || '',
+        dailyGoal: goalData.dailyGoal || '',
+        dailyTargetConsumption: goalData.dailyTargetConsumption || '',
+        bmr: goalData.bmr || ''
       });
-
-      if (currentWeight && goalWeight && dailyGoal) {
+   
+      if (currentWeight && goalData.goalWeight && goalData.dailyGoal) {
         this.calculateSummary();
       }
     } catch (e) {
@@ -843,61 +859,101 @@ Page({
 
   // 保存目标设置
   onSaveGoalSettings: function() {
-    var data = this.data;
-    var gender = data.gender;
-    var age = data.age;
-    var height = data.height;
-    var currentWeight = data.currentWeight;
-    var goalWeight = data.goalWeight;
-    var dailyGoal = data.dailyGoal;
-    var dailyTargetConsumption = data.dailyTargetConsumption;
-
-    if (!gender || !age || !height || !currentWeight || !goalWeight || !dailyGoal) {
-      wx.showToast({
-        title: '请填写完整信息',
-        icon: 'none'
-      });
-      return;
-    }
-
-    // 如果目标消耗为空，提示用户需要点击转换按钮
-    if (!dailyTargetConsumption) {
-      wx.showToast({
-        title: '请点击转换计算目标消耗',
-        icon: 'none'
-      });
-      return;
-    }
-
-    var ageNum = parseFloat(age);
-    var heightNum = parseFloat(height);
-    var current = parseFloat(currentWeight);
-    var goal = parseFloat(goalWeight);
-    var daily = parseFloat(dailyGoal);
-    var targetConsumption = parseFloat(dailyTargetConsumption);
-
-    if (isNaN(ageNum) || isNaN(heightNum) || isNaN(current) || isNaN(goal) || isNaN(daily) || isNaN(targetConsumption)) {
-      wx.showToast({
-        title: '请输入有效数字',
-        icon: 'none'
-      });
-      return;
-    }
-
-    if (daily > 0.3) {
-      var that = this;
-      wx.showModal({
-        title: '提示',
-        content: '每日减重目标超过0.3kg可能不利于健康，是否继续？',
-        success: function(res) {
-          if (res.confirm) {
-            that.saveGoalData();
-          }
+  var data = this.data;
+  var gender = data.gender;
+  var age = data.age;
+  var height = data.height;
+  var currentWeight = data.currentWeight;
+  var goalWeight = data.goalWeight;
+  var dailyGoal = data.dailyGoal;
+  var dailyTargetConsumption = data.dailyTargetConsumption;
+ 
+  if (!gender || !age || !height || !currentWeight || !goalWeight || !dailyGoal) {
+    wx.showToast({
+      title: '请填写完整信息',
+      icon: 'none'
+    });
+    return;
+  }
+ 
+  // 如果目标消耗为空，提示用户需要点击转换按钮
+  if (!dailyTargetConsumption) {
+    wx.showToast({
+      title: '请点击转换计算目标消耗',
+      icon: 'none'
+    });
+    return;
+  }
+ 
+  var ageNum = parseFloat(age);
+  var heightNum = parseFloat(height);
+  var current = parseFloat(currentWeight);
+  var goal = parseFloat(goalWeight);
+  var daily = parseFloat(dailyGoal);
+  var targetConsumption = parseFloat(dailyTargetConsumption);
+ 
+  if (isNaN(ageNum) || isNaN(heightNum) || isNaN(current) || isNaN(goal) || isNaN(daily) || isNaN(targetConsumption)) {
+    wx.showToast({
+      title: '请输入有效数字',
+      icon: 'none'
+    });
+    return;
+  }
+ 
+  if (daily > 0.3) {
+    var that = this;
+    wx.showModal({
+      title: '提示',
+      content: '每日减重目标超过0.3kg可能不利于健康，是否继续？',
+      success: function(res) {
+        if (res.confirm) {
+          that.saveGoalData();
         }
-      });
-    } else {
-      this.saveGoalData();
+      }
+    });
+  } else {
+    this.saveGoalData();
+  }
+  },
+
+  updateWeightRecord: function(weight) {
+    try {
+      const today = this.getCurrentDateString();
+      const weightRecords = wx.getStorageSync('weightRecords') || {};
+      
+      // 更新或添加今日体重记录
+      weightRecords[today] = weight;
+      wx.setStorageSync('weightRecords', weightRecords);
+      
+      // 更新数组格式记录
+      let weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
+      const existingIndex = weightRecordsArray.findIndex(item => item.date === today);
+      
+      const newRecord = { date: today, weight: weight };
+      if (existingIndex >= 0) {
+        weightRecordsArray[existingIndex] = newRecord;
+      } else {
+        weightRecordsArray.unshift(newRecord); // 添加到数组开头
+      }
+      
+      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
+      
+      // 设置数据更新标志
+      wx.setStorageSync('dataUpdated', new Date().getTime());
+      
+      console.log('体重记录已同步更新');
+    } catch (e) {
+      console.error('更新体重记录失败:', e);
     }
+  },
+   
+  // 新增方法：获取当前日期字符串（与index页一致）
+  getCurrentDateString: function() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   },
 
   // 保存目标数据
@@ -924,12 +980,12 @@ Page({
       wx.setStorageSync('dailyTargetConsumption', dailyTargetConsumption);
       wx.setStorageSync('bmr', bmr);
       wx.setStorageSync('calculatedBMR', bmr);
-
+   
       // 更新用户统计数据
       var userStats = wx.getStorageSync('userStats') || {};
       userStats.currentWeight = parseFloat(currentWeight);
       wx.setStorageSync('userStats', userStats);
-
+   
       // 保存完整的goalData对象
       var goalData = wx.getStorageSync('goalData') || {};
       goalData.gender = gender;
@@ -939,7 +995,11 @@ Page({
       goalData.dailyTargetConsumption = parseFloat(dailyTargetConsumption);
       goalData.bmr = bmr;
       goalData.calculatedBMR = bmr;
+      goalData.currentWeight = parseFloat(currentWeight); // 添加当前体重到goalData
       wx.setStorageSync('goalData', goalData);
+      
+      // 【新增】同步更新体重记录
+      this.updateWeightRecord(currentWeight);
       
       // 更新数据变更标志，通知所有页面刷新数据
       wx.setStorageSync('dataUpdated', new Date().getTime());
@@ -966,7 +1026,7 @@ Page({
       } catch (e) {
         console.error('通知页面刷新失败:', e);
       }
-
+   
       wx.showToast({
         title: '保存成功',
         icon: 'success'
@@ -988,7 +1048,114 @@ Page({
       });
     }
   },
+   
+  //更新体重记录方法
+  updateWeightRecord: function(weight, date) {
+    try {
+      date = date || this.getCurrentDateString();
+      
+      // 更新对象格式记录
+      var weightRecords = wx.getStorageSync('weightRecords') || {};
+      weightRecords[date] = weight;
+      wx.setStorageSync('weightRecords', weightRecords);
+      
+      // 更新数组格式记录
+      var weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
+      const existingIndex = weightRecordsArray.findIndex(item => item.date === date);
+      
+      const newRecord = { date: date, weight: weight };
+      if (existingIndex >= 0) {
+        weightRecordsArray[existingIndex] = newRecord;
+      } else {
+        weightRecordsArray.unshift(newRecord);
+      }
+      
+      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
+      
+      // 设置永久性今日体重记录
+      wx.setStorageSync('todayWeight', {
+        date: date,
+        weight: weight
+      });
+      
+      // 通知其他页面刷新数据
+      this.setData({ needRefresh: true });
+      wx.setStorageSync('dataUpdated', new Date().getTime());
+      
+      console.log('体重记录已同步更新');
+    } catch (e) {
+      console.error('更新体重记录失败:', e);
+    }
+  },
   
+  // 删除目标数据
+  onDeleteGoal: function() {
+  var that = this;
+  wx.showModal({
+    title: '确认删除',
+    content: '确定要删除当前目标设置吗？所有数据将被清空。',
+    success: function(res) {
+      if (res.confirm) {
+        try {
+          // 清空存储的目标数据
+          wx.removeStorageSync('gender');
+          wx.removeStorageSync('age');
+          wx.removeStorageSync('height');
+          wx.removeStorageSync('currentWeight');
+          wx.removeStorageSync('goalWeight');
+          wx.removeStorageSync('dailyGoal');
+          wx.removeStorageSync('dailyTargetConsumption');
+          wx.removeStorageSync('bmr');
+          wx.removeStorageSync('calculatedBMR');
+          wx.removeStorageSync('goalData');
+          
+          // 更新数据变更标志
+          wx.setStorageSync('dataUpdated', new Date().getTime());
+          
+          // 清空页面数据
+          that.setData({
+            gender: 'male',
+            age: '',
+            height: '',
+            currentWeight: '',
+            goalWeight: '',
+            dailyGoal: '',
+            dailyTargetConsumption: '',
+            bmr: '',
+            weightToLose: '',
+            estimatedDays: '',
+            targetDate: '',
+            showSummary: false,
+            allowManualTargetEdit: false
+          });
+          
+          // 通知其他页面刷新
+          var pages = getCurrentPages();
+          pages.forEach(function(page) {
+            if (page && page.setData) {
+              page.setData({ needRefresh: true });
+              if (typeof page.refreshData === 'function') {
+                page.refreshData();
+              }
+            }
+          });
+          
+          wx.showToast({
+            title: '目标已删除',
+            icon: 'success'
+          });
+        } catch (e) {
+          console.error('删除目标数据失败', e);
+          wx.showToast({
+            title: '删除失败，请重试',
+            icon: 'none'
+          });
+        }
+      }
+    }
+  });
+  },
+
   // 清除所有数据
   onClearAllData: function() {
     const that = this;
