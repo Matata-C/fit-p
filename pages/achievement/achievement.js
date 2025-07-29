@@ -46,7 +46,7 @@ Page({
       '你的努力终将被看到！'
     ],
     likedVoiceTexts: [],
-    tab: 'all', 
+    tab: 'all',
     voiceText: '你很棒，坚持就是胜利！再接再厉，目标就在前方！',
     voiceTextAnim: '',
     isPlaying: false,
@@ -170,7 +170,7 @@ Page({
       likedVoiceTexts: this.data.likedVoiceTexts.concat(val),
       addInput: '',
       tab: 'liked',
-      swiperIndex: this.data.likedVoiceTexts.length 
+      swiperIndex: this.data.likedVoiceTexts.length
     });
     this.updateVoiceTextByTab(this.data.likedVoiceTexts.length, 'liked');
     wx.showToast({ title: '已添加并收藏', icon: 'success' });
