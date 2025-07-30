@@ -1,54 +1,59 @@
 {
-    "pages": [
-        "pages/index/index",
-        "pages/analysis/analysis",
-        "pages/exercise/exercise",
-        "pages/food/food",
-        "pages/goal/goal",
-        "pages/profile/profile",
-        "pages/weightRecord/weightRecord",
-        "pages/achievement/achievement",
-        "pages/userInfo/userInfo",
-        "pages/calendar/calendar",
-        "pages/about-us/about-us",
-        "pages/feedback/feedback",
-        "pages/submitFeedback/submitFeedback",
-        "pages/step/step"
+  "pages": [
+    "pages/index/index",
+    "pages/analysis/analysis",
+    "pages/exercise/exercise",
+    "pages/food/food",
+    "pages/goal/goal",
+    "pages/profile/profile",
+    "pages/weightRecord/weightRecord",
+    "pages/achievement/achievement",
+    "pages/userInfo/userInfo",
+    "pages/calendar/calendar",
+    "pages/about-us/about-us",
+    "pages/feedback/feedback",
+    "pages/submitFeedback/submitFeedback",
+    "pages/step/step",
+    "pages/ai-chat/ai-chat"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/analysis/analysis",
+        "text": "分析"
+      },
+      {
+        "pagePath": "pages/ai-chat/ai-chat",
+        "text": "AI对话"
+      },
+      {
+        "pagePath": "pages/achievement/achievement",
+        "text": "成就"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
     ],
-    "window": {
-        "backgroundTextStyle": "light",
-        "navigationBarBackgroundColor": "#fff",
-        "navigationBarTitleText": "WeChat",
-        "navigationBarTextStyle": "black"
-    },
-    "tabBar": {
-        "custom": true,
-        "list": [
-            {
-                "pagePath": "pages/index/index",
-                "text": "首页"
-            },
-            {
-                "pagePath": "pages/analysis/analysis",
-                "text": "分析"
-            },
-            {
-                "pagePath": "pages/achievement/achievement",
-                "text": "成就"
-            },
-            {
-                "pagePath": "pages/profile/profile",
-                "text": "我的"
-            }
-        ],
-        "color": "#999",
-        "selectedColor": "#FFD600",
-        "backgroundColor": "#fff",
-        "borderStyle": "black"
-    },
-    "style": "v2",
-    "sitemapLocation": "sitemap.json",
-    "lazyCodeLoading": "requiredComponents",
-    "usingComponents": {},
-    "debug": false
+    "color": "#999",
+    "selectedColor": "#FFD600",
+    "backgroundColor": "#fff",
+    "borderStyle": "black"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "usingComponents": {},
+  "debug": false
 }

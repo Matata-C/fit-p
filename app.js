@@ -1,9 +1,8 @@
-// app.js
 App({
   onLaunch: function () {
     console.log('应用启动');
     wx.cloud.init({
-      env: 'green-cash-3g75t81dda4e81e4',
+      env: 'cloud1-6g0qn8fo7e746837',
       traceUser: true
     })
     this.tabChangeHandlers = [];

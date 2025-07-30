@@ -1,0 +1,70 @@
+<view class="chat-container">
+  <view class="chat-header">
+    <text class="chat-title">AI健身助手</text>
+    <view class="header-actions">
+      <button class="clear-btn" bindtap="clearChat">清空</button>
+    </view>
+  </view>
+
+  <scroll-view 
+    class="chat-messages" 
+    scroll-y="true" 
+    scroll-into-view="{{scrollIntoView}}" 
+    scroll-with-animation="true"
+    enable-flex="true"
+    enhanced="true"
+    bounces="true"
+    style="padding-bottom: {{keyboardHeight}}px">
+    <view class="messages-container">
+      <view wx:for="{{messages}}" wx:key="index" class="message-item {{item.type === 'user' ? 'message-user' : 'message-ai'}}" id="msg-{{index}}">
+        <view wx:if="{{item.type === 'user'}}" class="user-message">
+          <view class="message-bubble user-bubble">
+            <text class="message-text">{{item.content}}</text>
+          </view>
+          <image class="avatar user-avatar" src="/images/guest-icon.svg"></image>
+        </view>
+
+        <view wx:if="{{item.type === 'ai'}}" class="ai-message">
+          <image class="avatar ai-avatar" src="/images/柯基.png"></image>
+          <view class="message-bubble ai-bubble">
+            <text class="message-text">{{item.content}}</text>
+            <view wx:if="{{item.loading}}" class="loading-indicator">
+              <view class="dot dot1"></view>
+              <view class="dot dot2"></view>
+              <view class="dot dot3"></view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="quick-questions" wx:if="{{showQuickQuestions}}">
+    <text class="quick-title">快速提问</text>
+    <view class="quick-tags">
+      <button wx:for="{{quickQuestions}}" wx:key="index" class="quick-tag" bindtap="sendQuickQuestion" data-question="{{item}}">
+        {{item}}
+      </button>
+    </view>
+  </view>
+
+  <view class="chat-input-container">
+    <view class="input-box">
+      <textarea 
+        class="message-input" 
+        placeholder="输入您的问题，按回车发送..."
+        value="{{inputValue}}"
+        bindinput="onInputChange"
+        bindconfirm="sendMessage"
+        auto-height
+        maxlength="500"
+        confirm-type="send"
+        focus="{{focusInput}}"
+      ></textarea>
+    </view>
+  </view>
+
+  <view class="voice-tip" wx:if="{{showVoiceTip}}">
+    <text class="voice-text">长按可语音输入</text>
+  </view>
+</view>
