@@ -9,7 +9,7 @@ Page({
     userInfo_tank: false,   // 弹框显示状态
     showManualLogin: false, // 新增：手动注册弹框状态
     avatarUrl: '',          // 头像临时路径
-    nickName: '' ,           // 昵称
+    nickName: '',           // 昵称
     stats: {
       recordDays: 0,
       weightLost: '0',
@@ -32,28 +32,28 @@ Page({
     bmr: '',
     needRefresh: false,
   },
-  
-  onLoad: async function(options) {
+
+  onLoad: async function (options) {
     try {
       // 检查微信版本兼容性 - 使用新的API
       const systemInfo = wx.getAppBaseInfo();
       const version = systemInfo.version;
       console.log('微信版本:', version);
-      
+
       // 检查是否支持新的头像昵称API
       if (wx.canIUse('button.open-type.chooseAvatar')) {
         console.log('支持新的头像选择API');
       } else {
         console.log('不支持新的头像选择API，将使用旧版本');
       }
-      
+
       // 新增：自动登录检测
       await this.checkAutoLogin();
-      
+
       this.loadUserInfo();
       this.loadUserStats();
       this.loadGoalData();
-      
+
       // 尝试自动登录，但不影响页面基本功能
       try {
         const loginRes = await wx.cloud.callFunction({ name: 'login' });
@@ -61,7 +61,7 @@ Page({
         const db = wx.cloud.database();
         const userRes = await db.collection('user2').where({ openid }).get();
         if (userRes.data.length > 0) {
-          this.setData({ 
+          this.setData({
             userInfo: userRes.data[0],
             isLoggedIn: true  // 新增：设置登录状态
           });
@@ -74,7 +74,7 @@ Page({
         // 云函数失败不影响页面基本功能
       }
     } catch (e) {
-      console.error('加载个人资料页面数据失败：', e); 
+      console.error('加载个人资料页面数据失败：', e);
     }
     // 设置TabBar选中状态为个人页(索引4)
     tabBarManager.initTabBarForPage(4);
@@ -86,69 +86,69 @@ Page({
       // 1. 检查本地登录状态
       const isLoggedIn = wx.getStorageSync('isLoggedIn');
       const userInfo = wx.getStorageSync('userInfo');
-      
+
       if (isLoggedIn && userInfo) {
         // 2. 验证登录状态有效性
         const loginRes = await wx.cloud.callFunction({ name: 'login' });
         const openid = loginRes.result.openid;
-        
+
         if (userInfo.openid === openid) {
           // 登录状态有效，自动登录
           this.setData({
             userInfo: userInfo,
             isLoggedIn: true
           });
-          
+
           // 更新全局状态
           const app = getApp();
           if (app.globalData) {
             app.globalData.isLoggedIn = true;
             app.globalData.userInfo = userInfo;
           }
-          
+
           console.log('自动登录成功');
           return true;
         }
       }
-      
+
       // 3. 如果本地状态无效，清除缓存
       wx.removeStorageSync('userInfo');
       wx.removeStorageSync('isLoggedIn');
-      
+
       return false;
     } catch (error) {
       console.error('自动登录检测失败:', error);
       return false;
     }
   },
-  
+
   // 退出登录
-  tuichu: function() {
+  tuichu: function () {
     wx.showModal({
       title: '确认退出',
       content: '确定要退出登录吗？',
       success: (res) => {
         if (res.confirm) {
           // 1. 清空页面数据
-          this.setData({ 
-            userInfo: null, 
+          this.setData({
+            userInfo: null,
             isLoggedIn: false,
             userInfo_tank: false,
             avatarUrl: '',
             nickName: ''
           });
-          
+
           // 2. 清除本地缓存
           wx.removeStorageSync('userInfo');
           wx.removeStorageSync('isLoggedIn');
-          
+
           // 3. 清除全局数据（如果有的话）
           const app = getApp();
           if (app.globalData) {
             app.globalData.userInfo = null;
             app.globalData.isLoggedIn = false;
           }
-          
+
           wx.showToast({
             title: '已退出登录',
             icon: 'success'
@@ -189,24 +189,24 @@ Page({
   // 微信授权登录
   async onWechatLogin() {
     console.log('开始微信授权登录');
-    
+
     try {
       // 使用新的getUserProfile API
       const userProfile = await wx.getUserProfile({
         desc: '用于完善用户资料'
       });
       console.log('微信返回的userProfile.userInfo:', userProfile.userInfo);
-      
+
       wx.showLoading({ title: '正在登录', mask: true });
 
       // 1. 获取 openid
       console.log('开始调用云函数login...');
       const loginRes = await wx.cloud.callFunction({ name: 'login' });
       console.log('云函数login返回结果:', loginRes);
-      
+
       const openid = loginRes.result.openid;
       console.log('获取到的openid:', openid);
-      
+
       if (!openid) {
         throw new Error('获取用户openid失败');
       }
@@ -219,7 +219,7 @@ Page({
 
       // 3. 使用微信用户信息
       const wechatUserInfo = userProfile.userInfo;
-      
+
       let userInfo = {
         openid,
         avatarUrl: wechatUserInfo.avatarUrl,
@@ -238,7 +238,7 @@ Page({
         // 已有用户，更新信息
         console.log('开始更新用户信息...');
         await db.collection('user2').where({ openid }).update({
-          data: { 
+          data: {
             avatarUrl: wechatUserInfo.avatarUrl,
             nickName: wechatUserInfo.nickName,
             updateTime: new Date(),
@@ -249,27 +249,27 @@ Page({
       }
 
       wx.hideLoading();
-      this.setData({ 
-        userInfo, 
+      this.setData({
+        userInfo,
         userInfo_tank: false,
         isLoggedIn: true
       });
       // 写入本地缓存
       wx.setStorageSync('userInfo', userInfo);
       wx.setStorageSync('isLoggedIn', true);
-      
+
       // 新增：更新全局状态
       const app = getApp();
       if (app.globalData) {
         app.globalData.isLoggedIn = true;
         app.globalData.userInfo = userInfo;
       }
-      
+
       wx.showToast({ title: '登录成功' });
     } catch (err) {
       wx.hideLoading();
       console.error('微信授权登录失败:', err);
-      
+
       // 显示详细错误信息
       let errorMsg = '登录失败，请重试';
       if (err.errMsg && err.errMsg.includes('getUserProfile:fail')) {
@@ -281,7 +281,7 @@ Page({
       } else if (err.errMsg && err.errMsg.includes('cloud')) {
         errorMsg = '云函数调用失败，请检查云开发环境';
       }
-      
+
       wx.showModal({
         title: '登录失败',
         content: `错误详情：${err.message || err.errMsg || '未知错误'}\n\n请检查：\n1. 网络连接\n2. 云开发环境\n3. 云函数是否部署`,
@@ -293,9 +293,9 @@ Page({
 
   // 显示手动注册弹框
   showManualLogin() {
-    this.setData({ 
+    this.setData({
       userInfo_tank: false,
-      showManualLogin: true 
+      showManualLogin: true
     });
   },
 
@@ -318,18 +318,18 @@ Page({
             isGuest: true,
             createTime: new Date()
           };
-          
-          this.setData({ 
+
+          this.setData({
             userInfo: guestUserInfo,
             userInfo_tank: false,
             isLoggedIn: true
           });
-          
+
           // 写入本地缓存
           wx.setStorageSync('userInfo', guestUserInfo);
           wx.setStorageSync('isLoggedIn', true);
-          
-          wx.showToast({ 
+
+          wx.showToast({
             title: '已进入游客模式',
             icon: 'success'
           });
@@ -337,17 +337,17 @@ Page({
       }
     });
   },
-  
+
   // 获取头像
   onChooseAvatar(e) {
     this.setData({ avatarUrl: e.detail.avatarUrl });
   },
-  
+
   // 获取昵称
   getNickName(e) {
     this.setData({ nickName: e.detail.value });
   },
-  
+
   // 提交注册/登录
   async submit() {
     if (!this.data.avatarUrl) {
@@ -363,10 +363,10 @@ Page({
       console.log('开始调用云函数login...');
       const loginRes = await wx.cloud.callFunction({ name: 'login' });
       console.log('云函数login返回结果:', loginRes);
-      
+
       const openid = loginRes.result.openid;
       console.log('获取到的openid:', openid);
-      
+
       if (!openid) {
         throw new Error('获取用户openid失败');
       }
@@ -405,8 +405,8 @@ Page({
         // 已有用户，更新头像昵称
         console.log('开始更新用户信息...');
         await db.collection('user2').where({ openid }).update({
-          data: { 
-            avatarUrl, 
+          data: {
+            avatarUrl,
             nickName: this.data.nickName,
             updateTime: new Date()
           }
@@ -415,27 +415,27 @@ Page({
       }
 
       wx.hideLoading();
-      this.setData({ 
-        userInfo, 
+      this.setData({
+        userInfo,
         showManualLogin: false,
         isLoggedIn: true  // 新增：设置登录状态
       });
       // 写入本地缓存
       wx.setStorageSync('userInfo', userInfo);
       wx.setStorageSync('isLoggedIn', true);
-      
+
       // 新增：更新全局状态
       const app = getApp();
       if (app.globalData) {
         app.globalData.isLoggedIn = true;
         app.globalData.userInfo = userInfo;
       }
-      
+
       wx.showToast({ title: '注册成功' });
     } catch (err) {
       wx.hideLoading();
       console.error('登录失败:', err);
-      
+
       // 显示详细错误信息
       let errorMsg = '登录失败，请重试';
       if (err.message && err.message.includes('openid')) {
@@ -447,7 +447,7 @@ Page({
       } else if (err.errMsg && err.errMsg.includes('cloud')) {
         errorMsg = '云函数调用失败，请检查云开发环境';
       }
-      
+
       wx.showModal({
         title: '登录失败',
         content: `错误详情：${err.message || err.errMsg || '未知错误'}\n\n请检查：\n1. 网络连接\n2. 云开发环境\n3. 云函数是否部署`,
@@ -464,22 +464,22 @@ Page({
     });
   },
 
-  onShow: function() {
+  onShow: function () {
     // 检查是否有数据更新标志
     try {
       const dataUpdated = wx.getStorageSync('dataUpdated');
       const lastUpdate = wx.getStorageSync('lastProfileUpdate') || 0;
-      
+
       // 如果有新的数据更新，或页面设置了刷新标志，强制刷新
       if ((dataUpdated && dataUpdated > lastUpdate) || this.data.needRefresh) {
         console.log('检测到数据更新，刷新个人页面数据');
-        
+
         // 更新最后刷新时间
         wx.setStorageSync('lastProfileUpdate', new Date().getTime());
-        
+
         // 重置刷新标志
         this.setData({ needRefresh: false });
-        
+
         // 重新加载所有数据
         this.loadUserInfo();
         this.loadUserStats();
@@ -502,17 +502,17 @@ Page({
     tabBarManager.setSelectedTab(4);
   },
 
-  checkDataSynchronization: function() {
+  checkDataSynchronization: function () {
     try {
       const goalData = wx.getStorageSync('goalData') || {};
       const weightRecords = wx.getStorageSync('weightRecords') || {};
       const today = this.getCurrentDateString();
-      
+
       // 检查goalData中的当前体重是否与今日记录一致
-      if (goalData.currentWeight && weightRecords[today] !== undefined && 
-          goalData.currentWeight !== weightRecords[today]) {
+      if (goalData.currentWeight && weightRecords[today] !== undefined &&
+        goalData.currentWeight !== weightRecords[today]) {
         console.log('检测到数据不一致，正在同步...');
-        
+
         // 以goalData为准（因为这是用户主动设置的目标）
         this.updateWeightRecord(goalData.currentWeight, today);
       }
@@ -522,11 +522,11 @@ Page({
   },
 
   // 加载用户信息
-  loadUserInfo: function() {
+  loadUserInfo: function () {
     try {
       var userInfo = wx.getStorageSync('userInfo');
       var isLoggedIn = wx.getStorageSync('isLoggedIn');
-      
+
       if (userInfo && isLoggedIn) {
         this.setData({
           userInfo: userInfo,
@@ -542,20 +542,20 @@ Page({
       console.error('加载用户信息失败：', e);
     }
   },
-  
+
   // 加载用户统计数据
-  loadUserStats: function() {
+  loadUserStats: function () {
     try {
       const userStats = wx.getStorageSync('userStats') || {};
       const goalData = wx.getStorageSync('goalData') || {};
       const weightRecords = wx.getStorageSync('weightRecords') || [];
-      
+
       // 记录天数
       const recordDays = userStats.days || 0;
-      
+
       // 优先使用分析页面计算的总减重数据
       let totalWeightLoss = 0;
-      
+
       try {
         // 尝试从分析页面获取计算结果
         const analysisStats = wx.getStorageSync('analysisStatistics') || {};
@@ -563,7 +563,7 @@ Page({
           // 使用分析页面的计算结果
           totalWeightLoss = parseFloat(analysisStats.totalLost);
           console.log('使用分析页面的总减重数据:', totalWeightLoss);
-          
+
           // 同时更新userStats中的totalWeightLoss，保持一致性
           if (userStats.totalWeightLoss !== totalWeightLoss) {
             userStats.totalWeightLoss = totalWeightLoss;
@@ -578,19 +578,19 @@ Page({
         // 出错时使用userStats中的数据
         totalWeightLoss = userStats.totalWeightLoss || 0;
       }
-      
+
       // 预计达成目标天数
       var daysToGoal = 0;
       if (userStats.currentWeight && goalData.goalWeight && goalData.dailyGoal) {
         const currentWeight = userStats.currentWeight;
         const goalWeight = goalData.goalWeight;
         const dailyGoal = goalData.dailyGoal;
-        
+
         if (currentWeight > goalWeight && dailyGoal > 0) {
           daysToGoal = Math.ceil((currentWeight - goalWeight) / dailyGoal);
         }
       }
-      
+
       this.setData({
         'stats.recordDays': recordDays,
         'stats.weightLost': totalWeightLoss.toFixed(1),
@@ -601,7 +601,7 @@ Page({
     }
   },
 
-  onUserInfoTap: function() {
+  onUserInfoTap: function () {
     if (this.data.isLoggedIn) {
       // 已登录：跳转到用户详情页
       wx.navigateTo({
@@ -609,18 +609,18 @@ Page({
       });
       return;
     }
-    
+
     // 未登录：直接打开手动注册弹窗
     this.setData({ userInfo_tank: true });
   },
 
   // 加载目标设置数据
-  loadGoalData: function() {
+  loadGoalData: function () {
     try {
       // 优先从goalData加载（因为这是权威数据源）
       var goalData = wx.getStorageSync('goalData') || {};
       var currentWeight = goalData.currentWeight || wx.getStorageSync('currentWeight') || '';
-      
+
       this.setData({
         gender: goalData.gender || 'male',
         age: goalData.age || '',
@@ -631,7 +631,7 @@ Page({
         dailyTargetConsumption: goalData.dailyTargetConsumption || '',
         bmr: goalData.bmr || ''
       });
-   
+
       if (currentWeight && goalData.goalWeight && goalData.dailyGoal) {
         this.calculateSummary();
       }
@@ -639,26 +639,26 @@ Page({
       console.error('加载目标数据失败', e);
     }
   },
-  
+
   // 切换目标设置折叠面板
-  toggleGoalSettings: function() {
+  toggleGoalSettings: function () {
     this.setData({
       isGoalExpanded: !this.data.isGoalExpanded
     });
   },
 
   // 切换目标消耗编辑状态
-  toggleTargetEdit: function() {
+  toggleTargetEdit: function () {
     this.setData({
       allowManualTargetEdit: !this.data.allowManualTargetEdit
     });
   },
 
   // 点击转换按钮，将目标减重转换为目标消耗
-  convertToTargetConsumption: function() {
+  convertToTargetConsumption: function () {
     try {
       var dailyGoal = this.data.dailyGoal;
-      
+
       if (!dailyGoal) {
         wx.showToast({
           title: '请先填写目标减重',
@@ -666,14 +666,14 @@ Page({
         });
         return;
       }
-      
+
       var targetConsumption = this.calculateTargetConsumption();
-      
+
       if (targetConsumption > 0) {
         this.setData({
           dailyTargetConsumption: targetConsumption.toString()
         });
-        
+
         wx.showToast({
           title: '转换成功',
           icon: 'success'
@@ -684,7 +684,7 @@ Page({
           icon: 'none'
         });
       }
-    } catch(e) {
+    } catch (e) {
       console.error('转换目标消耗失败', e);
       wx.showToast({
         title: '转换失败，请重试',
@@ -692,45 +692,45 @@ Page({
       });
     }
   },
-  
+
   // 根据目标减重计算目标消耗
-  calculateTargetConsumption: function() {
+  calculateTargetConsumption: function () {
     var data = this.data;
     var currentWeight = data.currentWeight;
     var goalWeight = data.goalWeight;
     var dailyGoal = data.dailyGoal;
     var bmr = this.calculateBMR();
-    
+
     if (!currentWeight || !goalWeight || !dailyGoal || bmr <= 0) return 0;
-    
+
     var currentWeightNum = parseFloat(currentWeight);
     var goalWeightNum = parseFloat(goalWeight);
     var dailyGoalNum = parseFloat(dailyGoal);
-    
+
     if (isNaN(currentWeightNum) || isNaN(goalWeightNum) || isNaN(dailyGoalNum) || dailyGoalNum <= 0) return 0;
-    
+
     // 1kg脂肪约等于7700千卡
     var CALORIES_PER_KG = 7700;
-    
+
     // 每日需要的卡路里赤字
     var dailyCalorieDeficit = dailyGoalNum * CALORIES_PER_KG / 30; // 转换为每日消耗
-    
+
     // 目标消耗 = 基础代谢率 + 每日活动消耗 - 每日需要的卡路里赤字
     // 这里简化为基础代谢率 + 每日需要的卡路里赤字
     var targetConsumption = bmr + dailyCalorieDeficit;
-    
+
     // 确保目标消耗不低于基础代谢率的80%（安全值）
     var safeMinimum = bmr * 0.8;
-    
+
     if (targetConsumption < safeMinimum) {
       return Math.round(safeMinimum);
     }
-    
+
     return Math.round(targetConsumption);
   },
 
   // 输入每日目标消耗
-  onDailyTargetConsumptionInput: function(e) {
+  onDailyTargetConsumptionInput: function (e) {
     // 只有在允许手动编辑时才更新
     if (this.data.allowManualTargetEdit) {
       this.setData({
@@ -738,16 +738,16 @@ Page({
       });
     }
   },
-  
+
   // 选择性别
-  onGenderSelect: function(e) {
+  onGenderSelect: function (e) {
     var gender = e.currentTarget.dataset.gender;
     this.setData({ gender: gender });
     this.calculateSummary();
   },
 
   // 输入年龄
-  onAgeInput: function(e) {
+  onAgeInput: function (e) {
     this.setData({
       age: e.detail.value
     });
@@ -755,7 +755,7 @@ Page({
   },
 
   // 输入身高
-  onHeightInput: function(e) {
+  onHeightInput: function (e) {
     this.setData({
       height: e.detail.value
     });
@@ -763,7 +763,7 @@ Page({
   },
 
   // 输入当前体重
-  onCurrentWeightInput: function(e) {
+  onCurrentWeightInput: function (e) {
     this.setData({
       currentWeight: e.detail.value
     });
@@ -771,7 +771,7 @@ Page({
   },
 
   // 输入目标体重
-  onGoalWeightInput: function(e) {
+  onGoalWeightInput: function (e) {
     this.setData({
       goalWeight: e.detail.value
     });
@@ -779,7 +779,7 @@ Page({
   },
 
   // 输入每日目标减重
-  onDailyGoalInput: function(e) {
+  onDailyGoalInput: function (e) {
     this.setData({
       dailyGoal: e.detail.value
     });
@@ -787,13 +787,13 @@ Page({
   },
 
   // 计算摘要信息
-  calculateSummary: function() {
+  calculateSummary: function () {
     try {
       var data = this.data;
       var currentWeight = data.currentWeight;
       var goalWeight = data.goalWeight;
       var dailyGoal = data.dailyGoal;
-      
+
       if (!currentWeight || !goalWeight || !dailyGoal) {
         this.setData({ showSummary: false });
         return;
@@ -810,13 +810,13 @@ Page({
 
       var weightToLose = (current - goal).toFixed(1);
       var estimatedDays = Math.ceil(Math.abs(weightToLose) / daily);
-      
+
       // 计算目标日期
       var today = new Date();
       var targetDate = new Date(today.setDate(today.getDate() + estimatedDays));
-      var targetDateStr = targetDate.getFullYear() + '-' + 
-                        String(targetDate.getMonth() + 1).padStart(2, '0') + '-' + 
-                        String(targetDate.getDate()).padStart(2, '0');
+      var targetDateStr = targetDate.getFullYear() + '-' +
+        String(targetDate.getMonth() + 1).padStart(2, '0') + '-' +
+        String(targetDate.getDate()).padStart(2, '0');
 
       // 计算BMR
       var bmr = this.calculateBMR();
@@ -834,13 +834,13 @@ Page({
   },
 
   // 计算基础代谢率(BMR)
-  calculateBMR: function() {
+  calculateBMR: function () {
     var data = this.data;
     var gender = data.gender;
     var age = data.age;
     var height = data.height;
     var currentWeight = data.currentWeight;
-    
+
     if (!age || !height || !currentWeight) return 0;
 
     var ageNum = parseFloat(age);
@@ -858,106 +858,7 @@ Page({
   },
 
   // 保存目标设置
-  onSaveGoalSettings: function() {
-  var data = this.data;
-  var gender = data.gender;
-  var age = data.age;
-  var height = data.height;
-  var currentWeight = data.currentWeight;
-  var goalWeight = data.goalWeight;
-  var dailyGoal = data.dailyGoal;
-  var dailyTargetConsumption = data.dailyTargetConsumption;
- 
-  if (!gender || !age || !height || !currentWeight || !goalWeight || !dailyGoal) {
-    wx.showToast({
-      title: '请填写完整信息',
-      icon: 'none'
-    });
-    return;
-  }
- 
-  // 如果目标消耗为空，提示用户需要点击转换按钮
-  if (!dailyTargetConsumption) {
-    wx.showToast({
-      title: '请点击转换计算目标消耗',
-      icon: 'none'
-    });
-    return;
-  }
- 
-  var ageNum = parseFloat(age);
-  var heightNum = parseFloat(height);
-  var current = parseFloat(currentWeight);
-  var goal = parseFloat(goalWeight);
-  var daily = parseFloat(dailyGoal);
-  var targetConsumption = parseFloat(dailyTargetConsumption);
- 
-  if (isNaN(ageNum) || isNaN(heightNum) || isNaN(current) || isNaN(goal) || isNaN(daily) || isNaN(targetConsumption)) {
-    wx.showToast({
-      title: '请输入有效数字',
-      icon: 'none'
-    });
-    return;
-  }
- 
-  if (daily > 0.3) {
-    var that = this;
-    wx.showModal({
-      title: '提示',
-      content: '每日减重目标超过0.3kg可能不利于健康，是否继续？',
-      success: function(res) {
-        if (res.confirm) {
-          that.saveGoalData();
-        }
-      }
-    });
-  } else {
-    this.saveGoalData();
-  }
-  },
-
-  updateWeightRecord: function(weight) {
-    try {
-      const today = this.getCurrentDateString();
-      const weightRecords = wx.getStorageSync('weightRecords') || {};
-      
-      // 更新或添加今日体重记录
-      weightRecords[today] = weight;
-      wx.setStorageSync('weightRecords', weightRecords);
-      
-      // 更新数组格式记录
-      let weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
-      const existingIndex = weightRecordsArray.findIndex(item => item.date === today);
-      
-      const newRecord = { date: today, weight: weight };
-      if (existingIndex >= 0) {
-        weightRecordsArray[existingIndex] = newRecord;
-      } else {
-        weightRecordsArray.unshift(newRecord); // 添加到数组开头
-      }
-      
-      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
-      
-      // 设置数据更新标志
-      wx.setStorageSync('dataUpdated', new Date().getTime());
-      
-      console.log('体重记录已同步更新');
-    } catch (e) {
-      console.error('更新体重记录失败:', e);
-    }
-  },
-   
-  // 新增方法：获取当前日期字符串（与index页一致）
-  getCurrentDateString: function() {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  },
-
-  // 保存目标数据
-  saveGoalData: function() {
+  onSaveGoalSettings: function () {
     var data = this.data;
     var gender = data.gender;
     var age = data.age;
@@ -966,9 +867,108 @@ Page({
     var goalWeight = data.goalWeight;
     var dailyGoal = data.dailyGoal;
     var dailyTargetConsumption = data.dailyTargetConsumption;
-    
+
+    if (!gender || !age || !height || !currentWeight || !goalWeight || !dailyGoal) {
+      wx.showToast({
+        title: '请填写完整信息',
+        icon: 'none'
+      });
+      return;
+    }
+
+    // 如果目标消耗为空，提示用户需要点击转换按钮
+    if (!dailyTargetConsumption) {
+      wx.showToast({
+        title: '请点击转换计算目标消耗',
+        icon: 'none'
+      });
+      return;
+    }
+
+    var ageNum = parseFloat(age);
+    var heightNum = parseFloat(height);
+    var current = parseFloat(currentWeight);
+    var goal = parseFloat(goalWeight);
+    var daily = parseFloat(dailyGoal);
+    var targetConsumption = parseFloat(dailyTargetConsumption);
+
+    if (isNaN(ageNum) || isNaN(heightNum) || isNaN(current) || isNaN(goal) || isNaN(daily) || isNaN(targetConsumption)) {
+      wx.showToast({
+        title: '请输入有效数字',
+        icon: 'none'
+      });
+      return;
+    }
+
+    if (daily > 0.3) {
+      var that = this;
+      wx.showModal({
+        title: '提示',
+        content: '每日减重目标超过0.3kg可能不利于健康，是否继续？',
+        success: function (res) {
+          if (res.confirm) {
+            that.saveGoalData();
+          }
+        }
+      });
+    } else {
+      this.saveGoalData();
+    }
+  },
+
+  updateWeightRecord: function (weight) {
+    try {
+      const today = this.getCurrentDateString();
+      const weightRecords = wx.getStorageSync('weightRecords') || {};
+
+      // 更新或添加今日体重记录
+      weightRecords[today] = weight;
+      wx.setStorageSync('weightRecords', weightRecords);
+
+      // 更新数组格式记录
+      let weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
+      const existingIndex = weightRecordsArray.findIndex(item => item.date === today);
+
+      const newRecord = { date: today, weight: weight };
+      if (existingIndex >= 0) {
+        weightRecordsArray[existingIndex] = newRecord;
+      } else {
+        weightRecordsArray.unshift(newRecord); // 添加到数组开头
+      }
+
+      wx.setStorageSync('weightRecordsArray', weightRecordsArray);
+
+      // 设置数据更新标志
+      wx.setStorageSync('dataUpdated', new Date().getTime());
+
+      console.log('体重记录已同步更新');
+    } catch (e) {
+      console.error('更新体重记录失败:', e);
+    }
+  },
+
+  // 新增方法：获取当前日期字符串（与index页一致）
+  getCurrentDateString: function () {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  },
+
+  // 保存目标数据
+  saveGoalData: function () {
+    var data = this.data;
+    var gender = data.gender;
+    var age = data.age;
+    var height = data.height;
+    var currentWeight = data.currentWeight;
+    var goalWeight = data.goalWeight;
+    var dailyGoal = data.dailyGoal;
+    var dailyTargetConsumption = data.dailyTargetConsumption;
+
     var bmr = this.calculateBMR();
-    
+
     try {
       // 保存所有数据
       wx.setStorageSync('gender', gender);
@@ -980,12 +980,12 @@ Page({
       wx.setStorageSync('dailyTargetConsumption', dailyTargetConsumption);
       wx.setStorageSync('bmr', bmr);
       wx.setStorageSync('calculatedBMR', bmr);
-   
+
       // 更新用户统计数据
       var userStats = wx.getStorageSync('userStats') || {};
       userStats.currentWeight = parseFloat(currentWeight);
       wx.setStorageSync('userStats', userStats);
-   
+
       // 保存完整的goalData对象
       var goalData = wx.getStorageSync('goalData') || {};
       goalData.gender = gender;
@@ -997,25 +997,25 @@ Page({
       goalData.calculatedBMR = bmr;
       goalData.currentWeight = parseFloat(currentWeight); // 添加当前体重到goalData
       wx.setStorageSync('goalData', goalData);
-      
+
       // 【新增】同步更新体重记录
       this.updateWeightRecord(currentWeight);
-      
+
       // 更新数据变更标志，通知所有页面刷新数据
       wx.setStorageSync('dataUpdated', new Date().getTime());
-      
+
       // 尝试获取并更新所有页面
       try {
         // 获取页面栈
         var pages = getCurrentPages();
         if (pages && pages.length > 0) {
           // 遍历所有页面，设置刷新标志
-          pages.forEach(function(page) {
+          pages.forEach(function (page) {
             if (page && page.setData) {
               page.setData({
                 needRefresh: true
               });
-              
+
               // 如果页面有refreshData方法，调用它
               if (typeof page.refreshData === 'function') {
                 page.refreshData();
@@ -1026,12 +1026,12 @@ Page({
       } catch (e) {
         console.error('通知页面刷新失败:', e);
       }
-   
+
       wx.showToast({
         title: '保存成功',
         icon: 'success'
       });
-      
+
       // 关闭折叠面板
       setTimeout(() => {
         this.setData({
@@ -1048,121 +1048,121 @@ Page({
       });
     }
   },
-   
+
   //更新体重记录方法
-  updateWeightRecord: function(weight, date) {
+  updateWeightRecord: function (weight, date) {
     try {
       date = date || this.getCurrentDateString();
-      
+
       // 更新对象格式记录
       var weightRecords = wx.getStorageSync('weightRecords') || {};
       weightRecords[date] = weight;
       wx.setStorageSync('weightRecords', weightRecords);
-      
+
       // 更新数组格式记录
       var weightRecordsArray = wx.getStorageSync('weightRecordsArray') || [];
       const existingIndex = weightRecordsArray.findIndex(item => item.date === date);
-      
+
       const newRecord = { date: date, weight: weight };
       if (existingIndex >= 0) {
         weightRecordsArray[existingIndex] = newRecord;
       } else {
         weightRecordsArray.unshift(newRecord);
       }
-      
+
       wx.setStorageSync('weightRecordsArray', weightRecordsArray);
-      
+
       // 设置永久性今日体重记录
       wx.setStorageSync('todayWeight', {
         date: date,
         weight: weight
       });
-      
+
       // 通知其他页面刷新数据
       this.setData({ needRefresh: true });
       wx.setStorageSync('dataUpdated', new Date().getTime());
-      
+
       console.log('体重记录已同步更新');
     } catch (e) {
       console.error('更新体重记录失败:', e);
     }
   },
-  
+
   // 删除目标数据
-  onDeleteGoal: function() {
-  var that = this;
-  wx.showModal({
-    title: '确认删除',
-    content: '确定要删除当前目标设置吗？所有数据将被清空。',
-    success: function(res) {
-      if (res.confirm) {
-        try {
-          // 清空存储的目标数据
-          wx.removeStorageSync('gender');
-          wx.removeStorageSync('age');
-          wx.removeStorageSync('height');
-          wx.removeStorageSync('currentWeight');
-          wx.removeStorageSync('goalWeight');
-          wx.removeStorageSync('dailyGoal');
-          wx.removeStorageSync('dailyTargetConsumption');
-          wx.removeStorageSync('bmr');
-          wx.removeStorageSync('calculatedBMR');
-          wx.removeStorageSync('goalData');
-          
-          // 更新数据变更标志
-          wx.setStorageSync('dataUpdated', new Date().getTime());
-          
-          // 清空页面数据
-          that.setData({
-            gender: 'male',
-            age: '',
-            height: '',
-            currentWeight: '',
-            goalWeight: '',
-            dailyGoal: '',
-            dailyTargetConsumption: '',
-            bmr: '',
-            weightToLose: '',
-            estimatedDays: '',
-            targetDate: '',
-            showSummary: false,
-            allowManualTargetEdit: false
-          });
-          
-          // 通知其他页面刷新
-          var pages = getCurrentPages();
-          pages.forEach(function(page) {
-            if (page && page.setData) {
-              page.setData({ needRefresh: true });
-              if (typeof page.refreshData === 'function') {
-                page.refreshData();
+  onDeleteGoal: function () {
+    var that = this;
+    wx.showModal({
+      title: '确认删除',
+      content: '确定要删除当前目标设置吗？所有数据将被清空。',
+      success: function (res) {
+        if (res.confirm) {
+          try {
+            // 清空存储的目标数据
+            wx.removeStorageSync('gender');
+            wx.removeStorageSync('age');
+            wx.removeStorageSync('height');
+            wx.removeStorageSync('currentWeight');
+            wx.removeStorageSync('goalWeight');
+            wx.removeStorageSync('dailyGoal');
+            wx.removeStorageSync('dailyTargetConsumption');
+            wx.removeStorageSync('bmr');
+            wx.removeStorageSync('calculatedBMR');
+            wx.removeStorageSync('goalData');
+
+            // 更新数据变更标志
+            wx.setStorageSync('dataUpdated', new Date().getTime());
+
+            // 清空页面数据
+            that.setData({
+              gender: 'male',
+              age: '',
+              height: '',
+              currentWeight: '',
+              goalWeight: '',
+              dailyGoal: '',
+              dailyTargetConsumption: '',
+              bmr: '',
+              weightToLose: '',
+              estimatedDays: '',
+              targetDate: '',
+              showSummary: false,
+              allowManualTargetEdit: false
+            });
+
+            // 通知其他页面刷新
+            var pages = getCurrentPages();
+            pages.forEach(function (page) {
+              if (page && page.setData) {
+                page.setData({ needRefresh: true });
+                if (typeof page.refreshData === 'function') {
+                  page.refreshData();
+                }
               }
-            }
-          });
-          
-          wx.showToast({
-            title: '目标已删除',
-            icon: 'success'
-          });
-        } catch (e) {
-          console.error('删除目标数据失败', e);
-          wx.showToast({
-            title: '删除失败，请重试',
-            icon: 'none'
-          });
+            });
+
+            wx.showToast({
+              title: '目标已删除',
+              icon: 'success'
+            });
+          } catch (e) {
+            console.error('删除目标数据失败', e);
+            wx.showToast({
+              title: '删除失败，请重试',
+              icon: 'none'
+            });
+          }
         }
       }
-    }
-  });
+    });
   },
 
   // 清除所有数据
-  onClearAllData: function() {
+  onClearAllData: function () {
     const that = this;
     wx.showModal({
       title: '警告',
       content: '确定要清除所有数据吗？此操作不可恢复！',
-      success: function(res) {
+      success: function (res) {
         if (res.confirm) {
           that.clearAllData();
         }
@@ -1170,22 +1170,22 @@ Page({
     });
   },
 
-  clearAllData: function() {
+  clearAllData: function () {
     try {
       // 清除所有数据
       wx.clearStorageSync();
-      
+
       // 设置需要初始化标记
       wx.setStorageSync('needInitialSetup', 'true');
-      
+
       // 提示用户
       wx.showToast({
         title: '数据已清除',
         icon: 'success',
         duration: 2000,
-        success: function() {
+        success: function () {
           // 延迟跳转到首页
-          setTimeout(function() {
+          setTimeout(function () {
             wx.switchTab({
               url: '/pages/index/index'
             });
@@ -1274,14 +1274,14 @@ Page({
   },
 
   // 导航到目标设置页面
-  navigateToGoal: function() {
+  navigateToGoal: function () {
     wx.navigateTo({
       url: '/pages/goal/goal'
     });
   },
-  
+
   // 导航到个人信息页面
-  navigateToUserInfo: function() {
+  navigateToUserInfo: function () {
     wx.navigateTo({
       url: '/pages/userInfo/userInfo'
     });

@@ -3,7 +3,7 @@ Page({
     messages: [
       {
         type: 'ai',
-        content: '您好！我是您的AI健身助手，可以为您提供专业的健身建议和营养指导。请问有什么可以帮助您的？',
+        content: '您好！我是AI健身助手，可以为您提供专业的健身建议和营养指导。请问有什么可以帮助您的？',
         loading: false
       }
     ],
@@ -29,12 +29,19 @@ Page({
     tabBarManager.initTabBarForPage(2);
     this.loadChatHistory();
     this.keyboardHeight = 0;
+    this.lastKeyboardHeight = 0;
+    this.setData({
+      showQuickQuestions: true
+    });
     wx.onKeyboardHeightChange(res => {
-      this.keyboardHeight = res.height;
-      this.setData({
-        keyboardHeight: res.height
-      });
-      this.scrollToBottom();
+      const newHeight = res.height;
+      if (Math.abs(newHeight - this.lastKeyboardHeight) > 10) {
+        this.lastKeyboardHeight = newHeight;
+        this.setData({
+          keyboardHeight: newHeight
+        });
+        this.scrollToBottom();
+      }
     });
   },
 
@@ -49,6 +56,12 @@ Page({
 
   onUnload() {
     wx.offKeyboardHeightChange();
+    if (this.scrollTimer) {
+      clearTimeout(this.scrollTimer);
+    }
+  },
+
+  preventTap() {
   },
 
   onInputChange(e) {
@@ -71,7 +84,6 @@ Page({
       messages: messages,
       inputValue: '',
       isSending: true,
-      showQuickQuestions: false,
       showVoiceTip: false,
       focusInput: true
     });
@@ -231,11 +243,14 @@ Page({
   },
 
   scrollToBottom() {
-    setTimeout(() => {
+    if (this.scrollTimer) {
+      clearTimeout(this.scrollTimer);
+    }
+    this.scrollTimer = setTimeout(() => {
       this.setData({
         scrollIntoView: `msg-${this.data.messages.length - 1}`
       });
-    }, 100);
+    }, 300);
   },
 
   saveChatHistory() {
@@ -252,7 +267,6 @@ Page({
       if (history && history.length > 0) {
         this.setData({
           messages: history,
-          showQuickQuestions: false,
           showVoiceTip: false
         });
       }
