@@ -25,6 +25,8 @@ Page({
   },
 
   onLoad(options) {
+    const tabBarManager = require('../../utils/tabBarManager');
+    tabBarManager.initTabBarForPage(2);
     this.loadChatHistory();
     this.keyboardHeight = 0;
     wx.onKeyboardHeightChange(res => {
@@ -38,6 +40,11 @@ Page({
 
   onReady() {
     this.scrollToBottom();
+  },
+
+  onShow() {
+    const tabBarManager = require('../../utils/tabBarManager');
+    tabBarManager.setSelectedTab(2);
   },
 
   onUnload() {

@@ -56,12 +56,12 @@ Page({
     autoPlayTimer: null,
   },
   onLoad() {
-    tabBarManager.initTabBarForPage(2);
+    tabBarManager.initTabBarForPage(3);
     console.log('[DEBUG] 成就页面初始化完成');
     console.log('当前数据:', this.data);
   },
   onShow() {
-    tabBarManager.setSelectedTab(2);
+    tabBarManager.setSelectedTab(3);
     this.stopAutoPlay();
     if (this.data.autoPlay) this.startAutoPlay();
   },

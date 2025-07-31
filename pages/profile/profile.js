@@ -76,8 +76,8 @@ Page({
     } catch (e) {
       console.error('加载个人资料页面数据失败：', e); 
     }
-    // 设置TabBar选中状态为个人页(索引3)
-    tabBarManager.initTabBarForPage(3);
+    // 设置TabBar选中状态为个人页(索引4)
+    tabBarManager.initTabBarForPage(4);
   },
 
   // 新增：自动登录检测
@@ -499,7 +499,7 @@ Page({
     }
     this.checkDataSynchronization();
     // 确保TabBar选中个人页
-    tabBarManager.setSelectedTab(3);
+    tabBarManager.setSelectedTab(4);
   },
 
   checkDataSynchronization: function() {

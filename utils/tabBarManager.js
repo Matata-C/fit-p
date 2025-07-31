@@ -54,6 +54,7 @@ function switchTab(index) {
   const pages = [
     '/pages/index/index',
     '/pages/analysis/analysis',
+    '/pages/ai-chat/ai-chat',
     '/pages/achievement/achievement',
     '/pages/profile/profile'
   ];
