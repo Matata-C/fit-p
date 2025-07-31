@@ -10,15 +10,7 @@ Page({
     inputValue: '',
     isSending: false,
     scrollIntoView: '',
-    showQuickQuestions: true,
-    quickQuestions: [
-      '如何制定健身计划？',
-      '减脂期间吃什么？',
-      '增肌训练方案',
-      '运动前后吃什么？',
-      '如何计算卡路里？',
-      '健身新手建议'
-    ],
+
     showVoiceTip: true,
     keyboardHeight: 0,
     focusInput: false
@@ -31,7 +23,7 @@ Page({
     this.keyboardHeight = 0;
     this.lastKeyboardHeight = 0;
     this.setData({
-      showQuickQuestions: true
+      showQuickQuestions: false
     });
     wx.onKeyboardHeightChange(res => {
       const newHeight = res.height;
@@ -94,13 +86,7 @@ Page({
     }, 1000);
   },
 
-  sendQuickQuestion(e) {
-    const question = e.currentTarget.dataset.question;
-    this.setData({
-      inputValue: question
-    });
-    this.sendMessage();
-  },
+
 
   simulateAIResponse(userMessage) {
     let response = '';

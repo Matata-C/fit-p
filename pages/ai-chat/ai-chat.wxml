@@ -40,14 +40,7 @@
     </view>
   </scroll-view>
 
-  <view class="quick-questions" wx:if="{{showQuickQuestions}}" catchtap="preventTap">
-    <text class="quick-title">试试这些问题</text>
-    <view class="quick-tags">
-      <button wx:for="{{quickQuestions}}" wx:key="index" class="quick-tag" bindtap="sendQuickQuestion" data-question="{{item}}">
-        {{item}}
-      </button>
-    </view>
-  </view>
+
 
   <view class="chat-input-container" catchtap="preventTap">
     <view class="input-box">
