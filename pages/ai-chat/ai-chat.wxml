@@ -1,6 +1,6 @@
 <view class="chat-container">
   <view class="chat-header">
-    <text class="chat-title">AI健身助手</text>
+    <text class="chat-title"> TruFit AI</text>
     <view class="header-actions">
       <button class="clear-btn" bindtap="clearChat">清空</button>
     </view>
@@ -14,7 +14,8 @@
     enable-flex="true"
     enhanced="true"
     bounces="true"
-    style="padding-bottom: {{keyboardHeight}}px">
+    style="padding-bottom: {{keyboardHeight}}px"
+    catchtap="preventTap">
     <view class="messages-container">
       <view wx:for="{{messages}}" wx:key="index" class="message-item {{item.type === 'user' ? 'message-user' : 'message-ai'}}" id="msg-{{index}}">
         <view wx:if="{{item.type === 'user'}}" class="user-message">
@@ -39,16 +40,9 @@
     </view>
   </scroll-view>
 
-  <view class="quick-questions" wx:if="{{showQuickQuestions}}">
-    <text class="quick-title">快速提问</text>
-    <view class="quick-tags">
-      <button wx:for="{{quickQuestions}}" wx:key="index" class="quick-tag" bindtap="sendQuickQuestion" data-question="{{item}}">
-        {{item}}
-      </button>
-    </view>
-  </view>
 
-  <view class="chat-input-container">
+
+  <view class="chat-input-container" catchtap="preventTap">
     <view class="input-box">
       <textarea 
         class="message-input" 
@@ -62,9 +56,5 @@
         focus="{{focusInput}}"
       ></textarea>
     </view>
-  </view>
-
-  <view class="voice-tip" wx:if="{{showVoiceTip}}">
-    <text class="voice-text">长按可语音输入</text>
   </view>
 </view>

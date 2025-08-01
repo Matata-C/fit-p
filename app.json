@@ -55,5 +55,10 @@
   "sitemapLocation": "sitemap.json",
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {},
-  "debug": false
+  "debug": false,
+  "permission": {
+    "scope.werun": {
+      "desc": "用於獲取您的運動步數數據，幫助您更好地記錄健康狀況"
+    }
+  }
 }

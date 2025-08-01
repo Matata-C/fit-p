@@ -84,6 +84,13 @@
   color: #FFD600;
   margin-bottom: 4px;
 }
+
+/* 未授权状态的步数显示样式 */
+.step-number.unauthorized {
+  font-size: 14px;
+  color: #ff6f91;
+  font-weight: normal;
+}
 .step-slogan {
   font-size: 13px;
   color: #bfa100;

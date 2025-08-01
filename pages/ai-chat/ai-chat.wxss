@@ -34,6 +34,7 @@
   border: none;
   padding: 0;
   margin: 0;
+  color: #ff6f91;
 }
 
 .clear-btn::after {
@@ -50,7 +51,7 @@
 }
 
 .messages-container {
-  padding-bottom: 200rpx;
+  padding-bottom: 260rpx;
 }
 
 .message-item {
@@ -133,62 +134,15 @@
   }
 }
 
-.quick-questions {
-  padding: 20rpx 20rpx 20rpx;
-  background-color: #FFF0B2;
-  border-top: 1rpx solid #FFE082;
-  flex-shrink: 0;
-}
 
-.quick-title {
-  font-size: 28rpx;
-  color: #FFA500; 
-  margin-bottom: 15rpx;
-  display: flex;
-  align-items: center;
-}
-
-.quick-title icon {
-  margin-right: 8rpx;
-}
-
-.quick-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15rpx;
-}
-
-.quick-tag {
-  font-size: 26rpx;
-  padding: 15rpx 25rpx;
-  background-color: #FFD700;
-  color: #333;
-  border-radius: 25rpx;
-  border: none;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.quick-tag icon {
-  margin-right: 8rpx;
-}
-
-.quick-tag::after {
-  border: none;
-}
-
-.quick-tag:active {
-  background-color: #FFC107;
-}
 
 .chat-input-container {
   padding: 20rpx 20rpx 40rpx;
   background-color: #FFF0B2;
   border-top: 1rpx solid #FFE082;
   flex-shrink: 0;
-  padding-bottom: calc(40rpx + constant(safe-area-inset-bottom));
-  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+  padding-bottom: calc(40rpx + constant(safe-area-inset-bottom) + 100rpx);
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom) + 100rpx);
 }
 
 .input-box {
