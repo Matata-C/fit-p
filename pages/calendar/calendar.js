@@ -98,7 +98,7 @@ Page({
       year--;
     }
     this.setData({ year, month });
-    this.initCalendar();
+    this.generateCalendarData(year, month, this.data.today);
   },
 
   // 切换到下月
@@ -110,7 +110,7 @@ Page({
       year++;
     }
     this.setData({ year, month });
-    this.initCalendar();
+    this.generateCalendarData(year, month, this.data.today);
   },
 
   // 选择日期（打卡功能）

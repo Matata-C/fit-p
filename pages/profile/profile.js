@@ -548,10 +548,24 @@ Page({
     try {
       const userStats = wx.getStorageSync('userStats') || {};
       const goalData = wx.getStorageSync('goalData') || {};
-      const weightRecords = wx.getStorageSync('weightRecords') || [];
-
-      // 记录天数
-      const recordDays = userStats.days || 0;
+      
+      // 【优化】优先从weightRecordsArray计算记录天数，确保与历史记录一致
+      let weightRecordsArray = wx.getStorageSync('weightRecordsArray');
+      let recordDays = 0;
+      
+      if (Array.isArray(weightRecordsArray) && weightRecordsArray.length > 0) {
+        // 使用weightRecordsArray计算记录天数
+        recordDays = weightRecordsArray.length;
+        console.log('个人页面 - 从weightRecordsArray计算记录天数:', recordDays);
+      } else {
+        // 如果weightRecordsArray为空，则从weightRecords对象计算
+        const weightRecords = wx.getStorageSync('weightRecords') || {};
+        recordDays = Object.keys(weightRecords).length;
+        console.log('个人页面 - 从weightRecords对象计算记录天数:', recordDays);
+      }
+      
+      console.log('个人页面 - 最终记录天数:', recordDays, 'userStats中的天数:', userStats.days);
+      console.log('个人页面 - weightRecordsArray详情:', weightRecordsArray);
 
       // 优先使用分析页面计算的总减重数据
       let totalWeightLoss = 0;
@@ -591,10 +605,26 @@ Page({
         }
       }
 
+      // 【优化】确保记录天数与userStats同步
+      if (userStats.days !== recordDays) {
+        console.log('个人页面 - 记录天数不同步，更新userStats:', userStats.days, '->', recordDays);
+        userStats.days = recordDays;
+        wx.setStorageSync('userStats', userStats);
+        console.log('同步更新userStats中的记录天数:', recordDays);
+      } else {
+        console.log('个人页面 - 记录天数已同步:', recordDays);
+      }
+
       this.setData({
         'stats.recordDays': recordDays,
         'stats.weightLost': totalWeightLoss.toFixed(1),
         'stats.daysToGoal': daysToGoal
+      });
+      
+      console.log('个人页面统计数据已更新:', {
+        recordDays: recordDays,
+        weightLost: totalWeightLoss.toFixed(1),
+        daysToGoal: daysToGoal
       });
     } catch (e) {
       console.error('加载用户统计失败：', e);
