@@ -1,0 +1,22 @@
+{
+  "name": "imageRecognition",
+  "version": "1.0.0",
+  "description": "图像识别云函数 - 集成阿里云AI",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  },
+  "keywords": [
+    "wechat",
+    "cloud",
+    "function",
+    "image",
+    "recognition",
+    "alicloud"
+  ],
+  "author": "fit-p",
+  "license": "MIT"
+} 

@@ -53,9 +53,116 @@
       </view>
 
       <!-- 拍照识别入口 -->
-      <view class="cute-yellow-border photo-recognition-entry" bindtap="onPhotoRecognize">
-        <view class="photo-icon">📷</view>
-        <view class="photo-text">拍照识别食物热量</view>
+      <view class="cute-yellow-border photo-recognition-section">
+        <view class="calendar-title-pink">
+          智能食物识别 <text class="section-icon">🍎</text>
+        </view>
+        <view class="photo-recognition-entry" bindtap="onPhotoRecognize">
+          <view class="photo-icon-container">
+            <text class="photo-icon">📷</text>
+          </view>
+          <view class="photo-text-container">
+            <text class="photo-text">拍照识别食物热量</text>
+            <text class="photo-desc">支持多种常见食物识别</text>
+          </view>
+          <view class="photo-arrow">→</view>
+        </view>
+        <view class="supported-foods">
+          <text class="supported-title">支持识别:</text>
+          
+          <!-- 水果类 -->
+          <view class="food-category">
+            <text class="category-title">🍎 水果类</text>
+            <view class="food-tags">
+              <text class="food-tag">🍑 桃子</text>
+              <text class="food-tag">🍎 苹果</text>
+              <text class="food-tag">🍌 香蕉</text>
+              <text class="food-tag">🍊 橙子</text>
+              <text class="food-tag">🍇 葡萄</text>
+              <text class="food-tag">🍉 西瓜</text>
+              <text class="food-tag">🍓 草莓</text>
+              <text class="food-tag">🍍 菠萝</text>
+              <text class="food-tag">🥭 芒果</text>
+            </view>
+          </view>
+          
+          <!-- 蔬菜类 -->
+          <view class="food-category">
+            <text class="category-title">🥬 蔬菜类</text>
+            <view class="food-tags">
+              <text class="food-tag">🥬 蔬菜</text>
+              <text class="food-tag">🍅 西红柿</text>
+              <text class="food-tag">🥒 黄瓜</text>
+              <text class="food-tag">🥕 胡萝卜</text>
+              <text class="food-tag">🥔 土豆</text>
+              <text class="food-tag">🥦 西兰花</text>
+              <text class="food-tag">🥬 菠菜</text>
+              <text class="food-tag">🥬 白菜</text>
+            </view>
+          </view>
+          
+          <!-- 肉类 -->
+          <view class="food-category">
+            <text class="category-title">🍗 肉类</text>
+            <view class="food-tags">
+              <text class="food-tag">🍗 鸡肉</text>
+              <text class="food-tag">🐷 猪肉</text>
+              <text class="food-tag">🐮 牛肉</text>
+              <text class="food-tag">🐟 鱼肉</text>
+              <text class="food-tag">🦐 虾</text>
+              <text class="food-tag">🦀 螃蟹</text>
+              <text class="food-tag">🥚 鸡蛋</text>
+              <text class="food-tag">🐑 羊肉</text>
+              <text class="food-tag">🦆 鸭肉</text>
+            </view>
+          </view>
+          
+          <!-- 其他 -->
+          <view class="food-category">
+            <text class="category-title">🍽️ 其他</text>
+            <view class="food-tags">
+              <text class="food-tag">🍚 米饭</text>
+              <text class="food-tag">🍜 面条</text>
+              <text class="food-tag">🍞 面包</text>
+              <text class="food-tag">🥛 牛奶</text>
+              <text class="food-tag">🥛 酸奶</text>
+              <text class="food-tag">🥜 杏仁</text>
+              <text class="food-tag">🍕 披萨</text>
+              <text class="food-tag">🍔 汉堡</text>
+              <text class="food-tag">🍟 薯条</text>
+              <text class="food-tag">🥔 薯片</text>
+              <text class="food-tag">☕ 咖啡</text>
+              <text class="food-tag">🍵 茶</text>
+              <text class="food-tag">🥤 果汁</text>
+              <text class="food-tag">🍦 冰淇淋</text>
+              <text class="food-tag">🧀 奶酪</text>
+              <text class="food-tag">🍫 巧克力</text>
+              <text class="food-tag">🎂 蛋糕</text>
+              <text class="food-tag">🧈 豆腐</text>
+              <text class="food-tag">🫘 大豆</text>
+            </view>
+          </view>
+          <view class="recognition-tips">
+            <text class="tips-title">🤖 AI识别小贴士:</text>
+            <text class="tips-item">• 确保光线充足，食物清晰可见</text>
+            <text class="tips-item">• 尽量拍摄单个食物，避免复杂背景</text>
+            <text class="tips-item">• 基于阿里云AI技术，识别准确率高</text>
+            <text class="tips-item">• 识别失败时可手动选择或输入食物名称</text>
+          </view>
+        </view>
+        
+        <view class="action-buttons">
+          <view class="manual-add-btn" bindtap="showManualAddFood">
+            <text class="manual-add-text">手动添加食物</text>
+            <text class="manual-add-icon">➕</text>
+          </view>
+        </view>
+        
+
+        
+
+        
+
       </view>
 
       <!-- 运动小贴士 -->
