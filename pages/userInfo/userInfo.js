@@ -254,6 +254,19 @@ Page({
           wx.removeStorageSync('userStats');
           wx.removeStorageSync('analysisStatistics');
           wx.removeStorageSync('consumptionRecords');
+          //清除运动记录
+          wx.removeStorageSync('exerciseName');
+          wx.removeStorageSync('caloriesBurned');
+          wx.removeStorageSync('duration');
+          wx.removeStorageSync('exerciseRecords');
+          wx.removeStorageSync('todayTotalCalories');
+          //清除饮食记录
+          wx.removeStorageSync('foodName');
+          wx.removeStorageSync('calories');
+          wx.removeStorageSync('kcalValue');
+          wx.removeStorageSync('quantity');
+          wx.removeStorageSync('foodRecords');
+          wx.removeStorageSync('todayTotalCalories');
           // 设置数据更新标志，通知其他页面刷新
           wx.setStorageSync('dataUpdated', new Date().getTime());
           // 返回上一页并刷新
