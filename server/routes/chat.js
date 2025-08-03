@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const doubaoService = require('../services/doubaoService');
 
+// 添加字符编码中间件
+router.use((req, res, next) => {
+  req.setEncoding('utf8');
+  next();
+});
+
 router.post('/process', async (req, res) => {
   try {
     const { userId, message } = req.body;

@@ -1,12 +1,12 @@
 const http = require('http');
 
 // 设置端口
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 3000;
 
 // 创建HTTP服务器
 const server = http.createServer((req, res) => {
   // 设置响应头
-  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
   
   // 简单路由处理
   if (req.url === '/') {
@@ -33,4 +33,4 @@ process.on('SIGTERM', () => {
   server.close(() => {
     console.log('服务器已关闭');
   });
-}); 
+});

@@ -130,7 +130,7 @@ Page({
         path: '/api/chat/process',
         method: 'POST',
         header: {
-          'content-type': 'application/json'
+          'content-type': 'application/json; charset=utf-8'
         },
         data: {
           userId: app.globalData.userId || 'test-user-id',

@@ -1,5 +1,5 @@
 {
-  "containerPort": 80,
+  "containerPort": 3000,
   "minNum": 0,
   "maxNum": 5,
   "cpu": 1,
@@ -9,4 +9,4 @@
   "envParams": {},
   "customLogs": "stdout",
   "initialDelaySeconds": 2
-} 
+}

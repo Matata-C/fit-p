@@ -13,8 +13,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// 设置字符编码为UTF-8
+app.use((req, res, next) => {
+  req.setEncoding('utf8');
+  res.header('Content-Type', 'application/json; charset=utf-8');
+  next();
+});
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || 'localhost',

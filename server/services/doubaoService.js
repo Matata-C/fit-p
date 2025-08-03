@@ -77,7 +77,13 @@ class DoubaoService {
       const response = await axios.post(
         `${this.baseURL}/chat/completions`,
         requestBody,
-        { headers }
+        { 
+          headers,
+          responseType: 'json',
+          transformRequest: [(data, headers) => {
+            return JSON.stringify(data);
+          }]
+        }
       );
 
       const content = response.data.choices[0].message.content;
