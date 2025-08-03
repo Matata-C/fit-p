@@ -1,0 +1,6 @@
+<view class="container">
+  <button bindtap="testCloudCall" disabled="{{loading}}">测试云托管调用</button>
+  <view class="response">
+    <text>{{response}}</text>
+  </view>
+</view>

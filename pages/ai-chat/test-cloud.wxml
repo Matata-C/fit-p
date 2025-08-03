@@ -1,0 +1,6 @@
+<view class="container">
+  <button bindtap="testCloudCall">测试云托管调用</button>
+  <view class="result">
+    <text>点击按钮测试云托管调用功能</text>
+  </view>
+</view>

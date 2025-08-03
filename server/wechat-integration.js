@@ -1,5 +1,5 @@
 class WeChatAPI {
-  constructor(baseURL = 'http://localhost:3000') {
+  constructor(baseURL = 'https://your-deployed-domain.com') {
     this.baseURL = baseURL;
   }
 
@@ -80,8 +80,7 @@ class WeChatAPI {
     return this.request(url);
   }
 }
-
-const api = new WeChatAPI('http://localhost:3000');
+const api = new WeChatAPI('https://your-deployed-domain.com');
 
 Page({
   data: {

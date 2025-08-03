@@ -45,7 +45,7 @@ Component({
     }
   },
   observers: {
-    'dateLabels, stepsData, durationData, caloriesData, height': function(dateLabels, stepsData, durationData, caloriesData) {
+    'dateLabels, stepsData, durationData, caloriesData, height': function (dateLabels, stepsData, durationData, caloriesData) {
       this.setData({
         showChart: dateLabels.length > 0 && (stepsData.length > 0 || durationData.length > 0 || caloriesData.length > 0)
       });

@@ -548,11 +548,11 @@ Page({
     try {
       const userStats = wx.getStorageSync('userStats') || {};
       const goalData = wx.getStorageSync('goalData') || {};
-      
+
       // 【优化】优先从weightRecordsArray计算记录天数，确保与历史记录一致
       let weightRecordsArray = wx.getStorageSync('weightRecordsArray');
       let recordDays = 0;
-      
+
       if (Array.isArray(weightRecordsArray) && weightRecordsArray.length > 0) {
         // 使用weightRecordsArray计算记录天数
         recordDays = weightRecordsArray.length;
@@ -563,7 +563,7 @@ Page({
         recordDays = Object.keys(weightRecords).length;
         console.log('个人页面 - 从weightRecords对象计算记录天数:', recordDays);
       }
-      
+
       console.log('个人页面 - 最终记录天数:', recordDays, 'userStats中的天数:', userStats.days);
       console.log('个人页面 - weightRecordsArray详情:', weightRecordsArray);
 
@@ -620,7 +620,7 @@ Page({
         'stats.weightLost': totalWeightLoss.toFixed(1),
         'stats.daysToGoal': daysToGoal
       });
-      
+
       console.log('个人页面统计数据已更新:', {
         recordDays: recordDays,
         weightLost: totalWeightLoss.toFixed(1),

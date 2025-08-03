@@ -1,0 +1,17 @@
+.container {
+  padding: 20rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.response {
+  background-color: #f0f0f0;
+  padding: 20rpx;
+  border-radius: 10rpx;
+  font-family: monospace;
+  white-space: pre-wrap;
+}

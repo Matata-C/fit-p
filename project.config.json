@@ -1,44 +1,44 @@
 {
-  "appid": "wx5f024e1e41f0ec99",
-  "compileType": "miniprogram",
-  "libVersion": "3.8.0",
-  "packOptions": {
-    "ignore": [],
-    "include": []
-  },
-  "setting": {
-    "coverView": true,
-    "es6": true,
-    "postcss": true,
-    "minified": true,
-    "enhance": true,
-    "showShadowRootInWxmlPanel": true,
-    "packNpmRelationList": [],
-    "babelSetting": {
-      "ignore": [],
-      "disablePlugins": [],
-      "outputPath": ""
+    "appid": "wx5f024e1e41f0ec99",
+    "compileType": "miniprogram",
+    "libVersion": "3.8.0",
+    "packOptions": {
+        "ignore": [],
+        "include": []
     },
-    "uglifyFileName": false,
-    "compileWorklet": false,
-    "uploadWithSourceMap": true,
-    "packNpmManually": false,
-    "minifyWXSS": true,
-    "minifyWXML": true,
-    "localPlugins": false,
-    "disableUseStrict": false,
-    "useCompilerPlugins": false,
-    "condition": false,
-    "swc": false,
-    "disableSWC": true
-  },
-  "condition": {},
-  "editorSetting": {
-    "tabIndent": "insertSpaces",
-    "tabSize": 4
-  },
-  "projectArchitecture": "miniProgram",
-  "simulatorPluginLibVersion": {},
-  "cloudfunctionRoot": "cloudfunctions/",
-  "projectname": "fit-p"
+    "setting": {
+        "coverView": true,
+        "es6": true,
+        "postcss": true,
+        "minified": true,
+        "enhance": true,
+        "showShadowRootInWxmlPanel": true,
+        "packNpmRelationList": [],
+        "babelSetting": {
+            "ignore": [],
+            "disablePlugins": [],
+            "outputPath": ""
+        },
+        "uglifyFileName": false,
+        "compileWorklet": false,
+        "uploadWithSourceMap": true,
+        "packNpmManually": false,
+        "minifyWXSS": true,
+        "minifyWXML": true,
+        "localPlugins": false,
+        "disableUseStrict": false,
+        "useCompilerPlugins": false,
+        "condition": false,
+        "swc": false,
+        "disableSWC": true
+    },
+    "condition": {},
+    "editorSetting": {
+        "tabIndent": "insertSpaces",
+        "tabSize": 4
+    },
+    "projectArchitecture": "miniProgram",
+    "simulatorPluginLibVersion": {},
+    "cloudfunctionRoot": "cloudfunctions/",
+    "projectname": "fit-p"
 }

@@ -1,20 +1,15 @@
-// 豆包API测试脚本
-const DoubaoService = require('./services/doubaoService');
+require('dotenv').config();
+const doubaoService = require('./services/doubaoService');
 
 async function testDoubaoAPI() {
     console.log('🧪 测试豆包API连接...');
 
-    const doubaoService = new DoubaoService();
-
     try {
-        // 测试连接
         console.log('📡 正在连接豆包API...');
         const isConnected = await doubaoService.testConnection();
 
         if (isConnected) {
             console.log('✅ 豆包API连接成功！');
-
-            // 测试信息提取
             console.log('\n🎯 测试信息提取功能...');
 
             const testMessages = [
@@ -42,8 +37,6 @@ async function testDoubaoAPI() {
         console.error('❌ 测试过程中出错:', error.message);
     }
 }
-
-// 执行测试
 if (require.main === module) {
     testDoubaoAPI();
 }

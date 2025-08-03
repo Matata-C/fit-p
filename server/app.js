@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
 const chatRoutes = require('./routes/chat');
 const exerciseRoutes = require('./routes/exercise');

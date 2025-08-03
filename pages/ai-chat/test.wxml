@@ -1,0 +1,6 @@
+<view class="container">
+  <text class="title">API测试结果</text>
+  <view class="response">
+    <text>{{response}}</text>
+  </view>
+</view>

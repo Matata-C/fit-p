@@ -12,6 +12,18 @@
   letter-spacing: 1px;
   text-shadow: 0 2px 8px #fffde7;
 }
+
+.total-points {
+  font-size: 16px;
+  font-weight: bold;
+  color: #FFD600;
+  margin-bottom: 16px;
+  padding: 8px 16px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(255, 214, 0, 0.15);
+  text-align: center;
+}
 .achievement-list {
   margin-top: 8px;
 }
@@ -381,5 +393,5 @@
 
 .voice-autoplay-btn {
   min-width: 80px;
-} 
+}
 

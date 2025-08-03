@@ -14,7 +14,10 @@
     "pages/feedback/feedback",
     "pages/submitFeedback/submitFeedback",
     "pages/step/step",
-    "pages/ai-chat/ai-chat"
+    "pages/ai-chat/ai-chat",
+    "pages/ai-chat/test-cloud",
+    "pages/ai-chat/test-cloud-call",
+    "pages/ai-chat/test"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -56,9 +59,14 @@
   "lazyCodeLoading": "requiredComponents",
   "usingComponents": {},
   "debug": false,
-  "permission": {
-    "scope.werun": {
-      "desc": "用於獲取您的運動步數數據，幫助您更好地記錄健康狀況"
-    }
-  }
+  "requiredPrivateInfos": [
+    "werun"
+  ],
+  "networkTimeout": {
+    "request": 60000,
+    "connectSocket": 60000,
+    "uploadFile": 60000,
+    "downloadFile": 60000
+  },
+  "requiredPrivateInfos": []
 }

@@ -1,5 +1,6 @@
 <view class="container">
   <text class="section-title">我的成就</text>
+  <view class="total-points">总成就点：{{totalPoints}}</view>
   <view class="achievement-list">
     <block wx:for="{{achievements}}" wx:key="id">
       <view class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}">
@@ -70,4 +71,4 @@
       <button class="voice-add-btn" bindtap="addVoiceText">添加</button>
     </view>
   </view>
-</view> 
+</view>

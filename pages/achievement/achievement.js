@@ -9,6 +9,7 @@ Page({
         type: "连续记录",
         condition: "连续7天记录体重",
         reward: "+50成就点",
+        points: 50,
         unlocked: true
       },
       {
@@ -17,6 +18,7 @@ Page({
         type: "累计运动",
         condition: "累计运动100分钟",
         reward: "+30成就点",
+        points: 30,
         unlocked: false
       },
       {
@@ -25,9 +27,11 @@ Page({
         type: "健康饮食",
         condition: "连续7天饮食打卡",
         reward: "+40成就点",
+        points: 40,
         unlocked: false
       }
     ],
+    totalPoints: 50,
     leaderboard: [
       { id: 1, name: "用户A", score: 120 },
       { id: 2, name: "用户B", score: 90 },
@@ -57,8 +61,15 @@ Page({
   },
   onLoad() {
     tabBarManager.initTabBarForPage(3);
+    this.calculateTotalPoints();
     console.log('[DEBUG] 成就页面初始化完成');
     console.log('当前数据:', this.data);
+  },
+
+  calculateTotalPoints() {
+    const unlockedAchievements = this.data.achievements.filter(achievement => achievement.unlocked);
+    const totalPoints = unlockedAchievements.reduce((sum, achievement) => sum + achievement.points, 0);
+    this.setData({ totalPoints });
   },
   onShow() {
     tabBarManager.setSelectedTab(3);
