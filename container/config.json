@@ -1,0 +1,14 @@
+{
+  "containerPort": 3000,
+  "minNum": 0,
+  "maxNum": 10,
+  "cpu": 1,
+  "mem": 2,
+  "policyType": "cpu",
+  "policyThreshold": 60,
+  "envParams": {
+    "NODE_ENV": "production"
+  },
+  "customLogs": "stdout",
+  "initialDelaySeconds": 2
+} 

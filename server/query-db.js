@@ -4,11 +4,11 @@ async function queryDB() {
   try {
     // 创建数据库连接
     const connection = await mysql.createConnection({
-      host: 'localhost',
-      port: 3306,
-      user: 'root',
-      password: 'root123',
-      database: 'fitness_app'
+      host: process.env.DB_HOST || 'localhost',
+      port: process.env.DB_PORT || 3306,
+      user: process.env.DB_USER || 'root',
+      password: process.env.DB_PASSWORD || 'root123',
+      database: process.env.DB_NAME || 'fitness_app'
     });
 
     // 查询最新的5条运动记录

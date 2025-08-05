@@ -6,7 +6,7 @@ router.get('/records/:userId', async (req, res) => {
     const { userId } = req.params;
     const { date, limit = 10, page = 1 } = req.query;
 
-    const pool = require('../app').pool;
+    const { pool } = require('../db');
 
     let query = 'SELECT * FROM food_records WHERE user_id = ?';
     let params = [userId];
@@ -52,7 +52,7 @@ router.post('/records', async (req, res) => {
       });
     }
 
-    const pool = require('../app').pool;
+    const { pool } = require('../db');
 
     const [result] = await pool.execute(
       `INSERT INTO food_records 
@@ -93,7 +93,7 @@ router.delete('/records/:id', async (req, res) => {
       });
     }
 
-    const pool = require('../app').pool;
+    const { pool } = require('../db');
 
     const [result] = await pool.execute(
       'DELETE FROM food_records WHERE id = ? AND user_id = ?',
@@ -126,7 +126,7 @@ router.get('/stats/:userId', async (req, res) => {
     const { userId } = req.params;
     const { startDate, endDate } = req.query;
 
-    const pool = require('../app').pool;
+    const { pool } = require('../db');
 
     let query = `
       SELECT 
@@ -186,7 +186,7 @@ router.get('/today-nutrition/:userId', async (req, res) => {
     const { userId } = req.params;
     const today = new Date().toISOString().split('T')[0];
 
-    const pool = require('../app').pool;
+    const { pool } = require('../db');
 
     const [rows] = await pool.execute(
       `SELECT 

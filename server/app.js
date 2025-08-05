@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2/promise');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 
@@ -8,9 +7,14 @@ const chatRoutes = require('./routes/chat');
 const exerciseRoutes = require('./routes/exercise');
 const foodRoutes = require('./routes/food');
 const doubaoService = require('./services/doubaoService');
+const { pool } = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+if (!global.PORT) {
+  global.PORT = process.env.PORT || 3001;
+}
+const PORT = global.PORT;
+
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
@@ -23,15 +27,8 @@ app.use((req, res, next) => {
   next();
 });
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_NAME || 'fitness_app',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-});
+// 使用db.js中的pool连接池
+  
 
 async function initDatabase() {
   try {
@@ -114,7 +111,6 @@ app.use((req, res) => {
 });
 async function startServer() {
   await initDatabase();
-
   app.listen(PORT, () => {
     console.log(`🚀 服务器启动成功！`);
     console.log(`📍 端口: ${PORT}`);

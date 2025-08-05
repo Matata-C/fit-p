@@ -79,6 +79,7 @@ class DoubaoService {
         requestBody,
         { 
           headers,
+          timeout: 15000,
           responseType: 'json',
           transformRequest: [(data, headers) => {
             return JSON.stringify(data);

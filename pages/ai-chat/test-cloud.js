@@ -11,9 +11,15 @@ Page({
         title: '测试中...'
       });
       const response = await wx.cloud.callContainer({
-        path: '/health',
-        method: 'GET',
-      });
+      config: {
+       env: 'prod-1g6skl837a850b7f' // 云托管环境ID
+      },
+      path: '/health',
+      method: 'GET',
+      header: {
+      'X-WX-SERVICE': 'ai-chat-service'
+  }
+});
 
       wx.hideLoading();
 

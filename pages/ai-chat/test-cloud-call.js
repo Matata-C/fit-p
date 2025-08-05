@@ -11,9 +11,13 @@ Page({
     });
 
     wx.cloud.callContainer({
+      config: {
+       env: 'prod-1g6skl837a850b7f' // 云托管环境ID
+      },
       path: '/api/chat/process',
       method: 'POST',
       header: {
+        'X-WX-SERVICE': 'ai-chat-service', // 云托管服务名称
         'content-type': 'application/json'
       },
       data: {

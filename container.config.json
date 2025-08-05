@@ -8,5 +8,5 @@
   "policyThreshold": 60,
   "envParams": {},
   "customLogs": "stdout",
-  "initialDelaySeconds": 2
+  "initialDelaySeconds": 10
 }

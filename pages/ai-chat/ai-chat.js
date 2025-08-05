@@ -106,30 +106,20 @@ Page({
       console.log('正在调用云托管服务:', {
         path: '/api/chat/process',
         method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
-        data: {
-          userId: 'test-user',
-          message: userMessage
-        }
-      });
-
-      console.log('调用云托管服务，请求参数:', {
-        path: '/api/chat/process',
-        method: 'POST',
-        header: {
-          'content-type': 'application/json'
-        },
         data: {
           userId: app.globalData.userId || 'test-user-id',
           message: userMessage
         }
       });
+
       const response = await wx.cloud.callContainer({
+        config: {
+         env: 'prod-1g6skl837a850b7f'
+        },
         path: '/api/chat/process',
         method: 'POST',
         header: {
+          'X-WX-SERVICE': 'ai-chat-service',
           'content-type': 'application/json; charset=utf-8'
         },
         data: {
@@ -137,8 +127,6 @@ Page({
           message: userMessage
         }
       });
-
-      console.log('云托管服务响应:', response);
 
       console.log('云托管服务响应:', response);
       const currentMessages = this.data.messages.slice(0, -1);
@@ -175,6 +163,7 @@ Page({
             }
           }
         }
+        
         const aiMessage = {
           type: 'ai',
           content: aiResponse,
@@ -202,7 +191,11 @@ Page({
     } catch (error) {
       const currentMessages = this.data.messages.slice(0, -1);
       let errorMessageContent = '抱歉，网络连接出现问题，请检查您的网络设置后重试。';
-      if (error.errMsg) {
+      
+      // 针对云托管服务未激活的错误提供具体指导
+      if (error.errMsg && error.errMsg.includes('Service is not activated')) {
+        errorMessageContent = 'AI服务正在部署中，请稍后再试。如果问题持续存在，请联系客服。';
+      } else if (error.errMsg) {
         errorMessageContent = `请求失败: ${error.errMsg}`;
       } else if (error.message) {
         errorMessageContent = `请求失败: ${error.message}`;
