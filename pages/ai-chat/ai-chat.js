@@ -1,4 +1,5 @@
 const app = getApp();
+const dataSync = require('../../utils/dataSync');
 
 Page({
   data: {
@@ -103,18 +104,35 @@ Page({
 
       this.scrollToBottom();
 
+      const userRecords = dataSync.getTodayCompleteData();
+
+      const weightRecords = wx.getStorageSync('weightRecordsArray') || [];
+      const exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+      const foodRecords = wx.getStorageSync('foodRecords') || {};
+
+      const today = dataSync.getCurrentDateString();
+
       console.log('正在调用云托管服务:', {
         path: '/api/chat/process',
         method: 'POST',
         data: {
           userId: app.globalData.userId || 'test-user-id',
-          message: userMessage
+          message: userMessage,
+          userRecords: {
+            today: userRecords,
+            weightHistory: weightRecords,
+            exerciseHistory: exerciseRecords,
+            foodHistory: foodRecords,
+            currentDate: today
+          }
         }
       });
 
+      const envId = app.globalData.envId || 'prod-1g6skl837a850b7f';
+
       const response = await wx.cloud.callContainer({
         config: {
-         env: 'prod-1g6skl837a850b7f'
+          env: envId
         },
         path: '/api/chat/process',
         method: 'POST',
@@ -124,7 +142,14 @@ Page({
         },
         data: {
           userId: app.globalData.userId || 'test-user-id',
-          message: userMessage
+          message: userMessage,
+          userRecords: {
+            today: userRecords,
+            weightHistory: weightRecords,
+            exerciseHistory: exerciseRecords,
+            foodHistory: foodRecords,
+            currentDate: today
+          }
         }
       });
 
@@ -133,6 +158,14 @@ Page({
 
       if (response.data.success) {
         let aiResponse = response.data.message || '抱歉，我没有理解您的意思。';
+
+        if (response.data.healthAdvice && response.data.healthAdvice.length > 0) {
+          aiResponse += '\n\n健康建议:\n';
+          response.data.healthAdvice.forEach(advice => {
+            aiResponse += `\n- ${advice}`;
+          });
+        }
+
         if (response.data.extractedData) {
           const data = response.data.extractedData;
           if (data.exercise && data.exercise.type) {
@@ -145,7 +178,11 @@ Page({
             }
           }
           if (data.food && data.food.name) {
-            aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n重量: ${data.food.weight}克`;
+            if (data.food.quantity && data.food.unit) {
+              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n量词: ${data.food.quantity}${data.food.unit}`;
+            } else {
+              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n重量: ${data.food.weight}克`;
+            }
             if (data.food.calories != null) {
               aiResponse += `\n卡路里: ${data.food.calories}`;
             }
@@ -163,7 +200,7 @@ Page({
             }
           }
         }
-        
+
         const aiMessage = {
           type: 'ai',
           content: aiResponse,
@@ -191,7 +228,7 @@ Page({
     } catch (error) {
       const currentMessages = this.data.messages.slice(0, -1);
       let errorMessageContent = '抱歉，网络连接出现问题，请检查您的网络设置后重试。';
-      
+
       // 针对云托管服务未激活的错误提供具体指导
       if (error.errMsg && error.errMsg.includes('Service is not activated')) {
         errorMessageContent = 'AI服务正在部署中，请稍后再试。如果问题持续存在，请联系客服。';
@@ -200,7 +237,7 @@ Page({
       } else if (error.message) {
         errorMessageContent = `请求失败: ${error.message}`;
       }
-      
+
       const errorMessage = {
         type: 'ai',
         content: errorMessageContent,

@@ -6,6 +6,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') });
 const chatRoutes = require('./routes/chat');
 const exerciseRoutes = require('./routes/exercise');
 const foodRoutes = require('./routes/food');
+const ttsRoutes = require('./routes/tts');
 const doubaoService = require('./services/doubaoService');
 const { pool } = require('./db');
 
@@ -26,9 +27,6 @@ app.use((req, res, next) => {
   res.header('Content-Type', 'application/json; charset=utf-8');
   next();
 });
-
-// 使用db.js中的pool连接池
-  
 
 async function initDatabase() {
   try {
@@ -94,6 +92,7 @@ app.get('/api/test-doubao', async (req, res) => {
 app.use('/api/chat', chatRoutes);
 app.use('/api/exercise', exerciseRoutes);
 app.use('/api/food', foodRoutes);
+app.use('/api/tts', ttsRoutes);
 
 app.use((error, req, res, next) => {
   console.error('错误:', error);

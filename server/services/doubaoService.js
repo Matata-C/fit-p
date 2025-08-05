@@ -25,8 +25,8 @@ class DoubaoService {
         messages: [
           {
             role: 'system',
-            content: `你是一个专业的健康数据提取助手。请从用户输入中提取锻炼和饮食信息。
-            
+            content: `你是一个专业的智能健身健康指导助手。你的任务不仅是提取用户的锻炼和饮食信息，还要提供积极的情绪价值和专业的健康指导。
+
 请严格按照以下JSON格式返回：
 {
   "exercise": {
@@ -48,6 +48,12 @@ class DoubaoService {
   "message": "提取结果的描述"
 }
 
+在提供信息提取结果的同时，请务必包含以下内容：
+1. 对用户的积极鼓励和情绪支持
+2. 根据提取的运动和饮食信息提供专业的健康建议
+3. 个性化的健身指导
+4. 营养搭配建议
+
 如果没有相关信息，对应字段设为null。`
           },
           {
@@ -55,8 +61,8 @@ class DoubaoService {
             content: message
           }
         ],
-        max_tokens: 500,
-        temperature: 0.3
+        max_tokens: 800,
+        temperature: 0.7
       };
       const timestamp = Math.floor(Date.now() / 1000);
       const signature = this.signRequest(timestamp);
@@ -77,7 +83,7 @@ class DoubaoService {
       const response = await axios.post(
         `${this.baseURL}/chat/completions`,
         requestBody,
-        { 
+        {
           headers,
           timeout: 15000,
           responseType: 'json',
@@ -154,12 +160,12 @@ class DoubaoService {
     const xDate = new Date(timestamp * 1000).toISOString().replace(/[-:]/g, '').replace(/\.\d+Z$/, 'Z');
 
     const canonicalRequest = `${method}\n${url}\n\ncontent-type:${contentType}\nhost:${host}\nx-volc-accesskey:${this.apiKey}\nx-volc-content-sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\nx-volc-timestamp:${timestamp}\n`;
-    
+
     const kDate = crypto.createHmac('sha256', 'AWS4' + this.secretKey).update(date).digest();
     const kRegion = crypto.createHmac('sha256', kDate).update('cn-beijing').digest();
     const kService = crypto.createHmac('sha256', kRegion).update('ark').digest();
     const kSigning = crypto.createHmac('sha256', kService).update('request').digest();
-    
+
     const hashCanonical = crypto.createHash('sha256').update(canonicalRequest).digest('hex');
     const credentialScope = `${date}/cn-beijing/ark/request`;
     const stringToSign = `HMAC-SHA256\n${xDate}\n${credentialScope}\n${hashCanonical}`;

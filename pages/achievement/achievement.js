@@ -98,7 +98,7 @@ Page({
   playVoice() {
     this.setData({ isPlaying: true });
     const innerAudioContext = wx.createInnerAudioContext();
-    innerAudioContext.src = 'https://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=' + encodeURIComponent(this.data.voiceText);
+    innerAudioContext.src = 'http://localhost:3001/api/tts/text2audio?text=' + encodeURIComponent(this.data.voiceText);
     innerAudioContext.play();
     innerAudioContext.onPlay(() => {
       console.log('语音播放开始');
