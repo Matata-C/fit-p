@@ -170,9 +170,6 @@ Page({
           const data = response.data.extractedData;
           if (data.exercise && data.exercise.type) {
             aiResponse += `\n\n运动记录:\n类型: ${data.exercise.type}\n时长: ${data.exercise.duration}分钟`;
-            if (data.exercise.calories_burned != null) {
-              aiResponse += `\n消耗卡路里: ${data.exercise.calories_burned}`;
-            }
             if (data.exercise.intensity) {
               aiResponse += `\n强度: ${data.exercise.intensity}`;
             }
@@ -181,20 +178,9 @@ Page({
             if (data.food.quantity && data.food.unit) {
               aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n量词: ${data.food.quantity}${data.food.unit}`;
             } else {
-              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n重量: ${data.food.weight}克`;
+              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}`;
             }
-            if (data.food.calories != null) {
-              aiResponse += `\n卡路里: ${data.food.calories}`;
-            }
-            if (data.food.protein != null) {
-              aiResponse += `\n蛋白质: ${data.food.protein}克`;
-            }
-            if (data.food.carbs != null) {
-              aiResponse += `\n碳水化合物: ${data.food.carbs}克`;
-            }
-            if (data.food.fat != null) {
-              aiResponse += `\n脂肪: ${data.food.fat}克`;
-            }
+
             if (data.food.meal_time) {
               aiResponse += `\n用餐时间: ${data.food.meal_time}`;
             }
