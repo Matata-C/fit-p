@@ -40,5 +40,6 @@
     "projectArchitecture": "miniProgram",
     "simulatorPluginLibVersion": {},
     "cloudfunctionRoot": "cloudfunctions/",
-    "projectname": "fit-p"
+    "projectname": "fit-p",
+    "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

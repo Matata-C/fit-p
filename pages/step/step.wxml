@@ -14,7 +14,7 @@
           </view>
         </view>
         <view class="steps-text">
-          <text class="step-count">{{todaySteps}}/{{stepGoal}}</text>
+          <text class="step-count">{{stepCount}}/{{stepGoal}}</text>
           <text class="rest-step">剩余{{stepRemaining}}步</text>
         </view>
       </view>

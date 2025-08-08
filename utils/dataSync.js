@@ -27,14 +27,17 @@ function getTodayExerciseData() {
   try {
     const weRunData = wx.getStorageSync('weRunData') || {};
     if (weRunData[today] && weRunData[today].stepInfoList && weRunData[today].stepInfoList.length > 0) {
+        
       steps = weRunData[today].stepInfoList[0].step || 0;
     }
+   
   } catch (e) {
     console.log('获取微信运动数据失败，使用运动记录数据');
   }
   
   // 如果微信运动数据为空，则从运动记录获取
   if (steps === 0) {
+      
     let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
     let todayRecords = exerciseRecords[today] || [];
     todayRecords.forEach(record => {
@@ -50,6 +53,7 @@ function getTodayExerciseData() {
       calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
     });
   } else {
+      console.log('6666')
     // 如果从微信运动获取了步数，仍然从运动记录获取时长和卡路里
     let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
     let todayRecords = exerciseRecords[today] || [];
