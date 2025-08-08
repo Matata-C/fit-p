@@ -22,5 +22,14 @@
     "nodemon": "^2.0.15"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Matata-C/fit-p.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/Matata-C/fit-p/issues"
+  },
+  "homepage": "https://github.com/Matata-C/fit-p#readme"
 }

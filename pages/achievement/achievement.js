@@ -97,22 +97,46 @@ Page({
   },
   playVoice() {
     this.setData({ isPlaying: true });
-    const innerAudioContext = wx.createInnerAudioContext();
-    innerAudioContext.src = 'http://localhost:3001/api/tts/text2audio?text=' + encodeURIComponent(this.data.voiceText);
-    innerAudioContext.play();
-    innerAudioContext.onPlay(() => {
-      console.log('语音播放开始');
-    });
-    innerAudioContext.onEnded(() => {
-      this.setData({ isPlaying: false });
-    });
-    innerAudioContext.onError((res) => {
-      wx.showToast({
-        title: '语音播放失败，请检查网络',
-        icon: 'none'
-      });
-      this.setData({ isPlaying: false });
-      console.error('语音播放失败', res);
+    wx.cloud.callContainer({
+      config: {
+        env: 'cloud1-6g0qn8fo7e746837'
+      },
+      path: '/api/tts/text2audio',
+      method: 'GET',
+      header: {
+        'X-WX-SERVICE': 'tts-service-name',  // TTS服务名称
+        'content-type': 'application/json'
+      },
+      data: {
+        text: this.data.voiceText
+      },
+      success: (res) => {
+        const innerAudioContext = wx.createInnerAudioContext();
+        innerAudioContext.src = res.data.audioUrl;  
+        innerAudioContext.play();
+        innerAudioContext.onPlay(() => {
+          console.log('语音播放开始');
+        });
+        innerAudioContext.onEnded(() => {
+          this.setData({ isPlaying: false });
+        });
+        innerAudioContext.onError((res) => {
+          wx.showToast({
+            title: '语音播放失败',
+            icon: 'none'
+          });
+          this.setData({ isPlaying: false });
+          console.error('语音播放失败', res);
+        });
+      },
+      fail: (err) => {
+        wx.showToast({
+          title: '语音生成失败',
+          icon: 'none'
+        });
+        this.setData({ isPlaying: false });
+        console.error('调用云托管服务失败', err);
+      }
     });
   },
   refreshVoice() {
