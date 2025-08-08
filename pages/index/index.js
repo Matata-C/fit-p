@@ -189,6 +189,10 @@ Page({
   
 
   onLoad: function () {
+    this.data.timer = setInterval(() => {
+        this.getSteps();
+      }, 5000);
+
     console.log('首页加载');
 
     // 设置今日日期

@@ -42,7 +42,7 @@
       <text class="step-slogan">——生命在于运动——</text>
     </view>
     <image class="step-icon" src="/images/跑步(1).png"></image> <!-- 需替换实际跑步图标路径 -->
-    </view>                                                                                              <button bindtap="getSteps">获取今日最新步数</button>
+    </view>                                                                                             
                                                                                                                                          
 
   <!-- 饮食建议区域 -->
