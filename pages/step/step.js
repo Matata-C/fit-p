@@ -2,10 +2,10 @@ Page({
   data: {
     currentWeekday: '',
     currentDate: '',
-    currentStep: 7852,
+  
     targetStep: 10000,
-    date: '2025年7月17日',
-    weekday: '周四',
+  
+   stepCount:0,//步数数据
     calories: 320,
     duration: 65,
     todaySteps: 0,
@@ -27,6 +27,11 @@ Page({
   },
 
   onLoad() {
+       // 从本地存储读取步数
+    const step = wx.getStorageSync('stepCount') || 0
+    this.setData({
+      stepCount: step
+    })
     this.initDate();
     // this.initWeekSteps(); // Remove weekSteps init
     // 初始化日期
@@ -60,7 +65,7 @@ Page({
                 icon: 'none'
               });
               this.updateProgressAndDraw();
-              this.calculateConversions(7852);
+              this.calculateConversions(7852);//模拟数据
             }
           });
         } else {
@@ -77,7 +82,7 @@ Page({
       success: (res) => {
         // 注意：真实项目中需要解密res.encryptedData获取步数
         // 这里使用模拟数据进行演示
-        const mockSteps = 7852; // 模拟步数
+        const mockSteps = 5959; // 模拟步数
         this.setData({ todaySteps: mockSteps }, () => {
           this.updateProgressAndDraw(); // 新增：更新进度并绘制
           this.calcStepRemaining();

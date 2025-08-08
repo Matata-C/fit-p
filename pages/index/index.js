@@ -19,6 +19,7 @@ const spread = function (obj1, obj2) {
 };
 
 Page({
+   
   data: {
     // 消耗数据
     consumptionData: {
@@ -36,6 +37,7 @@ Page({
       currentWeight: 0       // 当前体重
     },
     // 显示数据
+    stepCount:0,          //steps
     theoreticalValue: 0,       // 理论消耗值
     targetValue: 0,            // 目标消耗值
     actualValue: 0,            // 实际消耗值
@@ -96,6 +98,52 @@ Page({
     ],
   },
 
+//test
+  // 定义获取步数的函数
+  getSteps() {
+    // 1. 请求用户授权微信运动
+    wx.authorize({
+      scope: 'scope.werun',
+      success: () => {
+        // 2. 授权成功，获取 cloudID（临时凭证）
+        wx.getWeRunData({
+          success: res => {
+            // 3. 调用云函数，传递 cloudID 解密
+            wx.cloud.callFunction({
+              name: 'getSteps', // 云函数名称（必须和你部署的一致）
+              data: {
+                weRunData: wx.cloud.CloudID(res.cloudID) // 用 CloudID 包装凭证
+              },
+              success: res => {
+                // 4. 拿到步数，更新页面显示
+                this.setData({
+                  stepCount: res.result.step
+                })
+                console.log('今日步数：', res.result.step)
+                //存储step
+                wx.setStorageSync('stepCount', res.result.step)
+              },
+              fail: err => {
+                console.error('云函数调用失败：', err)
+                wx.showToast({ title: '获取失败', icon: 'none' })
+              }
+            })
+          },
+          fail: err => {
+            console.error('获取微信运动数据失败：', err)
+            wx.showToast({ title: '请开启微信运动', icon: 'none' })
+          }
+        })
+      },
+      fail: () => {
+        // 用户拒绝授权时的提示
+        wx.showToast({ title: '需要授权才能获取步数', icon: 'none' })
+      }
+    })
+  },
+
+
+
   // 新增：跳转到今日步数界面
   navigateToStepDetail() {
     wx.navigateTo({
@@ -138,6 +186,7 @@ Page({
       showModal: false
     });
   },
+  
 
   onLoad: function () {
     console.log('首页加载');
