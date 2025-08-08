@@ -542,11 +542,10 @@ Page({
   checkTodayWeight: function () {
     try {
       var today = this.getCurrentDateString();
-      var goalData = wx.getStorageSync('goalData') || {};
       var todayWeightRecord = wx.getStorageSync('todayWeight');
       var weightRecords = wx.getStorageSync('weightRecords') || {};
 
-      // 【优化】检查今日是否有体重记录
+      // 只检查今日是否有体重记录，不使用goalData作为备用
       var displayWeight = null;
 
       // 优先检查今日体重记录
@@ -557,15 +556,9 @@ Page({
         // 如果没有今日体重记录，检查体重记录对象中是否有今日记录
         displayWeight = weightRecords[today];
         console.log('从体重记录中找到今日记录:', displayWeight);
-      } else {
-        // 最后检查goalData中的当前体重（作为备用）
-        displayWeight = goalData.currentWeight || null;
-        if (displayWeight) {
-          console.log('使用goalData中的当前体重:', displayWeight);
-        }
       }
 
-      // 【优化】确保今日体重记录状态正确
+      // 只有在今天确实有体重记录时才显示
       var hasTodayWeight = displayWeight !== null;
 
       this.setData({
