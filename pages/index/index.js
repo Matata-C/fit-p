@@ -37,7 +37,7 @@ Page({
       currentWeight: 0       // 当前体重
     },
     // 显示数据
-    stepCount:0,          //steps
+ 
     theoreticalValue: 0,       // 理论消耗值
     targetValue: 0,            // 目标消耗值
     actualValue: 0,            // 实际消耗值
@@ -52,7 +52,7 @@ Page({
     inputWeight: '',           // 体重输入值
     showWeightDialog: false,   // 是否显示体重记录对话框
     // 步数相关数据
-    todaySteps: 0,             // 今日步数
+    stepCount:0,          //steps
     todayCalories: 0,          // 今日消耗卡路里
     todayDuration: 0,          // 今日运动时长
     showDebug: false,          // 调试信息显示开关
@@ -98,7 +98,7 @@ Page({
     ],
   },
 
-//test
+
   // 定义获取步数的函数
   getSteps() {
     // 1. 请求用户授权微信运动
@@ -151,18 +151,7 @@ Page({
     });
   },
 
-  // 手动刷新步数数据
-  refreshStepData() {
-    wx.showLoading({
-      title: '刷新步数中...'
-    });
-
-    this.getWeRunSteps();
-
-    setTimeout(() => {
-      wx.hideLoading();
-    }, 1500);
-  },
+ 
 
   goToCalendar() {
     wx.navigateTo({
@@ -189,9 +178,11 @@ Page({
   
 
   onLoad: function () {
+   this.getSteps();
+      //刷新步数
     this.data.timer = setInterval(() => {
         this.getSteps();
-      }, 5000);
+      }, 30000);
 
     console.log('首页加载');
 
@@ -507,83 +498,10 @@ Page({
     }
   },
 
-  loadTodaySteps: function () {
-    // 获取微信运动步数
-    this.getWeRunSteps();
-  },
+ 
+ 
 
-  // 获取微信运动步数
-  getWeRunSteps: function () {
-    wx.getSetting({
-      success: (res) => {
-        if (!res.authSetting['scope.werun']) {
-          // 未授权，发起授权请求
-          wx.authorize({
-            scope: 'scope.werun',
-            success: () => {
-              this.fetchWeRunSteps();
-            },
-            fail: () => {
-              console.log('用户拒绝微信运动授权');
-              this.setData({
-                todaySteps: '当前用户未授权',
-                todayCalories: 0,
-                todayDuration: 0
-              });
-            }
-          });
-        } else {
-          // 已授权，直接获取数据
-          this.fetchWeRunSteps();
-        }
-      },
-      fail: () => {
-        console.log('获取权限设置失败');
-        this.setData({
-          todaySteps: '当前用户未授权',
-          todayCalories: 0,
-          todayDuration: 0
-        });
-      }
-    });
-  },
 
-  // 实际获取微信运动步数
-  fetchWeRunSteps: function () {
-    wx.getWeRunData({
-      success: (res) => {
-        console.log('微信运动数据获取成功:', res);
-
-        // 由于解密需要服务端支持，这里使用模拟数据
-        // 在实际项目中，需要调用云函数或服务端API进行解密
-        const mockSteps = Math.floor(Math.random() * 8000) + 2000; // 2000-10000之间的随机步数
-
-        // 计算卡路里和时长
-        const calories = Math.round(mockSteps * 0.04);
-        const duration = Math.round(mockSteps / 120);
-
-        this.setData({
-          todaySteps: mockSteps,
-          todayCalories: calories,
-          todayDuration: duration
-        });
-
-        console.log('步数数据更新:', { steps: mockSteps, calories, duration });
-      },
-      fail: (err) => {
-        console.error('获取微信运动数据失败:', err);
-        this.handleWeRunError();
-      }
-    });
-  },
-
-  handleWeRunError: function () {
-    this.setData({
-      todaySteps: '当前用户未授权',
-      todayCalories: 0,
-      todayDuration: 0
-    });
-  },
 
   // 切换调试信息显示
   toggleDebug: function () {
