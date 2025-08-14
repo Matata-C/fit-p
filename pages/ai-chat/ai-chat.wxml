@@ -2,11 +2,32 @@
   <view class="chat-header">
     <text class="chat-title"> TruFit AI</text>
     <view class="header-actions">
-      <button class="clear-btn" bindtap="clearChat">清空</button>
+      <button class="clear-btn" bindtap="clearChat">清空记录</button>
+    </view>
+  </view>
+
+  <view wx:if="{{showRoleSelection}}" class="role-selection-container">
+    <view class="role-selection-header">
+      <text class="role-selection-title">选择您的AI助手风格</text>
+      <text class="role-selection-subtitle">不同风格的助手会以不同的方式与您交流</text>
+    </view>
+    
+    <view class="roles-container">
+      <view wx:for="{{roles}}" wx:key="id" class="role-item" bindtap="selectRole" data-role-id="{{item.id}}">
+        <image class="role-avatar" src="{{item.avatar}}"></image>
+        <view class="role-info">
+          <text class="role-name">{{item.name}}</text>
+          <text class="role-description">{{item.description}}</text>
+        </view>
+        <view class="role-selected-icon" wx:if="{{selectedRole && selectedRole.id === item.id}}">
+          <text class="selected-text">已选择</text>
+        </view>
+      </view>
     </view>
   </view>
 
   <scroll-view 
+    wx:else
     class="chat-messages" 
     scroll-y="true" 
     scroll-into-view="{{scrollIntoView}}" 
@@ -26,7 +47,7 @@
         </view>
 
         <view wx:if="{{item.type === 'ai'}}" class="ai-message">
-          <image class="avatar ai-avatar" src="/images/柯基.png"></image>
+          <image class="avatar ai-avatar" src="{{selectedRole ? selectedRole.avatar : '/images/柯基.png'}}"></image>
           <view class="message-bubble ai-bubble">
             <text class="message-text">{{item.content}}</text>
             <view wx:if="{{item.loading}}" class="loading-indicator">
@@ -40,9 +61,7 @@
     </view>
   </scroll-view>
 
-
-
-  <view class="chat-input-container" catchtap="preventTap">
+  <view wx:if="{{!showRoleSelection}}" class="chat-input-container" catchtap="preventTap">
     <view class="input-box">
       <textarea 
         class="message-input" 
@@ -56,5 +75,9 @@
         focus="{{focusInput}}"
       ></textarea>
     </view>
+  </view>
+  
+  <view wx:if="{{!showRoleSelection}}" class="reselect-role-container">
+    <button class="reselect-role-btn" bindtap="reselectRole">重新选择助手风格</button>
   </view>
 </view>

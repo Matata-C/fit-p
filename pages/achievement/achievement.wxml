@@ -12,7 +12,7 @@
           <view class="achieve-header">
             <text class="achieve-name">{{item.name}}</text>
             <text class="achieve-reward" wx:if="{{item.unlocked}}">{{item.reward}}</text>
-            <text class="achieve-reward locked" wx:else>{{item.reward}}</text>
+            <text class="achieve-reward locked" wx:else>未解锁</text>
           </view>
           <view class="achieve-btn-row" wx:if="{{!item.unlocked}}">
             <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
@@ -44,7 +44,7 @@
     </block>
   </view>
 
-  <view class="section-title">语音激励</view>
+  <view class="section-title">来碗鸡汤吧~</view>
   <view class="voice-section">
     <view class="voice-tabs">
       <view class="voice-tab {{tab === 'all' ? 'active' : ''}}" data-tab="all" bindtap="onTabChange">全部</view>
@@ -60,7 +60,6 @@
       </block>
     </swiper>
     <view class="voice-btn-row">
-      <button class="voice-btn {{isPlaying ? 'playing' : ''}}" bindtap="playVoice">{{isPlaying ? '播放中...' : '播放'}}</button>
       <button class="voice-like-btn" bindtap="likeVoice">{{likedVoiceTexts && likedVoiceTexts.includes(voiceText) ? '取消收藏' : '收藏'}}</button>
       <button class="voice-copy-btn" bindtap="copyVoice">复制</button>
       <button class="voice-share-btn" bindtap="shareVoice">分享</button>

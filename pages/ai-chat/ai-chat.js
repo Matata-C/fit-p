@@ -3,6 +3,34 @@ const dataSync = require('../../utils/dataSync');
 
 Page({
   data: {
+    showRoleSelection: true,
+    selectedRole: null,
+    roles: [
+      {
+        id: 'professional',
+        name: '专业健身教练',
+        description: '专业严谨，提供科学的健身建议',
+        avatar: '/images/柯基.png'
+      },
+      {
+        id: 'energetic',
+        name: '活力健身伙伴',
+        description: '年轻活泼，充满鼓励',
+        avatar: '/images/橘猫.png'
+      },
+      {
+        id: 'gentle',
+        name: '温和营养师',
+        description: '温和细致，注重饮食营养',
+        avatar: '/images/田园犬.png'
+      },
+      {
+        id: 'strict',
+        name: '严厉教练',
+        description: '严格直接，强调纪律',
+        avatar: '/images/柯基.png'
+      }
+    ],
     messages: [
       {
         type: 'ai',
@@ -57,6 +85,42 @@ Page({
   },
 
   preventTap() {
+  },
+
+  selectRole(e) {
+    const roleId = e.currentTarget.dataset.roleId;
+    const selectedRole = this.data.roles.find(role => role.id === roleId);
+
+    this.setData({
+      selectedRole: selectedRole,
+      showRoleSelection: false
+    });
+
+    const roleMessages = {
+      'professional': '您好！我是您的专业健身教练，我会为您提供科学严谨的健身建议和营养指导。请问有什么可以帮助您的？',
+      'energetic': '嗨！我是您的活力健身伙伴，我们一起快乐地运动吧！有什么我可以帮您的吗？',
+      'gentle': '您好！我是您的温和营养师，我会细致地为您分析饮食营养搭配。请问您想了解什么？',
+      'strict': '您好！我是您的严厉教练，我会严格要求您的训练计划。请直接告诉我您的需求！'
+    };
+
+    const initialMessage = roleMessages[roleId] || '您好！我是AI健身助手，可以为您提供专业的健身建议和营养指导。请问有什么可以帮助您的？';
+
+    this.setData({
+      messages: [
+        {
+          type: 'ai',
+          content: initialMessage,
+          loading: false
+        }
+      ]
+    });
+  },
+
+  reselectRole() {
+    this.setData({
+      showRoleSelection: true,
+      selectedRole: null
+    });
   },
 
   onInputChange(e) {
@@ -124,7 +188,8 @@ Page({
             exerciseHistory: exerciseRecords,
             foodHistory: foodRecords,
             currentDate: today
-          }
+          },
+          aiRole: this.data.selectedRole?.id || 'professional'  // 添加AI角色风格参数
         }
       });
 
@@ -149,7 +214,8 @@ Page({
             exerciseHistory: exerciseRecords,
             foodHistory: foodRecords,
             currentDate: today
-          }
+          },
+          aiRole: this.data.selectedRole?.id || 'professional'  // 添加AI角色风格参数
         }
       });
 
@@ -173,6 +239,9 @@ Page({
             if (data.exercise.intensity) {
               aiResponse += `\n强度: ${data.exercise.intensity}`;
             }
+
+            // 将运动数据保存到主页的运动记录中
+            this.saveExerciseDataToMain(data.exercise);
           }
           if (data.food && data.food.name) {
             if (data.food.quantity && data.food.unit) {
@@ -184,6 +253,9 @@ Page({
             if (data.food.meal_time) {
               aiResponse += `\n用餐时间: ${data.food.meal_time}`;
             }
+
+            // 将饮食数据保存到主页的饮食记录中
+            this.saveFoodDataToMain(data.food);
           }
         }
 
@@ -241,6 +313,53 @@ Page({
     this.saveChatHistory();
   },
 
+  saveExerciseDataToMain(exerciseData) {
+    try {
+      const exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+      const today = dataSync.getCurrentDateString();
+
+      if (!exerciseRecords[today]) {
+        exerciseRecords[today] = [];
+      }
+
+      exerciseRecords[today].push({
+        type: exerciseData.type,
+        duration: exerciseData.duration,
+        calories: exerciseData.calories_burned || 0,
+        date: new Date().toISOString()
+      });
+
+      wx.setStorageSync('exerciseRecords', exerciseRecords);
+      console.log('运动记录已保存到主页');
+    } catch (e) {
+      console.error('保存运动记录到主页失败:', e);
+    }
+  },
+
+  saveFoodDataToMain(foodData) {
+    try {
+      const foodRecords = wx.getStorageSync('foodRecords') || {};
+      const today = dataSync.getCurrentDateString();
+
+      if (!foodRecords[today]) {
+        foodRecords[today] = [];
+      }
+
+      foodRecords[today].push({
+        name: foodData.name,
+        weight: foodData.weight || 100,
+        calories: foodData.calories || 0,
+        meal_time: foodData.meal_time || '未指定',
+        date: new Date().toISOString()
+      });
+
+      wx.setStorageSync('foodRecords', foodRecords);
+      console.log('饮食记录已保存到主页');
+    } catch (e) {
+      console.error('保存饮食记录到主页失败:', e);
+    }
+  },
+
   clearChat() {
     wx.showModal({
       title: '清空对话',
@@ -248,13 +367,16 @@ Page({
       success: (res) => {
         if (res.confirm) {
           this.setData({
+            showRoleSelection: true,
+            selectedRole: null,
             messages: [{
               type: 'ai',
-              content: '您好！我是您的AI健身助手，可以为您提供专业的健身建议和营养指导。请问有什么可以帮助您的？',
+              content: '您好！我是AI健身助手，可以为您提供专业的健身建议和营养指导。请问有什么可以帮助您的？',
               loading: false
             }],
             showQuickQuestions: true,
-            showVoiceTip: true
+            showVoiceTip: true,
+            inputValue: ''
           });
           wx.removeStorageSync('chat_history');
         }

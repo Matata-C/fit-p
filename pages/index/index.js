@@ -19,7 +19,7 @@ const spread = function (obj1, obj2) {
 };
 
 Page({
-   
+
   data: {
     // 消耗数据
     consumptionData: {
@@ -37,7 +37,7 @@ Page({
       currentWeight: 0       // 当前体重
     },
     // 显示数据
- 
+
     theoreticalValue: 0,       // 理论消耗值
     targetValue: 0,            // 目标消耗值
     actualValue: 0,            // 实际消耗值
@@ -52,7 +52,7 @@ Page({
     inputWeight: '',           // 体重输入值
     showWeightDialog: false,   // 是否显示体重记录对话框
     // 步数相关数据
-    stepCount:0,          //steps
+    stepCount: 0,          //steps
     todayCalories: 0,          // 今日消耗卡路里
     todayDuration: 0,          // 今日运动时长
     showDebug: false,          // 调试信息显示开关
@@ -151,7 +151,7 @@ Page({
     });
   },
 
- 
+
 
   goToCalendar() {
     wx.navigateTo({
@@ -175,14 +175,14 @@ Page({
       showModal: false
     });
   },
-  
+
 
   onLoad: function () {
-   this.getSteps();
-      //刷新步数
+    this.getSteps();
+    //刷新步数
     this.data.timer = setInterval(() => {
-        this.getSteps();
-      }, 30000);
+      this.getSteps();
+    }, 30000);
 
     console.log('首页加载');
 
@@ -498,8 +498,8 @@ Page({
     }
   },
 
- 
- 
+
+
 
 
 
@@ -1403,4 +1403,18 @@ Page({
       console.error('刷新用户统计数据失败:', e);
     }
   },
+
+  loadTodaySteps: function () {
+    try {
+      const stepCount = wx.getStorageSync('stepCount') || 0;
+
+      this.setData({
+        stepCount: stepCount
+      });
+
+      console.log('今日步数加载成功:', stepCount);
+    } catch (e) {
+      console.error('加载今日步数失败:', e);
+    }
+  }
 })

@@ -1,4 +1,62 @@
 const tabBarManager = require('../../utils/tabBarManager');
+const weightUtil = require('../../utils/weightUtil');
+const dataSync = require('../../utils/dataSync');
+
+const calculateWeightAchievement = () => {
+  try {
+    const records = weightUtil.getWeightRecords();
+    if (records.length < 7) return false;
+    
+    records.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    const today = new Date();
+    let consecutiveDays = 0;
+    
+    for (let i = 0; i < Math.min(7, records.length); i++) {
+      const recordDate = new Date(records[i].date);
+      const diffDays = Math.floor((today - recordDate) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === i) {
+        consecutiveDays++;
+      } else {
+        break;
+      }
+    }
+    
+    return consecutiveDays >= 7;
+  } catch (e) {
+    console.error('计算体重成就失败', e);
+    return false;
+  }
+};
+
+const calculateDietAchievement = () => {
+  try {
+    const foodRecords = wx.getStorageSync('foodRecords') || {};
+    const dates = Object.keys(foodRecords).sort((a, b) => new Date(b) - new Date(a));
+    
+    if (dates.length < 7) return false;
+    
+    const today = new Date();
+    let consecutiveDays = 0;
+    
+    for (let i = 0; i < Math.min(7, dates.length); i++) {
+      const recordDate = new Date(dates[i]);
+      const diffDays = Math.floor((today - recordDate) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays === i && foodRecords[dates[i]].length > 0) {
+        consecutiveDays++;
+      } else {
+        break;
+      }
+    }
+    
+    return consecutiveDays >= 7;
+  } catch (e) {
+    console.error('计算饮食成就失败', e);
+    return false;
+  }
+};
 
 Page({
   data: {
@@ -10,28 +68,21 @@ Page({
         condition: "连续7天记录体重",
         reward: "+50成就点",
         points: 50,
-        unlocked: true
+        unlocked: false,
+        taskType: "weight" 
       },
       {
         id: 2,
-        name: "运动健将",
-        type: "累计运动",
-        condition: "累计运动100分钟",
-        reward: "+30成就点",
-        points: 30,
-        unlocked: false
-      },
-      {
-        id: 3,
         name: "饮食自律",
         type: "健康饮食",
         condition: "连续7天饮食打卡",
         reward: "+40成就点",
         points: 40,
-        unlocked: false
+        unlocked: false,
+        taskType: "diet"
       }
     ],
-    totalPoints: 50,
+    totalPoints: 0,
     leaderboard: [
       { id: 1, name: "用户A", score: 120 },
       { id: 2, name: "用户B", score: 90 },
@@ -59,42 +110,64 @@ Page({
     autoPlay: false,
     autoPlayTimer: null,
   },
+  
   onLoad() {
     tabBarManager.initTabBarForPage(3);
+    
+    this.calculateAchievements();
+    
     this.calculateTotalPoints();
+    
     console.log('[DEBUG] 成就页面初始化完成');
     console.log('当前数据:', this.data);
   },
-
+  calculateAchievements() {
+    const achievements = [...this.data.achievements];
+    
+    achievements[0].unlocked = calculateWeightAchievement();
+    achievements[1].unlocked = calculateDietAchievement();
+    
+    this.setData({ achievements });
+  },
+  
   calculateTotalPoints() {
     const unlockedAchievements = this.data.achievements.filter(achievement => achievement.unlocked);
     const totalPoints = unlockedAchievements.reduce((sum, achievement) => sum + achievement.points, 0);
     this.setData({ totalPoints });
   },
+  
   onShow() {
     tabBarManager.setSelectedTab(3);
     this.stopAutoPlay();
     if (this.data.autoPlay) this.startAutoPlay();
+    
+    this.calculateAchievements();
+    this.calculateTotalPoints();
   },
+  
   onUnload() {
     this.stopAutoPlay();
   },
+  
   onTabChange(e) {
     const tab = e.currentTarget.dataset.tab;
     this.setData({ tab, swiperIndex: 0 });
     this.updateVoiceTextByTab(0, tab);
   },
+  
   onSwiperChange(e) {
     const idx = e.detail.current;
     this.setData({ swiperIndex: idx });
     this.updateVoiceTextByTab(idx, this.data.tab);
   },
+  
   updateVoiceTextByTab(idx, tab) {
     const arr = tab === 'liked' ? this.data.likedVoiceTexts : this.data.voiceTexts;
     if (arr.length > 0) {
       this.setData({ voiceText: arr[idx] });
     }
   },
+  
   playVoice() {
     this.setData({ isPlaying: true });
     wx.cloud.callContainer({
@@ -139,6 +212,7 @@ Page({
       }
     });
   },
+  
   refreshVoice() {
     const arr = this.data.tab === 'liked' ? this.data.likedVoiceTexts : this.data.voiceTexts;
     if (arr.length <= 1) return;
@@ -148,10 +222,12 @@ Page({
     this.setData({ swiperIndex: nextIdx });
     this.updateVoiceTextByTab(nextIdx, this.data.tab);
   },
+  
   getCurrentVoiceText() {
     const arr = this.data.tab === 'liked' ? this.data.likedVoiceTexts : this.data.voiceTexts;
     return arr[this.data.swiperIndex] || '';
   },
+  
   likeVoice() {
     const voiceText = this.getCurrentVoiceText();
     const likedVoiceTexts = this.data.likedVoiceTexts;
@@ -164,6 +240,7 @@ Page({
       wx.showToast({ title: '已收藏语音', icon: 'success' });
     }
   },
+  
   copyVoice() {
     const voiceText = this.getCurrentVoiceText();
     if (!voiceText) return;
@@ -174,11 +251,13 @@ Page({
       }
     });
   },
+  
   shareVoice() {
     wx.showShareMenu({ withShareTicket: true });
     wx.updateShareMenu({ withShareTicket: true });
     wx.showToast({ title: '请点击右上角分享', icon: 'none' });
   },
+  
   onShareAppMessage() {
     const voiceText = this.getCurrentVoiceText();
     return {
@@ -187,9 +266,11 @@ Page({
       desc: voiceText,
     };
   },
+  
   onInputChange(e) {
     this.setData({ addInput: e.detail.value });
   },
+  
   addVoiceText() {
     const val = this.data.addInput.trim();
     if (!val) {
@@ -210,6 +291,7 @@ Page({
     this.updateVoiceTextByTab(this.data.likedVoiceTexts.length, 'liked');
     wx.showToast({ title: '已添加并收藏', icon: 'success' });
   },
+  
   startAutoPlay() {
     if (this.data.autoPlayTimer) return;
     this.data.autoPlayTimer = setInterval(() => {
@@ -220,12 +302,14 @@ Page({
       this.updateVoiceTextByTab(nextIdx, this.data.tab);
     }, 4000);
   },
+  
   stopAutoPlay() {
     if (this.data.autoPlayTimer) {
       clearInterval(this.data.autoPlayTimer);
       this.data.autoPlayTimer = null;
     }
   },
+  
   toggleAutoPlay() {
     this.setData({ autoPlay: !this.data.autoPlay });
     if (!this.data.autoPlay) {
@@ -234,9 +318,26 @@ Page({
       this.startAutoPlay();
     }
   },
+  
   goToTask(e) {
-    wx.switchTab({
-      url: '/pages/index/index',
-    });
+    const taskId = e.currentTarget.dataset.id;
+    const taskType = this.data.achievements.find(item => item.id === taskId)?.taskType;
+    
+    switch(taskType) {
+      case 'weight':
+        wx.switchTab({
+          url: '/pages/index/index',
+        });
+        break;
+      case 'diet':
+        wx.navigateTo({
+          url: '/pages/food/food',
+        });
+        break;
+      default:
+        wx.switchTab({
+          url: '/pages/index/index',
+        });
+    }
   }
 })

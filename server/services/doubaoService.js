@@ -3,74 +3,58 @@ const crypto = require('crypto');
 
 class DoubaoService {
   constructor() {
-    if (!process.env.DOUBAO_API_KEY) {
-      throw new Error('缺少DOUBAO_API_KEY环境变量配置');
-    }
-
-    if (!process.env.DOUBAO_ENDPOINT) {
-      throw new Error('缺少DOUBAO_ENDPOINT环境变量配置');
-    }
-
-    this.apiKey = process.env.DOUBAO_API_KEY;
-    this.secretKey = process.env.DOUBAO_SECRET_KEY || '';
-    this.endpoint = process.env.DOUBAO_ENDPOINT;
+    this.apiKey = process.env.DOUBAO_API_KEY || 'your-api-key';
+    this.secretKey = process.env.DOUBAO_SECRET_KEY || 'your-secret-key';
     this.baseURL = 'https://ark.cn-beijing.volces.com/api/v3';
+    this.model = process.env.DOUBAO_MODEL || 'ep-20241210143344-9v8g6';
   }
 
-  async extractExerciseAndFoodInfo(message) {
+  async generateConversationalResponse(message, aiRole = 'professional', userRecords = null) {
+    const rolePrompts = {
+      'professional': '你是一位专业的健康顾问，请以专业、科学的方式回答用户的问题，提供准确的健康建议。',
+      'energetic': '你是一位充满活力的健身教练，请以积极、热情的方式回答用户的问题，鼓励用户坚持运动。',
+      'gentle': '你是一位温柔的养生顾问，请以温和、体贴的方式回答用户的问题，关心用户的身心健康。',
+      'strict': '你是一位严格的健身导师，请以严肃、直接的方式回答用户的问题，要求用户严格执行计划。'
+    };
+
+    const systemPrompt = `${rolePrompts[aiRole] || rolePrompts['professional']}
+
+请以自然对话的方式回应用户，同时自动识别并提取用户提到的运动和饮食信息。
+如果用户提到运动，请提取运动类型、时长（统一转换为分钟）、消耗卡路里等信息。
+如果用户提到饮食，请提取食物名称、重量（克）、卡路里、蛋白质、碳水化合物、脂肪等信息。`;
+
+    const context = userRecords ? `
+用户今日数据：
+- 步数：${userRecords.steps || 0}步
+- 运动时长：${userRecords.duration || 0}分钟
+- 消耗卡路里：${userRecords.calories || 0}卡
+- 体重：${userRecords.weight || 0}公斤` : '';
+
+    const requestBody = {
+      model: this.model,
+      messages: [
+        {
+          role: 'system',
+          content: systemPrompt
+        },
+        {
+          role: 'user',
+          content: `${context}\n\n用户消息：${message}`
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 1000
+    };
+
     try {
-      const prompt = this.buildPrompt(message);
-      const requestBody = {
-        model: this.endpoint,
-        messages: [
-          {
-            role: 'system',
-            content: `你是一个专业的智能健身健康指导助手。你的任务不仅是提取用户的锻炼和饮食信息，还要提供积极的情绪价值和专业的健康指导。
-
-请严格按照以下JSON格式返回：
-{
-  "exercise": {
-    "type": "运动类型",
-    "duration": 分钟数,
-    "calories_burned": 消耗卡路里,
-    "intensity": "低/中/高"
-  },
-  "food": {
-    "name": "食物名称",
-    "weight": 重量(克),
-    "calories": 卡路里,
-    "protein": 蛋白质(克),
-    "carbs": 碳水化合物(克),
-    "fat": 脂肪(克),
-    "meal_time": "早餐/午餐/晚餐/加餐"
-  },
-  "confidence": 0.95,
-  "message": "提取结果的描述"
-}
-
-在提供信息提取结果的同时，请务必包含以下内容：
-1. 对用户的积极鼓励和情绪支持
-2. 根据提取的运动和饮食信息提供专业的健康建议
-3. 个性化的健身指导
-4. 营养搭配建议
-
-如果没有相关信息，对应字段设为null。`
-          },
-          {
-            role: 'user',
-            content: message
-          }
-        ],
-        max_tokens: 800,
-        temperature: 0.7
-      };
       const timestamp = Math.floor(Date.now() / 1000);
       const signature = this.signRequest(timestamp);
+      
       const headers = {
-        'Authorization': `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`,
+        'X-Volc-Authorization': `HMAC-SHA256 Credential=${this.apiKey}, Signature=${signature}`,
         'X-Volc-AccessKey': this.apiKey,
-        'X-Volc-Signature': signature,
         'X-Volc-Timestamp': timestamp,
         'X-Volc-Content-Sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
       };
@@ -86,6 +70,106 @@ class DoubaoService {
         {
           headers,
           timeout: 15000,
+          responseType: 'json',
+          transformRequest: [(data, headers) => {
+            return JSON.stringify(data);
+          }]
+        }
+      );
+
+      const content = response.data.choices[0].message.content;
+      console.log('豆包API响应:', content);
+
+      const extractedInfo = await this.extractExerciseAndFoodInfo(message);
+      
+      return {
+        response: content,
+        role: aiRole,
+        extractedData: extractedInfo
+      };
+    } catch (error) {
+      console.error('豆包API调用失败:', error.response?.data || error.message);
+      if (error.response) {
+        const status = error.response.status;
+        const data = error.response.data;
+
+        if (status === 401) {
+          return {
+            response: '抱歉，AI服务认证失败，请稍后重试',
+            role: aiRole,
+            extractedData: { exercise: null, food: null, confidence: 0.0, message: 'API认证失败' }
+          };
+        } else if (status === 403) {
+          return {
+            response: '抱歉，AI服务访问被拒绝，请稍后重试',
+            role: aiRole,
+            extractedData: { exercise: null, food: null, confidence: 0.0, message: 'API访问被拒绝' }
+          };
+        } else if (status === 429) {
+          return {
+            response: '抱歉，AI服务调用频率过高，请稍后重试',
+            role: aiRole,
+            extractedData: { exercise: null, food: null, confidence: 0.0, message: 'API调用频率超限' }
+          };
+        } else {
+          return {
+            response: '抱歉，AI服务暂时不可用，请稍后重试',
+            role: aiRole,
+            extractedData: { exercise: null, food: null, confidence: 0.0, message: 'API调用失败' }
+          };
+        }
+      } else if (error.request) {
+        return {
+          response: '抱歉，AI服务无响应，请检查网络连接',
+          role: aiRole,
+          extractedData: { exercise: null, food: null, confidence: 0.0, message: 'API服务无响应' }
+        };
+      } else {
+        return {
+          response: '抱歉，AI服务配置错误，请稍后重试',
+          role: aiRole,
+          extractedData: { exercise: null, food: null, confidence: 0.0, message: '请求配置错误' }
+        };
+      }
+    }
+  }
+
+  async extractExerciseAndFoodInfo(message) {
+    try {
+      const timestamp = Math.floor(Date.now() / 1000);
+      const signature = this.signRequest(timestamp);
+      
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.apiKey}`,
+        'X-Volc-Authorization': `HMAC-SHA256 Credential=${this.apiKey}, Signature=${signature}`,
+        'X-Volc-AccessKey': this.apiKey,
+        'X-Volc-Timestamp': timestamp,
+        'X-Volc-Content-Sha256': 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+      };
+
+      const requestBody = {
+        model: this.model,
+        messages: [
+          {
+            role: 'system',
+            content: '请分析以下文本，提取锻炼和饮食信息，并以JSON格式返回。如果包含运动信息，请提取运动类型、时长（分钟）、消耗卡路里、强度。如果包含饮食信息，请提取食物名称、重量（克）、卡路里、蛋白质（克）、碳水化合物（克）、脂肪（克）、用餐时间。如果没有相关信息，请返回null。'
+          },
+          {
+            role: 'user',
+            content: message
+          }
+        ],
+        temperature: 0.3,
+        max_tokens: 500
+      };
+
+      const response = await axios.post(
+        `${this.baseURL}/chat/completions`,
+        requestBody,
+        {
+          headers,
+          timeout: 10000,
           responseType: 'json',
           transformRequest: [(data, headers) => {
             return JSON.stringify(data);
@@ -204,17 +288,22 @@ class DoubaoService {
       if (text.includes(type)) {
         let duration = 30;
         let calories = 200;
-
-        const durationMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
-        if (durationMatch) {
-          duration = parseInt(durationMatch[1]);
+        
+        const hourMatch = text.match(/(\d+)\s*(?:小时|h)/i);
+        if (hourMatch) {
+          duration = parseInt(hourMatch[1]) * 60; 
+        } else {
+          const durationMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
+          if (durationMatch) {
+            duration = parseInt(durationMatch[1]);
+          }
         }
-
+        
         const caloriesMatch = text.match(/(\d+)\s*卡路里/i);
         if (caloriesMatch) {
           calories = parseInt(caloriesMatch[1]);
         }
-
+        
         result.exercise = {
           type: name,
           duration: duration,
@@ -244,11 +333,14 @@ class DoubaoService {
         if (foodName.includes('香蕉')) calories = weight * 0.89;
         if (foodName.includes('米饭')) calories = weight * 1.16;
         if (foodName.includes('鸡胸肉')) calories = weight * 1.65;
+        if (foodName.includes('鸡蛋')) calories = weight * 1.43;
+        if (foodName.includes('牛奶')) calories = weight * 0.54;
+        calories = Math.max(1, Math.round(calories));
 
         result.food = {
           name: foodName.trim(),
           weight: weight,
-          calories: Math.round(calories),
+          calories: calories,
           protein: Math.round(weight * 0.02),
           carbs: Math.round(weight * 0.15),
           fat: Math.round(weight * 0.01),
@@ -257,32 +349,23 @@ class DoubaoService {
         break;
       }
     }
-
     return result;
   }
 
   detectMealTime(text) {
-    const now = new Date();
-    const hour = now.getHours();
-
-    if (text.includes('早餐') || text.includes('早上') || (hour >= 5 && hour < 10)) {
-      return '早餐';
-    } else if (text.includes('午餐') || text.includes('中午') || (hour >= 10 && hour < 15)) {
-      return '午餐';
-    } else if (text.includes('晚餐') || text.includes('晚上') || (hour >= 15 && hour < 22)) {
-      return '晚餐';
-    } else {
-      return hour < 10 ? '早餐' : hour < 15 ? '午餐' : '晚餐';
-    }
+    if (text.includes('早餐') || text.includes('早上')) return '早餐';
+    if (text.includes('午餐') || text.includes('中午')) return '午餐';
+    if (text.includes('晚餐') || text.includes('晚上')) return '晚餐';
+    if (text.includes('夜宵') || text.includes('睡前')) return '夜宵';
+    return '其他';
   }
 
-  async testConnection() {
-    try {
-      const response = await this.extractExerciseAndFoodInfo('测试连接');
-      return { success: true, message: '豆包API连接正常' };
-    } catch (error) {
-      return { success: false, message: error.message };
-    }
+  testConnection() {
+    return {
+      status: 'ok',
+      message: '豆包服务连接正常',
+      timestamp: new Date().toISOString()
+    };
   }
 }
 
