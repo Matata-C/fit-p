@@ -3,8 +3,8 @@ const crypto = require('crypto');
 
 class DoubaoService {
   constructor() {
-    this.apiKey = process.env.DOUBAO_API_KEY || 'your-api-key';
-    this.secretKey = process.env.DOUBAO_SECRET_KEY || 'your-secret-key';
+    this.apiKey = process.env.DOUBAO_API_KEY || 'fa1f920c-a8d1-483e-932f-b9ead6f8492b';
+    this.secretKey = process.env.DOUBAO_SECRET_KEY || 'TW1NeU5ESTJZakl3WkRsaE5EVmhNRGxqTTJZelpqWTNaR015TldOaFpqZw==';
     this.baseURL = 'https://ark.cn-beijing.volces.com/api/v3';
     this.model = process.env.DOUBAO_MODEL || 'ep-20241210143344-9v8g6';
   }
@@ -259,97 +259,112 @@ class DoubaoService {
   }
 
   extractFromText(text) {
-    const result = {
-      exercise: null,
-      food: null,
-      confidence: 0.5,
-      message: '信息提取中...'
-    };
-
-    const exercisePatterns = [
-      /跑了?(\d+(?:\.\d+)?)\s*(?:公里|km|千米)/i,
-      /走了?(\d+(?:\.\d+)?)\s*(?:公里|km|千米)/i,
-      /运动了?(\d+)\s*(?:分钟|min|小时)/i,
-      /锻炼了?(\d+)\s*(?:分钟|min|小时)/i,
-      /游泳了?(\d+)\s*(?:分钟|min|小时)/i,
-      /骑车了?(\d+)\s*(?:分钟|min|小时)/i
-    ];
-
-    const exerciseTypes = {
-      '跑': '跑步',
-      '走': '走路',
-      '游泳': '游泳',
-      '骑车': '骑行',
-      '瑜伽': '瑜伽',
-      '健身': '健身'
-    };
-
-    for (const [type, name] of Object.entries(exerciseTypes)) {
-      if (text.includes(type)) {
-        let duration = 30;
-        let calories = 200;
-        
-        const hourMatch = text.match(/(\d+)\s*(?:小时|h)/i);
-        if (hourMatch) {
-          duration = parseInt(hourMatch[1]) * 60; 
-        } else {
-          const durationMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
-          if (durationMatch) {
-            duration = parseInt(durationMatch[1]);
+      console.log('[DEBUG] 原始输入文本:', text);
+      const result = {
+          exercise: null,
+          food: null,
+          confidence: 0.5,
+          message: '信息提取中...'
+      };
+  
+      for (const [type, name] of Object.entries(exerciseTypes)) {
+          if (text.includes(type)) {
+              console.log('[DEBUG] 检测到运动类型:', type);
+              let duration = 30;
+              let calories = 200;
+  
+              const hourMatch = text.match(/(\d+)\s*(?:小时|h)/i);
+              const minuteMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
+  
+              if (hourMatch) {
+                  duration = parseInt(hourMatch[1]) * 60; 
+              } else if (minuteMatch) {
+                  duration = parseInt(minuteMatch[1]);
+              }
+              
+              const caloriesMatch = text.match(/(\d+)\s*卡路里/i);
+              if (caloriesMatch) {
+                  calories = parseInt(caloriesMatch[1]);
+              }
+              
+              result.exercise = {
+                  type: name,
+                  duration: duration,
+                  calories_burned: calories,
+                  intensity: '中'
+              };
+              break;
           }
-        }
-        
-        const caloriesMatch = text.match(/(\d+)\s*卡路里/i);
-        if (caloriesMatch) {
-          calories = parseInt(caloriesMatch[1]);
-        }
-        
-        result.exercise = {
-          type: name,
-          duration: duration,
-          calories_burned: calories,
-          intensity: '中'
-        };
-        break;
       }
-    }
-
-    const foodPatterns = [
-      /吃了?\s*(.+?)\s*(\d+)?\s*(?:克|g|个|份)/i,
-      /喝了?\s*(.+?)\s*(\d+)?\s*(?:毫升|ml|杯)/i,
-      /早餐吃了?\s*(.+?)(?:\s|$)/i,
-      /午餐吃了?\s*(.+?)(?:\s|$)/i,
-      /晚餐吃了?\s*(.+?)(?:\s|$)/i
-    ];
-
-    for (const pattern of foodPatterns) {
-      const match = text.match(pattern);
-      if (match) {
-        let foodName = match[1];
-        let weight = match[2] ? parseInt(match[2]) : 100;
-
-        let calories = weight * 0.5;
-        if (foodName.includes('苹果')) calories = weight * 0.52;
-        if (foodName.includes('香蕉')) calories = weight * 0.89;
-        if (foodName.includes('米饭')) calories = weight * 1.16;
-        if (foodName.includes('鸡胸肉')) calories = weight * 1.65;
-        if (foodName.includes('鸡蛋')) calories = weight * 1.43;
-        if (foodName.includes('牛奶')) calories = weight * 0.54;
-        calories = Math.max(1, Math.round(calories));
-
-        result.food = {
-          name: foodName.trim(),
-          weight: weight,
-          calories: calories,
-          protein: Math.round(weight * 0.02),
-          carbs: Math.round(weight * 0.15),
-          fat: Math.round(weight * 0.01),
-          meal_time: this.detectMealTime(text)
-        };
-        break;
+  
+      const foodPatterns = [
+          /吃了?\s*(.+?)\s*(\d+)?\s*(?:克|g|个|份)/i,
+          /喝了?\s*(.+?)\s*(\d+)?\s*(?:毫升|ml|杯)/i,
+          /早餐吃了?\s*(.+?)(?:\s|$)/i,
+          /午餐吃了?\s*(.+?)(?:\s|$)/i,
+          /晚餐吃了?\s*(.+?)(?:\s|$)/i
+      ];
+  
+      for (const pattern of foodPatterns) {
+          const match = text.match(pattern);
+          if (match) {
+              console.log('[DEBUG] 食物匹配结果:', {
+                  '模式': pattern,
+                  '匹配结果': match,
+                  '食物名称': match[1],
+                  '重量': match[2] ? parseInt(match[2]) : 100
+              });
+              let foodName = match[1];
+              let weight = match[2] ? parseInt(match[2]) : 100;
+  
+              let calories = 0;
+              if (foodName.includes('苹果')) calories = Math.round(weight * 0.52);
+              else if (foodName.includes('香蕉')) calories = Math.round(weight * 0.89);
+              else if (foodName.includes('米饭')) calories = Math.round(weight * 1.16);
+              else if (foodName.includes('鸡胸肉')) calories = Math.round(weight * 1.65);
+              else if (foodName.includes('鸡蛋')) calories = Math.round(weight * 1.43);
+              else if (foodName.includes('牛奶')) calories = Math.round(weight * 0.54);
+              else if (foodName.includes('蔬菜')) calories = Math.round(weight * 0.25);
+              else if (foodName.includes('肉')) calories = Math.round(weight * 2.5);
+              else calories = Math.round(weight * 0.7); 
+              
+              calories = Math.max(1, calories);
+  
+              let protein = 0;
+              let carbs = 0;
+              let fat = 0;
+              
+              if (foodName.includes('苹果')) {
+                  protein = Math.round(weight * 0.002);
+                  carbs = Math.round(weight * 0.14);
+                  fat = Math.round(weight * 0.002);
+              } else if (foodName.includes('鸡胸肉')) {
+                  protein = Math.round(weight * 0.2);
+                  carbs = 0;
+                  fat = Math.round(weight * 0.05);
+              } else if (foodName.includes('鸡蛋')) {
+                  protein = Math.round(weight * 0.13);
+                  carbs = Math.round(weight * 0.01);
+                  fat = Math.round(weight * 0.09);
+              } else {
+                  protein = Math.round(weight * 0.03);
+                  carbs = Math.round(weight * 0.15);
+                  fat = Math.round(weight * 0.03);
+              }
+  
+              result.food = {
+                  name: foodName.trim(),
+                  weight: weight,
+                  calories: calories,
+                  protein: protein,
+                  carbs: carbs,
+                  fat: fat,
+                  meal_time: this.detectMealTime(text)
+              };
+              break;
+          }
       }
-    }
-    return result;
+      return result;
   }
 
   detectMealTime(text) {

@@ -20,6 +20,7 @@ router.post('/process', async (req, res) => {
     console.log(`处理用户 ${userId} 的消息: "${message}"，使用 ${selectedRole} 风格`);
 
     const conversationalResult = await doubaoService.generateConversationalResponse(message, selectedRole, userRecords);
+    console.log('[DEBUG] 对话API返回结果:', JSON.stringify(conversationalResult, null, 2));
     
     const extractedInfo = conversationalResult.extractedData || {
       exercise: null,
@@ -27,6 +28,7 @@ router.post('/process', async (req, res) => {
       confidence: 0.0,
       message: '未检测到有效的运动或饮食信息'
     };
+    console.log('[DEBUG] 提取的信息:', JSON.stringify(extractedInfo, null, 2));
 
     const result = {
       success: true,
@@ -77,27 +79,41 @@ router.post('/process', async (req, res) => {
 });
 
 async function saveExerciseRecord(userId, exerciseData) {
+  console.log('[DEBUG] 保存运动记录 - 原始数据:', exerciseData);
   if (!exerciseData.type || exerciseData.duration == null) {
     throw new Error('运动记录缺少必要字段');
   }
 
+  let duration = exerciseData.duration;
+  if (duration > 120) { 
+    if (duration % 60 === 0 && duration / 60 <= 24) {
+      duration = duration / 60;
+      console.warn(`修正运动时长单位: ${exerciseData.duration}小时 -> ${duration}分钟`);
+    } else {
+      duration = 30;
+      console.warn(`修正异常运动时长: ${exerciseData.duration} -> 30分钟`);
+    }
+  }
+
   const caloriesBurned = exerciseData.calories_burned ?? 0;
-  const intensity = exerciseData.intensity ?? null;
+  const intensity = exerciseData.intensity ?? '中';
 
   const [result] = await pool.execute(
     `INSERT INTO exercise_records (user_id, exercise_type, duration, calories_burned, intensity)
      VALUES (?, ?, ?, ?, ?)`,
-    [userId, exerciseData.type, exerciseData.duration, caloriesBurned, intensity]
+    [userId, exerciseData.type, duration, caloriesBurned, intensity]
   );
 
   return {
     id: result.insertId,
     ...exerciseData,
+    duration: duration, 
     exercise_date: new Date().toISOString()
   };
 }
 
 async function saveFoodRecord(userId, foodData) {
+  console.log('[DEBUG] 保存饮食记录 - 原始数据:', foodData);
   if (!foodData || (!foodData.name && foodData.weight == null)) {
     return null;
   }
@@ -108,7 +124,7 @@ async function saveFoodRecord(userId, foodData) {
     [
       userId,
       foodData.name || null,
-      foodData.weight != null ? foodData.weight : 100, // 默认100克避免null错误
+      foodData.weight != null ? foodData.weight : 100,
       foodData.calories ?? null,
       foodData.protein ?? null,
       foodData.carbs ?? null,
@@ -200,7 +216,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
         } else if (aiRole === 'energetic') {
           advice.push(`您今天运动了${duration}分钟，再运动${60 - duration}分钟就能达到60分钟目标啦，相信您一定可以的！`);
         } else if (aiRole === 'gentle') {
-          advice.push(`您今天运动了${duration}分钟，如果能再运动${60 - duration}分钟就更好了，不过也不要太勉强自己哦。`);
+          advice.push(`您今天运动了${duration}分钟，如果能再运动${60 - duration}分钟就更好了，不过也不要太强迫自己哦。`);
         } else if (aiRole === 'strict') {
           advice.push(`您今日运动时长仅${duration}分钟，远远未达到要求。必须再运动${60 - duration}分钟，这是最低标准。`);
         } else {
@@ -228,7 +244,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
         } else if (aiRole === 'energetic') {
           advice.push(`您今天消耗了${calories}卡路里，再消耗${400 - calories}卡路里就能达到400卡路里目标啦，相信您一定可以的！`);
         } else if (aiRole === 'gentle') {
-          advice.push(`您今天消耗了${calories}卡路里，如果能再消耗${400 - calories}卡路里就更好了，不过也不要太勉强自己哦。`);
+          advice.push(`您今天消耗了${calories}卡路里，如果能再消耗${400 - calories}卡路里就更好了，不过也不要太强迫自己哦。`);
         } else if (aiRole === 'strict') {
           advice.push(`您今日消耗仅${calories}卡路里，远远未达到要求。必须再消耗${400 - calories}卡路里，这是最低标准。`);
         } else {
@@ -273,7 +289,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
       } else if (aiRole === 'strict') {
         advice.push(`您今日进行了${duration ?? ''}分钟的${type}运动，这是基本要求。`);
         if (calories_burned) {
-          advice.push(`本次运动消耗${calories_burned}卡路里，效率一般，需进一步提高强度。`);
+          advice.push(`本次运动消耗${calories_burned}卡路里，效率一般，需进一步增加强度。`);
         }
       } else {
         advice.push(`您今天进行了${duration ?? ''}分钟的${type}运动，真是非常棒的选择！`);
@@ -312,7 +328,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
         } else if (aiRole === 'energetic') {
           advice.push('瑜伽能让身体更柔软，心情会更放松！搭配有氧运动效果会更好哦！');
         } else if (aiRole === 'gentle') {
-          advice.push('瑜伽是很温和的运动，有助于放松身心。您可以每天做一点，但不要勉强自己哦。');
+          advice.push('瑜伽是很温和的运动，有助于放松身心。您可以每天做一点，但不要强迫自己哦。');
         } else if (aiRole === 'strict') {
           advice.push('瑜伽作为辅助运动尚可，但必须搭配高强度有氧运动才能达到减脂目的。');
         } else {
@@ -336,7 +352,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
         } else if (aiRole === 'energetic') {
           advice.push('任何形式的运动都是对健康的投资，您做得太棒啦！继续保持哦！');
         } else if (aiRole === 'gentle') {
-          advice.push('您选择了运动，这很好呢。任何运动都对身体有帮助，但不要太过勉强自己哦。');
+          advice.push('您选择了运动，这很好呢。任何运动都对身体有帮助，但不要太过强迫自己哦。');
         } else if (aiRole === 'strict') {
           advice.push('运动是基本要求，但要达到理想效果，必须增加运动强度和时间。');
         } else {
@@ -446,7 +462,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
       advice.push('您在运动和饮食方面都做得不错，继续保持这种科学的生活方式。');
     } else if (aiRole === 'energetic') {
       advice.push('运动后适当补充蛋白质和碳水化合物有助于恢复，您真是太棒啦！');
-      advice.push('您在运动和饮食方面都做得超赞，继续保持这种活力四射的生活方式！');
+      advice.push('您在运动和饮食方面都做得超赞，继续保持这种活力四射Styles的方式！');
     } else if (aiRole === 'gentle') {
       advice.push('运动后适当补充蛋白质和碳水化合物有助于恢复，您做得很好呢。');
       advice.push('您在运动和饮食方面都做得不错，继续保持这种健康的生活方式就好啦。');
@@ -501,7 +517,7 @@ function generatePersonalizedHealthAdvice(extractedInfo, userRecords, aiRole) {
     } else if (aiRole === 'strict') {
       advice.push('健康需要严格的自律，每一个细节都不能忽视。必须制定并严格执行完整的健康计划。');
     } else {
-      advice.push('健康是一个长期的过程，每一个小的改变都是进步。让我们一起努力！');
+      advice.push('健康是一个长期的过程，每一个小的改变都是进步。我们一起努力！');
     }
   }
 
