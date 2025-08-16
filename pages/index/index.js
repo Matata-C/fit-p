@@ -3,8 +3,7 @@ const weightUtil = require('../../utils/weightUtil');
 const dateUtil = require('../../utils/dateUtil');
 const tabBarManager = require('../../utils/tabBarManager');
 const dataSync = require('../../utils/dataSync');
-const app = getApp()
-
+const app = getApp();
 
 // 自定义对象展开函数以兼容不支持spread操作符的环境
 const spread = function (obj1, obj2) {
@@ -122,6 +121,9 @@ Page({
                 console.log('今日步数：', res.result.step)
                 //存储step
                 wx.setStorageSync('stepCount', res.result.step)
+                
+                // 设置数据更新标志，通知其他页面刷新
+                wx.setStorageSync('dataUpdated', new Date().getTime());
               },
               fail: err => {
                 console.error('云函数调用失败：', err)
@@ -178,10 +180,10 @@ Page({
 
 
   onLoad: function () {
-    this.getSteps();
+    this.loadTodaySteps();
     //刷新步数
     this.data.timer = setInterval(() => {
-      this.getSteps();
+      this.loadTodaySteps();
     }, 30000);
 
     console.log('首页加载');
@@ -281,11 +283,15 @@ Page({
           console.error('刷新数据失败:', e);
         }
       }
+      
+      // 每次显示页面时都刷新步数数据，确保与分析页面同步
+      this.loadTodaySteps();
     } catch (e) {
       console.error('检查数据更新失败:', e);
       // 出错时仍然执行常规刷新
       try {
         this.refreshData();
+        this.loadTodaySteps();
       } catch (e) {
         console.error('刷新数据失败:', e);
       }
@@ -1406,15 +1412,35 @@ Page({
 
   loadTodaySteps: function () {
     try {
-      const stepCount = wx.getStorageSync('stepCount') || 0;
-
+      // 使用统一的数据同步工具获取今日步数，确保与分析页面数据一致
+      const steps = dataSync.getTodaySteps();
+      
       this.setData({
-        stepCount: stepCount
+        stepCount: steps
       });
 
-      console.log('今日步数加载成功:', stepCount);
+      console.log('今日步数加载成功:', steps);
+      
+      // 同步更新本地存储，确保数据一致性
+      wx.setStorageSync('stepCount', steps);
     } catch (e) {
       console.error('加载今日步数失败:', e);
+    }
+  },
+  
+  // 调试：查看数据同步状态
+  showDataSyncStatus: function () {
+    try {
+      const status = dataSync.getDataSyncStatus();
+      console.log('数据同步状态:', status);
+      
+      wx.showModal({
+        title: '数据同步状态',
+        content: `日期: ${status.date}\n微信运动: ${status.weRunSteps}步\n运动记录: ${status.exerciseSteps}步\n本地存储: ${status.localSteps}步\n最终步数: ${status.finalSteps}步\n最后更新: ${status.lastUpdate}`,
+        showCancel: false
+      });
+    } catch (e) {
+      console.error('获取数据同步状态失败:', e);
     }
   }
 })
