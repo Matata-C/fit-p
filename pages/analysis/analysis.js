@@ -143,6 +143,9 @@ Page({
         
         return; 
       }
+      
+      // 每次显示页面时都检查步数数据同步
+      this.checkStepsSynchronization();
     } catch (e) {
       console.error('检查数据更新失败:', e);
     }
@@ -518,6 +521,18 @@ Page({
     // 使用统一的数据同步工具获取今日数据
     const todayData = dataSync.getTodayDataWithProgress();
     
+    // 确保步数数据与首页同步
+    const currentSteps = dataSync.getTodaySteps();
+    if (currentSteps !== todayData.steps) {
+      console.log('步数数据不一致，同步更新:', {
+        original: todayData.steps,
+        current: currentSteps
+      });
+      todayData.steps = currentSteps;
+      // 重新计算步数百分比
+      todayData.stepsPercent = dataSync.calculateProgress(currentSteps, 10000);
+    }
+    
     this.setData({
       coreData: {
         date: todayData.date,
@@ -601,6 +616,29 @@ Page({
     this.setData({
       pieData: pieData
     });
+  },
+  
+  // 检查步数数据同步
+  checkStepsSynchronization() {
+    try {
+      // 获取当前页面显示的步数
+      const currentDisplaySteps = this.data.coreData?.steps || 0;
+      // 获取最新的步数数据
+      const latestSteps = dataSync.getTodaySteps();
+      
+      console.log('步数同步检查:', {
+        currentDisplay: currentDisplaySteps,
+        latest: latestSteps
+      });
+      
+      // 如果数据不一致，更新显示
+      if (currentDisplaySteps !== latestSteps) {
+        console.log('检测到步数数据不一致，自动同步');
+        this.updateCoreData();
+      }
+    } catch (e) {
+      console.error('检查步数同步失败:', e);
+    }
   },
 
   // 添加测试运动数据

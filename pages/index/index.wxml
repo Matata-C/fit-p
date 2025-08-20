@@ -31,17 +31,22 @@
   </view>
 
   <!-- 步数卡片 -->
-  <view class="step-card" bindtap="navigateToStepDetail" bindlongpress="refreshStepData">
+  <view class="step-card" bindtap="navigateToStepDetail" bindlongpress="showDataSyncStatus">
     <view class="step-info">
       <text class="step-date">{{todayDate}}</text>
       <text class="step-label">今日步数</text>
       
      
 
-      <text class="step-number {{todaySteps === '当前用户未授权' ? 'unauthorized' : ''}}">{{stepCount}}</text>
+      <text class="step-number">{{stepCount}}</text>
       <text class="step-slogan">——生命在于运动——</text>
     </view>
     <image class="step-icon" src="/images/跑步(1).png"></image> <!-- 需替换实际跑步图标路径 -->
+    </view>
+    
+    <!-- 调试按钮（长按步数卡片显示） -->
+    <view class="debug-button" wx:if="{{showDebug}}" bindtap="showDataSyncStatus">
+      <text class="debug-text">🔍</text>
     </view>                                                                                             
                                                                                                                                          
 
@@ -140,7 +145,7 @@
     <!-- 调试信息（开发时使用） -->
     <view class="debug-info card" wx:if="{{showDebug}}">
       <view class="card-title">调试信息</view>
-      <view class="debug-item">步数: {{todaySteps}}</view>
+      <view class="debug-item">步数: {{stepCount}}</view>
       <view class="debug-item">卡路里: {{todayCalories}}</view>
       <view class="debug-item">时长: {{todayDuration}}分钟</view>
       <view class="debug-item">体重: {{todayWeight}}公斤</view>

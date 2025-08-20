@@ -14,65 +14,87 @@ function getCurrentDateString() {
 }
 
 /**
+ * 获取今日步数数据（统一入口，确保数据一致性）
+ * @returns {number} 今日步数
+ */
+function getTodaySteps() {
+  const today = getCurrentDateString();
+  let steps = 0;
+  
+  // 优先从微信运动获取步数
+  try {
+    const weRunData = wx.getStorageSync('weRunData') || {};
+    if (weRunData[today] && weRunData[today].stepInfoList && weRunData[today].stepInfoList.length > 0) {
+      steps = weRunData[today].stepInfoList[0].step || 0;
+      console.log('从微信运动获取步数:', steps);
+    }
+  } catch (e) {
+    console.log('获取微信运动数据失败:', e);
+  }
+  
+  // 如果微信运动数据为空，则从运动记录获取
+  if (steps === 0) {
+    try {
+      let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+      let todayRecords = exerciseRecords[today] || [];
+      todayRecords.forEach(record => {
+        steps += record.steps ? Number(record.steps) : 0;
+      });
+      console.log('从运动记录获取步数:', steps);
+    } catch (e) {
+      console.log('获取运动记录数据失败:', e);
+    }
+  }
+  
+  // 如果都没有数据，尝试从本地存储获取
+  if (steps === 0) {
+    try {
+      const localSteps = wx.getStorageSync('stepCount');
+      if (localSteps && localSteps > 0) {
+        steps = Number(localSteps);
+        console.log('从本地存储获取步数:', steps);
+      }
+    } catch (e) {
+      console.log('获取本地存储步数失败:', e);
+    }
+  }
+  
+  console.log('最终获取的今日步数:', steps);
+  return steps;
+}
+
+/**
  * 获取今日运动数据（步数、时长、卡路里）
  * @returns {object} {steps, duration, calories}
  */
 function getTodayExerciseData() {
   const today = getCurrentDateString();
-  let steps = 0;
+  const steps = getTodaySteps(); // 使用统一的步数获取函数
   let duration = 0;
   let calories = 0;
   
-  // 尝试从微信运动获取步数
+  // 从运动记录获取时长和卡路里
   try {
-    const weRunData = wx.getStorageSync('weRunData') || {};
-    if (weRunData[today] && weRunData[today].stepInfoList && weRunData[today].stepInfoList.length > 0) {
-        
-      steps = weRunData[today].stepInfoList[0].step || 0;
-    }
-   
+    let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+    let todayRecords = exerciseRecords[today] || [];
+    todayRecords.forEach(record => {
+      // 处理时长：现在duration字段已经是分钟数
+      let recordDuration = 0;
+      if (record.minutes) {
+        recordDuration = Number(record.minutes);
+      } else if (record.duration) {
+        recordDuration = Number(record.duration);
+      }
+      duration += recordDuration;
+      calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
+    });
   } catch (e) {
-    console.log('获取微信运动数据失败，使用运动记录数据');
+    console.log('获取运动记录时长和卡路里失败:', e);
   }
   
-  // 如果微信运动数据为空，则从运动记录获取
-  if (steps === 0) {
-      
-    let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
-    let todayRecords = exerciseRecords[today] || [];
-    todayRecords.forEach(record => {
-      steps += record.steps ? Number(record.steps) : 0;
-      // 处理时长：现在duration字段已经是分钟数
-      let recordDuration = 0;
-      if (record.minutes) {
-        recordDuration = Number(record.minutes);
-      } else if (record.duration) {
-        recordDuration = Number(record.duration);
-      }
-      duration += recordDuration;
-      calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
-    });
-  } else {
-      console.log('6666')
-    // 如果从微信运动获取了步数，仍然从运动记录获取时长和卡路里
-    let exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
-    let todayRecords = exerciseRecords[today] || [];
-    todayRecords.forEach(record => {
-      // 处理时长：现在duration字段已经是分钟数
-      let recordDuration = 0;
-      if (record.minutes) {
-        recordDuration = Number(record.minutes);
-      } else if (record.duration) {
-        recordDuration = Number(record.duration);
-      }
-      duration += recordDuration;
-      calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
-    });
-    
-    // 如果运动记录中没有卡路里数据，根据步数估算
-    if (calories === 0 && steps > 0) {
-      calories = Math.round(steps * 0.04); // 每步约消耗0.04卡路里
-    }
+  // 如果运动记录中没有卡路里数据，根据步数估算
+  if (calories === 0 && steps > 0) {
+    calories = Math.round(steps * 0.04); // 每步约消耗0.04卡路里
   }
   
   return {
@@ -368,8 +390,39 @@ function getTodayDataWithProgress() {
   };
 }
 
+/**
+ * 获取数据同步状态（用于调试）
+ * @returns {object} 数据同步状态信息
+ */
+function getDataSyncStatus() {
+  const today = getCurrentDateString();
+  const weRunData = wx.getStorageSync('weRunData') || {};
+  const exerciseRecords = wx.getStorageSync('exerciseRecords') || {};
+  const localSteps = wx.getStorageSync('stepCount') || 0;
+  
+  const weRunSteps = weRunData[today]?.stepInfoList?.[0]?.step || 0;
+  const exerciseSteps = (exerciseRecords[today] || []).reduce((sum, record) => {
+    return sum + (record.steps ? Number(record.steps) : 0);
+  }, 0);
+  
+  return {
+    date: today,
+    weRunSteps,
+    exerciseSteps,
+    localSteps,
+    finalSteps: getTodaySteps(),
+    dataSources: {
+      weRun: weRunData[today] ? 'available' : 'unavailable',
+      exercise: exerciseRecords[today] ? 'available' : 'unavailable',
+      local: localSteps > 0 ? 'available' : 'unavailable'
+    },
+    lastUpdate: wx.getStorageSync('dataUpdated') || 'never'
+  };
+}
+
 module.exports = {
   getCurrentDateString,
+  getTodaySteps,
   getTodayExerciseData,
   getTodayWeight,
   getTodayCompleteData,
@@ -378,5 +431,6 @@ module.exports = {
   categorizeExercise,
   testExerciseCategorization,
   testPercentageCalculation,
-  calculateProgress
+  calculateProgress,
+  getDataSyncStatus
 }; 

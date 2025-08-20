@@ -62,6 +62,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 .step-info {
   display: flex;
@@ -98,6 +99,26 @@
 .step-icon {
   width: 90px;
   height: 90px;
+}
+
+/* 调试按钮样式 */
+.debug-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 107, 145, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.debug-text {
+  font-size: 16px;
+  color: white;
 }
 
 /* 饮食建议区域样式 */
