@@ -59,6 +59,35 @@ Page({
 
   },
 
+  // 添加步数
+  addSteps() {
+    const newStepCount = this.data.stepCount + 1000;
+    this.setData({
+      stepCount: newStepCount
+    });
+    
+    // 保存步数到本地存储
+    wx.setStorageSync('stepCount', newStepCount);
+    
+    // 更新相关数据
+    this.calcStepRemaining();
+    this.updateProgressAndDraw();
+    this.calculateConversions(newStepCount);
+    this.setData({
+        todayPeriods: [
+            { label: '早', steps: (newStepCount*0.2).toFixed(0), percent: 20 },
+            { label: '中', steps: (newStepCount*0.35).toFixed(0), percent: 35 },
+            { label: '晚', steps: (newStepCount*0.45).toFixed(0) , percent: 45 }
+          ]
+    });
+    
+    // 显示提示
+    wx.showToast({
+      title: `步数已更新: ${newStepCount}`,
+      icon: 'success'
+    });
+  },
+
   
   // 计算步数转化的数据
   calculateConversions(stepCount) {

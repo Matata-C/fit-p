@@ -12,7 +12,7 @@
       <view class="food-item" wx:for="{{foodRecords}}" wx:key="index">
         <view class="food-info">
           <view class="food-name">{{item.name}}</view>
-          <view class="food-time">{{item.time}} | 数量: {{item.quantity}}</view>
+          <view class="food-time">{{item.time}} | 数量: {{item.quantity}}{{item.unit}}</view>
         </view>
         <view class="calories-info">
           <view class="food-calories">{{item.calories}} 千卡</view>
@@ -22,7 +22,7 @@
       
       <view class="total-section">
         <view class="total-label">今日总摄入</view>
-        <view class="total-value">{{totalCalories}} 千卡</view>
+        <view class="total-value">{{todayTotalCalories}} 千卡</view>
       </view>
     </block>
     <view class="no-records" wx:else>
@@ -75,4 +75,4 @@
       <button class="save-button" bindtap="saveFood">保存</button>
     </view>
   </view>
-</view> 
+</view>

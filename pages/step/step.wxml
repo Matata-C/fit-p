@@ -70,6 +70,7 @@
   
   <!-- 底部功能入口 -->
   <view class="bottom-section">
+    <button bindtap="addSteps">增加步数(测试用)</button>
     <view class="bottom-menu">
       <navigator url="/pages/achievement/achievement" class="menu-item" open-type="switchTab">
         <icon type="friend" size="24" color="#7f8c8d"></icon>

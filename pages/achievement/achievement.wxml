@@ -1,5 +1,8 @@
 <view class="container">
-  <text class="section-title">我的成就</text>
+  <view class="section-header">
+    <text class="section-title">我的成就</text>
+    <button class="more-btn" bindtap="navigateToMoreAchievements">更多</button>
+  </view>
   <view class="total-points">总成就点：{{totalPoints}}</view>
   <view class="achievement-list">
     <block wx:for="{{achievements}}" wx:key="id">
@@ -39,7 +42,6 @@
           </text>
         </view>
         <text class="user">{{item.name}}</text>
-        <text class="score">成就点：{{item.score}}</text>
       </view>
     </block>
   </view>

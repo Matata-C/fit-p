@@ -12,7 +12,7 @@
       <view class="exercise-item" wx:for="{{exerciseRecords}}" wx:key="index">
         <view class="exercise-info">
           <view class="exercise-name">{{item.name}}</view>
-          <view class="exercise-time">{{item.time}} <block wx:if="{{item.duration || item.durationText}}">| 时长: {{formatDuration(item.duration) || item.durationText || item.duration + '小时'}}</block></view>
+          <view class="exercise-time">{{item.time}} <block wx:if="{{item.duration || item.durationText}}">| 时长: {{formatDuration(item.duration) || item.durationText || item.duration + '分钟'}}</block></view>
         </view>
         <view class="calories-info">
           <view class="exercise-calories">{{item.caloriesBurned}} 千卡</view>
@@ -50,8 +50,8 @@
     </view>
     
     <view class="input-group">
-      <view class="input-label">持续时间（小时）</view>
-      <input class="input-field" type="digit" placeholder="输入持续时间（小时）" value="{{duration}}" bindinput="onDurationInput" />
+      <view class="input-label">持续时间（分钟）</view>
+      <input class="input-field" type="digit" placeholder="输入持续时间（分钟）" value="{{duration}}" bindinput="onDurationInput" />
     </view>
     
     <view class="input-group">
@@ -64,4 +64,4 @@
       <button class="save-button" bindtap="saveExercise">保存</button>
     </view>
   </view>
-</view> 
+</view>

@@ -244,11 +244,10 @@ Page({
             this.saveExerciseDataToMain(data.exercise);
           }
           if (data.food && data.food.name) {
-            if (data.food.quantity && data.food.unit) {
-              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n量词: ${data.food.quantity}${data.food.unit}`;
-            } else {
-              aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}`;
-            }
+            // 确保总是显示数量和单位
+            const quantity = data.food.quantity || 1;
+            const unit = data.food.unit || '个';
+            aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n量词: ${quantity}${unit}`;
 
             if (data.food.meal_time) {
               aiResponse += `\n用餐时间: ${data.food.meal_time}`;
@@ -323,9 +322,11 @@ Page({
       }
 
       exerciseRecords[today].push({
+        name: exerciseData.type,
         type: exerciseData.type,
         duration: exerciseData.duration,
-        calories: exerciseData.calories_burned || 0,
+        minutes: exerciseData.duration,
+        caloriesBurned: exerciseData.calories_burned || 0,
         date: new Date().toISOString()
       });
 
@@ -345,10 +346,17 @@ Page({
         foodRecords[today] = [];
       }
 
+      // 确保重量和卡路里有值
+      const weight = foodData.weight || foodData.quantity || 100;
+      // 确保卡路里不为0，最低为1
+      const calories = Math.max(1, foodData.calories || 0);
+      const unit = foodData.unit || '克';
+
       foodRecords[today].push({
         name: foodData.name,
-        weight: foodData.weight || 100,
-        calories: foodData.calories || 0,
+        weight: weight,
+        unit: unit,
+        calories: calories,
         meal_time: foodData.meal_time || '未指定',
         date: new Date().toISOString()
       });

@@ -368,13 +368,16 @@ Page({
   },
 
   loadConsumptionData: function () {
+    console.log('=== loadConsumptionData 开始执行 ===');
     try {
       // 获取当前日期
       var today = this.getCurrentDateString();
+      console.log('当前日期:', today);
 
       // 获取BMR和目标消耗
       var bmr = wx.getStorageSync('calculatedBMR') || 0;
       var dailyTargetConsumption = wx.getStorageSync('dailyTargetConsumption') || 0;
+      console.log('BMR:', bmr, '目标消耗:', dailyTargetConsumption);
 
       // 从存储中获取消费记录
       var consumptionRecords = wx.getStorageSync('consumptionRecords') || {};
@@ -383,6 +386,7 @@ Page({
         target: 0,
         actual: 0
       };
+      console.log('今日消费记录:', todayRecord);
 
       // 检查并更新消耗记录
       if (bmr > 0 && (!todayRecord.theoretical || todayRecord.theoretical === 0)) {
@@ -391,12 +395,21 @@ Page({
         var todayExercises = exerciseRecords[today] || [];
         var exerciseCalories = 0;
 
+        console.log('今日运动记录数量:', todayExercises.length);
+        console.log('运动记录详情:', todayExercises);
         for (var i = 0; i < todayExercises.length; i++) {
-          exerciseCalories += todayExercises[i].caloriesBurned || 0;
+          var calories = parseFloat(todayExercises[i].caloriesBurned) || 0;
+          if (isNaN(calories)) {
+            calories = 0;
+          }
+          console.log(`第${i+1}条运动记录: ${todayExercises[i].name}, 卡路里: ${calories}`);
+          exerciseCalories += calories;
         }
+        console.log('运动消耗总和:', exerciseCalories);
 
         // 更新理论消耗
         todayRecord.theoretical = bmr + exerciseCalories;
+        console.log('理论消耗计算:', bmr, '+', exerciseCalories, '=', todayRecord.theoretical);
       }
 
       // 检查并更新目标消耗
@@ -412,10 +425,12 @@ Page({
       let theoretical = parseFloat(todayRecord.theoretical) || 0;
       let target = parseFloat(todayRecord.target) || 1; // 默认最小为1，避免除以零
       let actual = parseFloat(todayRecord.actual) || 0;
+      console.log('数值有效性检查 - 理论消耗:', theoretical, '目标消耗:', target, '实际消耗:', actual);
 
       // 计算比例
       let theoreticalPercentage = target > 0 ? (theoretical / target * 100) : 0;
       theoreticalPercentage = Math.min(100, theoreticalPercentage); // 限制最大为100%
+      console.log('比例计算:', theoretical, '/', target, '* 100 =', theoreticalPercentage);
 
       // 设置数据
       this.setData({
@@ -426,8 +441,10 @@ Page({
       });
 
       console.log('理论消耗:', theoretical, '目标消耗:', target, '比例:', theoreticalPercentage);
+      console.log('=== loadConsumptionData 执行完成 ===');
     } catch (e) {
       console.error('加载消耗数据失败:', e);
+      console.log('=== loadConsumptionData 执行出错 ===');
     }
   },
 

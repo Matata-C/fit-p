@@ -8,6 +8,7 @@
     "pages/profile/profile",
     "pages/weightRecord/weightRecord",
     "pages/achievement/achievement",
+    "pages/achievement/more-achievements",
     "pages/userInfo/userInfo",
     "pages/calendar/calendar",
     "pages/about-us/about-us",

@@ -126,7 +126,7 @@ Page({
   tuichu: function () {
     wx.showModal({
       title: '确认退出',
-      content: '确定要退出登录吗？',
+      content: '确定要退出登录吗？退出后总成就点将被清零。',
       success: (res) => {
         if (res.confirm) {
           // 1. 清空页面数据
@@ -141,12 +141,20 @@ Page({
           // 2. 清除本地缓存
           wx.removeStorageSync('userInfo');
           wx.removeStorageSync('isLoggedIn');
+          // 清除总成就点数缓存
+          wx.removeStorageSync('totalAchievementPoints');
+          // 清除日成就相关缓存
+          wx.removeStorageSync('dailyAchievementResetDate');
 
-          // 3. 清除全局数据（如果有的话）
+          // 3. 清除全局数据
           const app = getApp();
           if (app.globalData) {
             app.globalData.userInfo = null;
             app.globalData.isLoggedIn = false;
+            // 重置全局成就数据
+            app.globalData.totalAchievementPoints = 0;
+            app.globalData.achievementPointsUpdated = false;
+            app.globalData.newAchievementPoints = 0;
           }
 
           wx.showToast({

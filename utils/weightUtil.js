@@ -63,6 +63,10 @@ const saveWeightRecord = (weight, date, time) => {
 const getWeightRecords = (days = null) => {
   try {
     let records = wx.getStorageSync('weightRecords') || [];
+    // 确保records是数组
+    if (!Array.isArray(records)) {
+      records = [];
+    }
     records = records.sort((a, b) => new Date(b.date) - new Date(a.date));
     
     if (days) {
@@ -260,4 +264,4 @@ module.exports = {
   estimateDaysToGoal,
   calculateTodayActualLoss,
   calculateConsumptionProgress
-}; 
+};

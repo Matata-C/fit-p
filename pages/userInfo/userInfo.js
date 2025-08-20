@@ -13,13 +13,13 @@ Page({
     isEditing: false, // 新增：编辑状态
     hasChanges: false // 新增：检测是否有数据变更
   },
-  
-  onLoad: function(options) {
+
+  onLoad: function (options) {
     this.loadUserInfo();
   },
-  
+
   // 新增：加载用户信息
-  loadUserInfo: function() {
+  loadUserInfo: function () {
     try {
       const userInfo = wx.getStorageSync('userInfo');
       if (userInfo) {
@@ -38,44 +38,44 @@ Page({
       console.error('加载用户信息失败：', e);
     }
   },
-  
+
   // 新增：开始编辑
-  onStartEdit: function() {
-    this.setData({ 
+  onStartEdit: function () {
+    this.setData({
       isEditing: true,
-      hasChanges: false 
+      hasChanges: false
     });
   },
-  
+
   // 新增：取消编辑
-  onCancelEdit: function() {
+  onCancelEdit: function () {
     this.setData({ isEditing: false });
     this.loadUserInfo(); // 重新加载原始数据
   },
-  
+
   // 新增：保存编辑
-  onSaveEdit: async function() {
+  onSaveEdit: async function () {
     const { avatarUrl, nickName, gender, signature, age, region, userInfo } = this.data;
-    
+
     if (!avatarUrl || !nickName) {
       wx.showToast({ title: '请完善头像和昵称', icon: 'error' });
       return;
     }
-    
+
     // 验证昵称长度
     if (nickName.length > 20) {
       wx.showToast({ title: '昵称不能超过20字', icon: 'error' });
       return;
     }
-    
+
     // 验证年龄合理性
     if (age && (parseInt(age) < 1 || parseInt(age) > 150)) {
       wx.showToast({ title: '请输入合理年龄', icon: 'error' });
       return;
     }
-    
+
     wx.showLoading({ title: '保存中', mask: true });
-    
+
     try {
       // 上传新头像到云存储（如有更换）
       let finalAvatarUrl = avatarUrl;
@@ -87,7 +87,7 @@ Page({
         });
         finalAvatarUrl = uploadRes.fileID;
       }
-      
+
       // 更新数据库
       const db = wx.cloud.database();
       await db.collection('user2').where({ openid: userInfo.openid }).update({
@@ -101,10 +101,10 @@ Page({
           updateTime: new Date()
         }
       });
-      
+
       // 更新本地存储
-      const newUserInfo = { 
-        ...userInfo, 
+      const newUserInfo = {
+        ...userInfo,
         avatarUrl: finalAvatarUrl,
         nickName: nickName,
         gender: gender,
@@ -112,23 +112,23 @@ Page({
         age: age,
         region: region
       };
-      
+
       wx.setStorageSync('userInfo', newUserInfo);
-      
-      this.setData({ 
+
+      this.setData({
         userInfo: newUserInfo,
-        isEditing: false 
+        isEditing: false
       });
-      
+
       wx.showToast({ title: '保存成功' });
-      
+
       // 通知profile页面刷新
       wx.setStorageSync('dataUpdated', new Date().getTime());
-      
+
     } catch (err) {
       console.error('保存失败:', err);
       let errorMsg = '保存失败，请重试';
-      
+
       // 根据错误类型显示不同提示
       if (err.errMsg && err.errMsg.includes('cloud')) {
         errorMsg = '网络连接失败，请检查网络';
@@ -137,45 +137,45 @@ Page({
       } else if (err.message && err.message.includes('database')) {
         errorMsg = '数据保存失败，请重试';
       }
-      
+
       wx.showToast({ title: errorMsg, icon: 'error' });
     } finally {
       wx.hideLoading();
     }
   },
-  
+
   // 新增：选择头像
-  onChooseAvatar: function(e) {
-    this.setData({ 
+  onChooseAvatar: function (e) {
+    this.setData({
       avatarUrl: e.detail.avatarUrl,
-      hasChanges: true 
+      hasChanges: true
     });
   },
-  
+
   // 新增：输入昵称
-  onNickNameInput: function(e) {
+  onNickNameInput: function (e) {
     let value = e.detail.value;
-    
+
     // 过滤敏感词和特殊字符
     const sensitiveWords = ['admin', 'root', 'system', '微信用户', '微信'];
-    const hasSensitiveWord = sensitiveWords.some(word => 
+    const hasSensitiveWord = sensitiveWords.some(word =>
       value.toLowerCase().includes(word.toLowerCase())
     );
-    
+
     if (hasSensitiveWord) {
       wx.showToast({ title: '昵称包含敏感词', icon: 'none' });
       return;
     }
-    
+
     // 过滤特殊字符
     value = value.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '');
-    
-    this.setData({ 
+
+    this.setData({
       nickName: value,
-      hasChanges: true 
+      hasChanges: true
     });
   },
-  
+
   onGenderChange(e) {
     const index = e.detail.value;
     this.setData({
@@ -183,7 +183,7 @@ Page({
       hasChanges: true
     });
   },
-  
+
   onSignatureInput(e) {
     const value = e.detail.value;
     // 限制签名长度
@@ -196,7 +196,7 @@ Page({
       hasChanges: true
     });
   },
-  
+
   onAgeInput(e) {
     // 限制只能输入数字
     const value = e.detail.value.replace(/[^0-9]/g, '');
@@ -215,17 +215,17 @@ Page({
       hasChanges: true
     });
   },
-  
+
   onRegionChange(e) {
     // 地区选择器返回的是数组，需要转换为字符串
     const regionArray = e.detail.value;
     const regionString = regionArray.join(' ');
-    this.setData({ 
+    this.setData({
       region: regionString,
-      hasChanges: true 
+      hasChanges: true
     });
   },
-  
+
   onLogout() {
     wx.showModal({
       title: '确认退出',
@@ -246,7 +246,7 @@ Page({
           wx.removeStorageSync('bmr');
           wx.removeStorageSync('calculatedBMR');
           wx.removeStorageSync('goalData');
-           // 清除体重记录相关数据
+          // 清除体重记录相关数据
           wx.removeStorageSync('weightRecords');
           wx.removeStorageSync('weightRecordsArray');
           wx.removeStorageSync('todayWeight');
@@ -276,7 +276,7 @@ Page({
               wx.setStorageSync('dataUpdated', new Date().getTime());
             }
           });
-          
+
           wx.showToast({
             title: '已退出登录',
             icon: 'success'
@@ -285,7 +285,7 @@ Page({
       }
     });
   },
-  
+
   onDeleteAccount() {
     wx.showModal({
       title: '提示',

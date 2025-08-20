@@ -259,6 +259,23 @@ class DoubaoService {
   }
 
   extractFromText(text) {
+      // 定义运动类型映射
+      const exerciseTypes = {
+          '跑步': '跑步',
+          '游泳': '游泳',
+          '骑行': '骑行',
+          '健身': '健身',
+          '步行': '步行',
+          '散步': '步行',
+          '快走': '步行',
+          '慢走': '步行',
+          '跳绳': '跳绳',
+          '打球': '球类运动',
+          '篮球': '篮球',
+          '足球': '足球',
+          '羽毛球': '羽毛球',
+          '乒乓球': '乒乓球'
+      };
       console.log('[DEBUG] 原始输入文本:', text);
       const result = {
           exercise: null,
@@ -267,43 +284,82 @@ class DoubaoService {
           message: '信息提取中...'
       };
   
+      // 改进的运动提取逻辑
+      console.log('[DEBUG] 尝试提取运动信息:', text);
+      
+      // 简化的运动提取逻辑
+      let matchedExercise = null;
+      
+      console.log('[DEBUG] 运动类型列表:', exerciseTypes);
+      
+      // 首先检查文本中是否包含运动类型
       for (const [type, name] of Object.entries(exerciseTypes)) {
+          console.log('[DEBUG] 检查运动类型:', type);
           if (text.includes(type)) {
+              matchedExercise = type;
               console.log('[DEBUG] 检测到运动类型:', type);
-              let duration = 30;
-              let calories = 200;
-  
-              const hourMatch = text.match(/(\d+)\s*(?:小时|h)/i);
-              const minuteMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
-  
-              if (hourMatch) {
-                  duration = parseInt(hourMatch[1]) * 60; 
-              } else if (minuteMatch) {
-                  duration = parseInt(minuteMatch[1]);
-              }
-              
-              const caloriesMatch = text.match(/(\d+)\s*卡路里/i);
-              if (caloriesMatch) {
-                  calories = parseInt(caloriesMatch[1]);
-              }
-              
-              result.exercise = {
-                  type: name,
-                  duration: duration,
-                  calories_burned: calories,
-                  intensity: '中'
-              };
               break;
           }
       }
+      
+      if (!matchedExercise) {
+          console.log('[DEBUG] 未检测到任何运动类型');
+      }
+      
+      if (matchedExercise) {
+          let duration = 30;
+          let calories = 200;
+          
+          // 提取时长信息
+          const hourMatch = text.match(/(\d+)\s*(?:小时|h)/i);
+          const minuteMatch = text.match(/(\d+)\s*(?:分钟|min)/i);
+          
+          if (hourMatch) {
+              duration = parseInt(hourMatch[1]) * 60; 
+          } else if (minuteMatch) {
+              duration = parseInt(minuteMatch[1]);
+          }
+           
+          // 根据运动类型和时长估算卡路里消耗
+          // 增加基础代谢率影响，使估算更准确
+          switch (matchedExercise) {
+              case '跑步':
+                  calories = Math.round(duration * 10 * 1.2); // 跑步每分钟消耗约10-12卡路里
+                  break;
+              case '游泳':
+                  calories = Math.round(duration * 8 * 1.3); // 游泳每分钟消耗约8-10卡路里
+                  break;
+              case '骑行':
+                  calories = Math.round(duration * 7 * 1.1); // 骑行每分钟消耗约7-8卡路里
+                  break;
+              case '步行':
+                  calories = Math.round(duration * 4 * 1.1); // 步行每分钟消耗约4-5卡路里
+                  break;
+              default:
+                  calories = Math.round(duration * 6 * 1.2); // 其他运动默认每分钟消耗6-7卡路里
+          }
+           
+          result.exercise = {
+              type: exerciseTypes[matchedExercise],
+              duration: duration,
+              calories_burned: calories,
+              intensity: '中'
+          };
+      }
   
+      // 改进的食物提取模式（优先匹配常见食物）
       const foodPatterns = [
-          /吃了?\s*(.+?)\s*(\d+)?\s*(?:克|g|个|份)/i,
+          /吃了?\s*(一个|几个|一些)?\s*(苹果|香蕉|米饭|鸡胸肉|鸡蛋|牛奶|蔬菜|肉)\s*(\d+)?\s*(克|g|个|份)?/i,
+          /吃了?\s*(一个|几个|一些)?\s*(.+?)\s*(\d+)?\s*(克|g|个|份)?/i,
           /喝了?\s*(.+?)\s*(\d+)?\s*(?:毫升|ml|杯)/i,
-          /早餐吃了?\s*(.+?)(?:\s|$)/i,
-          /午餐吃了?\s*(.+?)(?:\s|$)/i,
-          /晚餐吃了?\s*(.+?)(?:\s|$)/i
+          /早餐吃了?\s*(一个|几个|一些)?\s*(.+?)(?:\s|$)/i,
+          /午餐吃了?\s*(一个|几个|一些)?\s*(.+?)(?:\s|$)/i,
+          /晚餐吃了?\s*(一个|几个|一些)?\s*(.+?)(?:\s|$)/i,
+          /吃了?\s*(.+?)(?:\s|$)/i  // 最后的后备模式
       ];
+
+      // 调试日志
+      console.log('[DEBUG] 尝试提取食物信息:', text);
   
       for (const pattern of foodPatterns) {
           const match = text.match(pattern);
@@ -311,12 +367,13 @@ class DoubaoService {
               console.log('[DEBUG] 食物匹配结果:', {
                   '模式': pattern,
                   '匹配结果': match,
-                  '食物名称': match[1],
-                  '重量': match[2] ? parseInt(match[2]) : 100
+                  '食物名称': match[2] || match[1], // 根据模式不同，食物名称可能在不同的捕获组
+                  '重量': match[3] ? parseInt(match[3]) : 100
               });
-              let foodName = match[1];
-              let weight = match[2] ? parseInt(match[2]) : 100;
+              let foodName = match[2] || match[1]; // 根据模式不同，食物名称可能在不同的捕获组
+              let weight = match[3] ? parseInt(match[3]) : 100;
   
+              // 更准确的食物卡路里计算
               let calories = 0;
               if (foodName.includes('苹果')) calories = Math.round(weight * 0.52);
               else if (foodName.includes('香蕉')) calories = Math.round(weight * 0.89);
@@ -326,7 +383,12 @@ class DoubaoService {
               else if (foodName.includes('牛奶')) calories = Math.round(weight * 0.54);
               else if (foodName.includes('蔬菜')) calories = Math.round(weight * 0.25);
               else if (foodName.includes('肉')) calories = Math.round(weight * 2.5);
-              else calories = Math.round(weight * 0.7); 
+              else if (foodName.includes('面包')) calories = Math.round(weight * 2.69);
+              else if (foodName.includes('面条')) calories = Math.round(weight * 1.1);
+              else if (foodName.includes('馒头')) calories = Math.round(weight * 2.21);
+              else if (foodName.includes('饺子')) calories = Math.round(weight * 2.1);
+              else calories = Math.round(weight * 1.2); // 提高默认卡路里估算值
+              
               
               calories = Math.max(1, calories);
   
@@ -352,9 +414,26 @@ class DoubaoService {
                   fat = Math.round(weight * 0.03);
               }
   
-              result.food = {
+              // 提取数量和单位
+      let quantity = 1;
+      let unit = '个';
+      const quantityMatch = text.match(/(一个|几个|一些|\d+个|\d+份)/i);
+      if (quantityMatch) {
+          if (quantityMatch[0].includes('一')) quantity = 1;
+          else if (quantityMatch[0].includes('几')) quantity = 2;
+          else if (quantityMatch[0].includes('些')) quantity = 1;
+          else {
+              const numMatch = quantityMatch[0].match(/\d+/);
+              if (numMatch) quantity = parseInt(numMatch[0]);
+          }
+          if (quantityMatch[0].includes('份')) unit = '份';
+      }
+
+      result.food = {
                   name: foodName.trim(),
                   weight: weight,
+                  quantity: quantity,
+                  unit: unit,
                   calories: calories,
                   protein: protein,
                   carbs: carbs,

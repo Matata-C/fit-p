@@ -1,0 +1,53 @@
+<view class="container">
+  <view class="section-title">日成就</view>
+  <view class="achievement-list">
+    <block wx:for="{{dailyAchievements}}" wx:key="id">
+      <view class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}">
+        <view class="achieve-icon">
+          <text wx:if="{{item.unlocked}}">🏆</text>
+          <text wx:else>🔒</text>
+        </view>
+        <view class="achieve-content">
+          <view class="achieve-header">
+            <text class="achieve-name">{{item.name}}</text>
+            <view class="reward-btn-container" wx:if="{{!item.unlocked}}">
+              <text class="achieve-reward locked">未解锁</text>
+              <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
+            </view>
+            <text class="achieve-reward" wx:else>{{item.reward}}</text>
+          </view>
+          <view class="achieve-detail">
+            <text class="achieve-type">{{item.type}}</text>
+            <text class="achieve-condition">{{item.condition}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section-title">月成就</view>
+  <view class="achievement-list">
+    <block wx:for="{{monthlyAchievements}}" wx:key="id">
+      <view class="achievement-item {{item.unlocked ? 'unlocked' : 'locked'}}">
+        <view class="achieve-icon">
+          <text wx:if="{{item.unlocked}}">🏆</text>
+          <text wx:else>🔒</text>
+        </view>
+        <view class="achieve-content">
+          <view class="achieve-header">
+            <text class="achieve-name">{{item.name}}</text>
+            <view class="reward-btn-container" wx:if="{{!item.unlocked}}">
+              <text class="achieve-reward locked">未解锁</text>
+              <button class="go-btn" bindtap="goToTask" data-id="{{item.id}}">去完成</button>
+            </view>
+            <text class="achieve-reward" wx:else>{{item.reward}}</text>
+          </view>
+          <view class="achieve-detail">
+            <text class="achieve-type">{{item.type}}</text>
+            <text class="achieve-condition">{{item.condition}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

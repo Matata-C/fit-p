@@ -7,7 +7,7 @@ const chatRoutes = require('./routes/chat');
 const exerciseRoutes = require('./routes/exercise');
 const foodRoutes = require('./routes/food');
 const doubaoService = require('./services/doubaoService');
-const { pool } = require('./db');
+const db = require('./db');
 
 const app = express();
 if (!global.PORT) {
@@ -29,42 +29,55 @@ app.use((req, res, next) => {
 
 async function initDatabase() {
   try {
-    const connection = await pool.getConnection();
+    // 检查数据库是否已连接
+    if (!db.isConnected()) {
+      console.log('⚠️ 数据库未连接，跳过初始化');
+      return;
+    }
 
-    await connection.execute(`
-      CREATE TABLE IF NOT EXISTS exercise_records (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id VARCHAR(255) NOT NULL,
-        exercise_type VARCHAR(100) NOT NULL,
-        duration INT NOT NULL,
-        calories_burned INT NOT NULL,
-        intensity ENUM('低', '中', '高') DEFAULT '中',
-        exercise_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        INDEX idx_user_date (user_id, exercise_date)
-      )
-    `);
-    await connection.execute(`
-      CREATE TABLE IF NOT EXISTS food_records (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        user_id VARCHAR(255) NOT NULL,
-        food_name VARCHAR(255) NOT NULL,
-        weight INT NOT NULL,
-        calories INT NOT NULL,
-        protein DECIMAL(5,2) DEFAULT 0,
-        carbs DECIMAL(5,2) DEFAULT 0,
-        fat DECIMAL(5,2) DEFAULT 0,
-        meal_time ENUM('早餐', '午餐', '晚餐', '加餐') DEFAULT '午餐',
-        meal_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        INDEX idx_user_date (user_id, meal_date)
-      )
-    `);
+    const connection = await db.getConnection();
+    if (!connection) {
+      console.log('⚠️ 无法获取数据库连接，跳过初始化');
+      return;
+    }
 
-    console.log('数据库初始化成功');
-    connection.release();
+    try {
+      await connection.execute(`
+        CREATE TABLE IF NOT EXISTS exercise_records (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id VARCHAR(255) NOT NULL,
+          exercise_type VARCHAR(100) NOT NULL,
+          duration INT NOT NULL,
+          calories_burned INT NOT NULL,
+          intensity ENUM('低', '中', '高') DEFAULT '中',
+          exercise_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          INDEX idx_user_date (user_id, exercise_date)
+        )
+      `);
+      await connection.execute(`
+        CREATE TABLE IF NOT EXISTS food_records (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          user_id VARCHAR(255) NOT NULL,
+          food_name VARCHAR(255) NOT NULL,
+          weight INT NOT NULL,
+          calories INT NOT NULL,
+          protein DECIMAL(5,2) DEFAULT 0,
+          carbs DECIMAL(5,2) DEFAULT 0,
+          fat DECIMAL(5,2) DEFAULT 0,
+          meal_time ENUM('早餐', '午餐', '晚餐', '加餐') DEFAULT '午餐',
+          meal_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          INDEX idx_user_date (user_id, meal_date)
+        )
+      `);
+
+      console.log('✅ 数据库初始化成功');
+    } finally {
+      connection.release();
+    }
   } catch (error) {
-    console.error('数据库初始化失败:', error);
+    console.error('❌ 数据库初始化失败:', error.message);
   }
 }
 
@@ -107,7 +120,11 @@ app.use((req, res) => {
   });
 });
 async function startServer() {
-  await initDatabase();
+  // 无论数据库是否初始化成功，都启动服务器
+  initDatabase().catch(err => {
+    console.error('❌ 数据库初始化出错:', err.message);
+  });
+
   app.listen(PORT, () => {
     console.log(`🚀 服务器启动成功！`);
     console.log(`📍 端口: ${PORT}`);
@@ -116,7 +133,7 @@ async function startServer() {
   });
 }
 
-module.exports = { app, pool, startServer };
+module.exports = { app, db, startServer };
 
 if (require.main === module) {
   startServer();
