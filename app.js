@@ -20,10 +20,10 @@ App({
       console.error('应用启动出错:', e);
     }
   },
-  
+
   // 更新总成就点数的方法
   // 初始化成就数据
-  initAchievementData: function() {
+  initAchievementData: function () {
     try {
       // 从本地存储加载总成就点数
       const totalPoints = wx.getStorageSync('totalAchievementPoints') || 0;
@@ -42,7 +42,7 @@ App({
 
 
   // 检查并重置日成就
-  checkAndResetDailyAchievements: function() {
+  checkAndResetDailyAchievements: function () {
     try {
       const today = new Date();
       // 设置今天12点的时间戳
@@ -66,7 +66,7 @@ App({
   },
 
   // 重置日成就
-  resetDailyAchievements: function() {
+  resetDailyAchievements: function () {
     try {
       console.log('重置日成就数据');
       // 清除与日成就相关的临时数据
@@ -82,12 +82,12 @@ App({
   },
 
   // 更新总成就点数的方法
-  updateTotalPoints: function(newPoints) {
+  updateTotalPoints: function (newPoints) {
     if (newPoints > 0) {
       this.globalData.totalAchievementPoints = (this.globalData.totalAchievementPoints || 0) + newPoints;
       this.globalData.achievementPointsUpdated = true;
       this.globalData.newAchievementPoints = newPoints;
-      
+
       // 保存到本地存储
       try {
         wx.setStorageSync('totalAchievementPoints', this.globalData.totalAchievementPoints);
@@ -99,7 +99,7 @@ App({
   },
 
   // 检查成就是否已解锁
-  isAchievementUnlocked: function(achievementId) {
+  isAchievementUnlocked: function (achievementId) {
     try {
       const unlockedAchievements = wx.getStorageSync('unlockedAchievements') || {};
       return unlockedAchievements[achievementId] === true;
@@ -110,7 +110,7 @@ App({
   },
 
   // 标记成就为已解锁
-  markAchievementAsUnlocked: function(achievementId) {
+  markAchievementAsUnlocked: function (achievementId) {
     try {
       const unlockedAchievements = wx.getStorageSync('unlockedAchievements') || {};
       unlockedAchievements[achievementId] = true;
@@ -122,7 +122,7 @@ App({
   },
 
   // 清除所有成就解锁状态
-  clearAllAchievements: function() {
+  clearAllAchievements: function () {
     try {
       wx.removeStorageSync('unlockedAchievements');
       console.log('已清除所有成就解锁状态');
@@ -132,7 +132,7 @@ App({
   },
 
   // 初始化成就解锁状态
-  initAchievementStatus: function() {
+  initAchievementStatus: function () {
     try {
       const unlockedAchievements = wx.getStorageSync('unlockedAchievements') || {};
       this.globalData.unlockedAchievements = unlockedAchievements;

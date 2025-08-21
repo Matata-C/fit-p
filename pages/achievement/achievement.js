@@ -167,19 +167,19 @@ Page({
     // 重新计算成就状态
     const achievements = [...this.data.achievements];
     const app = getApp();
-    
+
     // 使用持久化的解锁状态来设置当前成就状态
     achievements.forEach(item => {
       item.unlocked = app.isAchievementUnlocked(item.id);
     });
-    
+
     // 计算最新的成就状态
     achievements[0].unlocked = calculateWeightAchievement();
     achievements[1].unlocked = calculateDietAchievement();
     achievements[2].unlocked = calculateStepAchievement();
-    
+
     this.setData({ achievements });
-    
+
     // 检查是否有新解锁的成就
     let newPoints = 0;
     achievements.forEach(current => {
@@ -190,14 +190,14 @@ Page({
           icon: 'success',
           duration: 2000
         });
-        
+
         // 累加新获得的成就点
         newPoints += current.points;
         // 标记成就为已解锁
         app.markAchievementAsUnlocked(current.id);
       }
     });
-    
+
     // 如果有新获得的成就点，更新全局总成就点数
     if (newPoints > 0) {
       // 调用app方法更新全局成就点

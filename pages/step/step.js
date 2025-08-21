@@ -2,13 +2,13 @@ Page({
   data: {
     currentWeekday: '',
     currentDate: '',
-  
+
     targetStep: 10000,
-  
-   stepCount:0,//步数数据
+
+    stepCount: 0,//步数数据
     calories: 0,
     duration: 0,
-  
+
     stepGoal: 10000,
     stepRemaining: 0,
     // 数据转化区相关数据
@@ -17,83 +17,85 @@ Page({
     exerciseEffect: '',      // 运动效果描述
     exerciseEquivalent: '',  // 运动效果等价物
     distance: 0,             // 距离
-    distanceEquivalent: ''  , // 距离等价物
+    distanceEquivalent: '', // 距离等价物
     // weekSteps: [] // Remove weekSteps
     todayPeriods: [
       { label: '早', steps: 0, percent: 40 },
       { label: '中', steps: 0, percent: 60 },
-      { label: '晚', steps: 0 , percent: 35 }
+      { label: '晚', steps: 0, percent: 35 }
     ]
   },
 
   onLoad() {
-       // 从本地存储读取步数
+    // 从本地存储读取步数
     const step = wx.getStorageSync('stepCount') || 0
     this.setData({
       stepCount: step
     })
     this.initDate();
     // this.initWeekSteps(); // Remove weekSteps init
-    // 初始化日期
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-    const day = now.getDate();
-    this.setData({
-      currentDate: `${year}年${month}月${day}日`
-    });
-    
-    
-   
-    this.calcStepRemaining();
-    this.drawProgressRing();
-    this.updateProgressAndDraw();
-    this.calculateConversions(step);
-    this.setData({
-        todayPeriods: [
-            { label: '早', steps: (step*0.2).toFixed(0), percent: 20 },
-            { label: '中', steps: (step*0.35).toFixed(0), percent: 35 },
-            { label: '晚', steps: (step*0.45).toFixed(0) , percent: 45 }
-          ]
-    });
 
+    // 请求微信步数数据
+    this.requestWeRunData();
+
+    this.calcStepRemaining();
   },
 
-  // 添加步数
-  addSteps() {
-    const newStepCount = this.data.stepCount + 1000;
-    this.setData({
-      stepCount: newStepCount
-    });
-    
-    // 保存步数到本地存储
-    wx.setStorageSync('stepCount', newStepCount);
-    
-    // 更新相关数据
-    this.calcStepRemaining();
-    this.updateProgressAndDraw();
-    this.calculateConversions(newStepCount);
-    this.setData({
-        todayPeriods: [
-            { label: '早', steps: (newStepCount*0.2).toFixed(0), percent: 20 },
-            { label: '中', steps: (newStepCount*0.35).toFixed(0), percent: 35 },
-            { label: '晚', steps: (newStepCount*0.45).toFixed(0) , percent: 45 }
-          ]
-    });
-    
-    // 显示提示
-    wx.showToast({
-      title: `步数已更新: ${newStepCount}`,
-      icon: 'success'
+  // 请求微信步数授权并获取数据
+  requestWeRunData() {
+    wx.getWeRunData({
+      success: (res) => {
+        // 调用云函数处理步数数据
+        wx.cloud.callFunction({
+          name: 'getSteps',
+          data: {
+            weRunData: wx.cloud.CloudID(res.cloudID)
+          },
+          success: (result) => {
+            const stepCount = result.result.step;
+            // 更新步数数据
+            this.setData({
+              stepCount: stepCount
+            });
+            // 保存到本地存储
+            wx.setStorageSync('stepCount', stepCount);
+            // 更新相关UI
+            this.calcStepRemaining();
+            this.updateProgressAndDraw();
+            this.calculateConversions(stepCount);
+            this.setData({
+              todayPeriods: [
+                { label: '早', steps: (stepCount * 0.2).toFixed(0), percent: 20 },
+                { label: '中', steps: (stepCount * 0.35).toFixed(0), percent: 35 },
+                { label: '晚', steps: (stepCount * 0.45).toFixed(0), percent: 45 }
+              ]
+            });
+          },
+          fail: (err) => {
+            console.error('调用getSteps云函数失败:', err);
+            wx.showToast({
+              title: '同步步数失败',
+              icon: 'none'
+            });
+          }
+        });
+      },
+      fail: (err) => {
+        console.error('获取微信步数授权失败:', err);
+        wx.showToast({
+          title: '请授权微信步数',
+          icon: 'none'
+        });
+      }
     });
   },
 
-  
+
   // 计算步数转化的数据
   calculateConversions(stepCount) {
     // 计算消耗热量 (大致：每2000步消耗80千卡)
     const calories = (stepCount / 2000 * 80).toFixed(2);
-    
+
     // 热量等价物 (根据热量值动态变化)
     let calorieEquivalent = '';
     if (calories < 50) {
@@ -105,10 +107,10 @@ Page({
     } else {
       calorieEquivalent = '个汉堡';
     }
-    
+
     // 计算距离 (大致：每2000步1.5公里)
     const distance = (stepCount / 2000 * 1.5).toFixed(1);
-    
+
     // 距离等价物
     let distanceEquivalent = '';
     const distanceNum = parseFloat(distance);
@@ -121,11 +123,11 @@ Page({
     } else {
       distanceEquivalent = '步行1小时';
     }
-    
+
     // 运动效果和等价物
     let exerciseEffect = '';
     let exerciseEquivalent = '';
-    
+
     if (stepCount < 3000) {
       exerciseEffect = '轻度活动';
       exerciseEquivalent = '拉伸运动10分钟';
@@ -139,7 +141,7 @@ Page({
       exerciseEffect = '充分活动';
       exerciseEquivalent = '健身训练30分钟';
     }
-    
+
     // 更新数据
     this.setData({
       caloriesBurned: calories,
@@ -151,11 +153,11 @@ Page({
     });
   },
 
-   //更新进度百分比并绘制环形进度条
-   updateProgressAndDraw() {
-    const {stepCount, stepGoal } = this.data;
+  //更新进度百分比并绘制环形进度条
+  updateProgressAndDraw() {
+    const { stepCount, stepGoal } = this.data;
     const progressPercent = Math.min(Math.round((stepCount / stepGoal) * 100), 100);
-    
+
     this.setData({ progressPercent }, () => {
       this.drawProgressRing(); // 确保进度百分比更新后再绘制
     });
@@ -167,39 +169,39 @@ Page({
       .fields({ node: true, size: true })
       .exec((res) => {
         if (!res || !res[0] || !res[0].node) return;
-        
+
         const canvas = res[0].node;
         const ctx = canvas.getContext('2d');
         // 引入设备信息工具函数
         const { getDevicePixelRatio } = require('../../utils/device.js');
         const dpr = getDevicePixelRatio();
-       
+
         canvas.width = res[0].width * dpr;
         canvas.height = res[0].height * dpr;
         ctx.scale(dpr, dpr);
-        
-        const width = res[0].width; 
-        const height = res[0].height; 
-        const lineWidth = 10; 
-        const radius = (width - lineWidth) / 2; 
-        const centerX = width / 2; 
-        const centerY = height / 2; 
-        
+
+        const width = res[0].width;
+        const height = res[0].height;
+        const lineWidth = 10;
+        const radius = (width - lineWidth) / 2;
+        const centerX = width / 2;
+        const centerY = height / 2;
+
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
         ctx.lineWidth = lineWidth;
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
         ctx.stroke();
-        
+
         const progress = this.data.progressPercent / 100;
-        const startAngle = -0.5 * Math.PI; 
-        const endAngle = startAngle + 2 * Math.PI * progress; 
-      
+        const startAngle = -0.5 * Math.PI;
+        const endAngle = startAngle + 2 * Math.PI * progress;
+
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, startAngle, endAngle);
         ctx.lineWidth = lineWidth;
         const gradient = ctx.createLinearGradient(0, 0, width, height);
-        gradient.addColorStop(0, '#ff6f91'); 
+        gradient.addColorStop(0, '#ff6f91');
         gradient.addColorStop(1, '#ffb3c6');
         ctx.strokeStyle = gradient;
 
@@ -226,21 +228,22 @@ Page({
     const remaining = Math.max(stepGoal - stepCount, 0);
     this.setData({
       stepRemaining:
-   remaining
+        remaining
     });
   },
-  
+
   // 初始化日期
   initDate() {
     const now = new Date();
     const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    const year = now.getFullYear();
     const month = now.getMonth() + 1;
     const day = now.getDate();
     const weekday = weekdays[now.getDay()];
-    
+
     this.setData({
       currentWeekday: weekday,
-      currentDate: `${month}月${day}日`
+      currentDate: `${year}年${month}月${day}日`
     });
   },
 
