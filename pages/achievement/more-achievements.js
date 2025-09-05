@@ -8,7 +8,6 @@ const calculateDailyExercise = () => {
     if (typeof exerciseRecords !== 'object' || exerciseRecords === null) {
       exerciseRecords = {};
     }
-    // 检查今日是否有运动记录
     return Array.isArray(exerciseRecords[today]) && exerciseRecords[today].length > 0;
   } catch (e) {
     console.error('计算每日运动成就失败', e);
@@ -23,7 +22,6 @@ const calculateDailyDiet = () => {
     if (typeof dietRecords !== 'object' || dietRecords === null) {
       dietRecords = {};
     }
-    // 检查今日饮食记录数量是否达到3次
     return Array.isArray(dietRecords[today]) && dietRecords[today].length >= 3;
   } catch (e) {
     console.error('计算每日饮食成就失败', e);
@@ -40,8 +38,6 @@ const calculateMonthlyExercise = () => {
     
     const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
-    
-    // 计算本月有运动记录的天数
     let daysWithExercise = 0;
     Object.keys(exerciseRecords).forEach(date => {
       const dateObj = new Date(date);
@@ -165,16 +161,13 @@ Page({
   },
 
   calculateAchievements() {
-    // 检查是否需要重置日成就状态
     const app = getApp();
     if (app.globalData && app.globalData.dailyAchievementsReset) {
-      // 重置日成就解锁状态
       const dailyAchievements = [...this.data.dailyAchievements].map(item => ({
         ...item,
         unlocked: false
       }));
       this.setData({ dailyAchievements });
-      // 重置全局标志
       app.globalData.dailyAchievementsReset = false;
       console.log('已重置日成就状态');
     }
@@ -182,7 +175,6 @@ Page({
     const dailyAchievements = Array.isArray(this.data.dailyAchievements) ? [...this.data.dailyAchievements] : [];
     const monthlyAchievements = Array.isArray(this.data.monthlyAchievements) ? [...this.data.monthlyAchievements] : [];
 
-    // 使用持久化的解锁状态来设置当前成就状态
     dailyAchievements.forEach(item => {
       item.unlocked = app.isAchievementUnlocked(item.id);
     });
@@ -190,7 +182,6 @@ Page({
       item.unlocked = app.isAchievementUnlocked(item.id);
     });
 
-    // 计算最新的成就状态
     if (dailyAchievements.length > 0) {
       dailyAchievements[0].unlocked = calculateDailyExercise();
     }
@@ -213,12 +204,9 @@ Page({
       monthlyAchievements
     });
     
-    // 检查是否有新解锁的成就
     let newPoints = 0;
     
-    // 检查日成就
     dailyAchievements.forEach(current => {
-      // 对于日成就，即使之前已解锁，如果被重置了也需要重新计算
       if (current.unlocked && (!app.isAchievementUnlocked(current.id) || app.globalData.dailyAchievementsReset)) {
         wx.showToast({
           title: `解锁成就：${current.name}！`,
@@ -226,14 +214,11 @@ Page({
           duration: 2000
         });
         
-        // 累加新获得的成就点
         newPoints += current.points;
-        // 标记成就为已解锁
         app.markAchievementAsUnlocked(current.id);
       }
     });
     
-    // 检查月成就
     monthlyAchievements.forEach(current => {
       if (current.unlocked && !app.isAchievementUnlocked(current.id)) {
         wx.showToast({
@@ -242,14 +227,10 @@ Page({
           duration: 2000
         });
         
-        // 累加新获得的成就点
         newPoints += current.points;
-        // 标记成就为已解锁
         app.markAchievementAsUnlocked(current.id);
       }
     });
-    
-    // 如果有新获得的成就点，更新全局总成就点数
      if (newPoints > 0) {
        if (app) {
          app.updateTotalPoints(newPoints);

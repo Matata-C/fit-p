@@ -29,23 +29,6 @@
     </block>
   </view>
 
-  <view class="section-title">排行榜</view>
-  <view class="leaderboard-list">
-    <block wx:for="{{leaderboard}}" wx:key="id">
-      <view class="leaderboard-item {{index < 3 ? 'top' + (index+1) : ''}} {{item.isSelf ? 'self' : ''}}">
-        <view class="rank-wrap">
-          <text class="rank">
-            <text wx:if="{{index === 0}}">🥇</text>
-            <text wx:elif="{{index === 1}}">🥈</text>
-            <text wx:elif="{{index === 2}}">🥉</text>
-            <text wx:else>{{index + 1}}.</text>
-          </text>
-        </view>
-        <text class="user">{{item.name}}</text>
-      </view>
-    </block>
-  </view>
-
   <view class="section-title">来碗鸡汤吧~</view>
   <view class="voice-section">
     <view class="voice-tabs">

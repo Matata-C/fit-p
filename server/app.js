@@ -20,7 +20,6 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// 设置字符编码为UTF-8
 app.use((req, res, next) => {
   req.setEncoding('utf8');
   res.header('Content-Type', 'application/json; charset=utf-8');
@@ -29,7 +28,6 @@ app.use((req, res, next) => {
 
 async function initDatabase() {
   try {
-    // 检查数据库是否已连接
     if (!db.isConnected()) {
       console.log('⚠️ 数据库未连接，跳过初始化');
       return;
@@ -120,7 +118,6 @@ app.use((req, res) => {
   });
 });
 async function startServer() {
-  // 无论数据库是否初始化成功，都启动服务器
   initDatabase().catch(err => {
     console.error('❌ 数据库初始化出错:', err.message);
   });

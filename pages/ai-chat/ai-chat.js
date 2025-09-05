@@ -189,7 +189,7 @@ Page({
             foodHistory: foodRecords,
             currentDate: today
           },
-          aiRole: this.data.selectedRole?.id || 'professional'  // 添加AI角色风格参数
+          aiRole: this.data.selectedRole?.id || 'professional'  
         }
       });
 
@@ -215,7 +215,7 @@ Page({
             foodHistory: foodRecords,
             currentDate: today
           },
-          aiRole: this.data.selectedRole?.id || 'professional'  // 添加AI角色风格参数
+          aiRole: this.data.selectedRole?.id || 'professional'  
         }
       });
 
@@ -240,11 +240,9 @@ Page({
               aiResponse += `\n强度: ${data.exercise.intensity}`;
             }
 
-            // 将运动数据保存到主页的运动记录中
             this.saveExerciseDataToMain(data.exercise);
           }
           if (data.food && data.food.name) {
-            // 确保总是显示数量和单位
             const quantity = data.food.quantity || 1;
             const unit = data.food.unit || '个';
             aiResponse += `\n\n饮食记录:\n食物: ${data.food.name}\n量词: ${quantity}${unit}`;
@@ -253,7 +251,6 @@ Page({
               aiResponse += `\n用餐时间: ${data.food.meal_time}`;
             }
 
-            // 将饮食数据保存到主页的饮食记录中
             this.saveFoodDataToMain(data.food);
           }
         }
@@ -286,7 +283,6 @@ Page({
       const currentMessages = this.data.messages.slice(0, -1);
       let errorMessageContent = '抱歉，网络连接出现问题，请检查您的网络设置后重试。';
 
-      // 针对云托管服务未激活的错误提供具体指导
       if (error.errMsg && error.errMsg.includes('Service is not activated')) {
         errorMessageContent = 'AI服务正在部署中，请稍后再试。如果问题持续存在，请联系客服。';
       } else if (error.errMsg) {
@@ -326,7 +322,7 @@ Page({
         type: exerciseData.type,
         duration: exerciseData.duration,
         minutes: exerciseData.duration,
-        caloriesBurned: exerciseData.calories_burned || 0,
+        calories_burned: exerciseData.calories_burned || 0,
         date: new Date().toISOString()
       });
 
@@ -346,9 +342,7 @@ Page({
         foodRecords[today] = [];
       }
 
-      // 确保重量和卡路里有值
       const weight = foodData.weight || foodData.quantity || 100;
-      // 确保卡路里不为0，最低为1
       const calories = Math.max(1, foodData.calories || 0);
       const unit = foodData.unit || '克';
 

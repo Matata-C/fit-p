@@ -12,7 +12,7 @@ Page({
       });
       const response = await wx.cloud.callContainer({
       config: {
-       env: 'prod-1g6skl837a850b7f' // 云托管环境ID
+       env: 'prod-1g6skl837a850b7f'
       },
       path: '/health',
       method: 'GET',

@@ -71,11 +71,6 @@
   <!-- 底部功能入口 -->
   <view class="bottom-section">
     <view class="bottom-menu">
-      <navigator url="/pages/achievement/achievement" class="menu-item" open-type="switchTab">
-        <icon type="friend" size="24" color="#7f8c8d"></icon>
-        <text class="menu-text">排行榜</text>
-      </navigator>
-      <view class="menu-divider"></view>
       <navigator url="/pages/analysis/analysis" class="menu-item" open-type="switchTab">
         <icon type="list" size="24" color="#7f8c8d"></icon>
         <text class="menu-text">历史</text>

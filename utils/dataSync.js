@@ -86,7 +86,9 @@ function getTodayExerciseData() {
         recordDuration = Number(record.duration);
       }
       duration += recordDuration;
-      calories += record.caloriesBurned ? Number(record.caloriesBurned) : 0;
+      // 同时支持两种键名格式以确保兼容性
+      calories += record.calories_burned ? Number(record.calories_burned) : 
+                 (record.caloriesBurned ? Number(record.caloriesBurned) : 0);
     });
   } catch (e) {
     console.log('获取运动记录时长和卡路里失败:', e);
@@ -433,4 +435,4 @@ module.exports = {
   testPercentageCalculation,
   calculateProgress,
   getDataSyncStatus
-}; 
+};

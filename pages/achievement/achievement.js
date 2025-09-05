@@ -103,11 +103,7 @@ Page({
       }
     ],
     totalPoints: 0,
-    leaderboard: [
-      { id: 1, name: "用户A", score: 120 },
-      { id: 2, name: "用户B", score: 90 },
-      { id: 3, name: "用户C", score: 70 }
-    ],
+
     voiceTexts: [
       '你很棒，坚持就是胜利！再接再厉，目标就在前方！',
       '每一次努力，都是在为梦想添砖加瓦！',
@@ -136,7 +132,6 @@ Page({
 
     this.calculateAchievements();
 
-    // 从全局数据加载总成就点数
     const app = getApp();
     this.setData({
       totalPoints: app.globalData.totalAchievementPoints || 0
@@ -156,34 +151,27 @@ Page({
   },
 
   calculateTotalPoints() {
-    // 从全局数据获取总成就点数
     const app = getApp();
     const totalPoints = app.globalData.totalAchievementPoints || 0;
     this.setData({ totalPoints });
   },
 
-  // 检查成就状态变化
   checkAchievementChanges() {
-    // 重新计算成就状态
     const achievements = [...this.data.achievements];
     const app = getApp();
 
-    // 使用持久化的解锁状态来设置当前成就状态
     achievements.forEach(item => {
       item.unlocked = app.isAchievementUnlocked(item.id);
     });
 
-    // 计算最新的成就状态
     achievements[0].unlocked = calculateWeightAchievement();
     achievements[1].unlocked = calculateDietAchievement();
     achievements[2].unlocked = calculateStepAchievement();
 
     this.setData({ achievements });
 
-    // 检查是否有新解锁的成就
     let newPoints = 0;
     achievements.forEach(current => {
-      // 如果成就现在是解锁的，但之前没有被标记为解锁
       if (current.unlocked && !app.isAchievementUnlocked(current.id)) {
         wx.showToast({
           title: `恭喜解锁成就：${current.name}！`,
@@ -191,25 +179,19 @@ Page({
           duration: 2000
         });
 
-        // 累加新获得的成就点
         newPoints += current.points;
-        // 标记成就为已解锁
         app.markAchievementAsUnlocked(current.id);
       }
     });
 
-    // 如果有新获得的成就点，更新全局总成就点数
     if (newPoints > 0) {
-      // 调用app方法更新全局成就点
       if (app) {
         app.updateTotalPoints(newPoints);
-        // 同步更新本地数据
         this.setData({
           totalPoints: app.globalData.totalAchievementPoints
         });
       }
 
-      // 添加获得成就点的提示
       wx.showToast({
         title: `获得${newPoints}成就点！`,
         icon: 'success',
@@ -223,22 +205,18 @@ Page({
     this.stopAutoPlay();
     if (this.data.autoPlay) this.startAutoPlay();
 
-    // 检查是否有从其他页面更新的成就点
     const app = getApp();
     if (app) {
-      // 同步全局总成就点数
       this.setData({
         totalPoints: app.globalData.totalAchievementPoints || 0
       });
 
-      // 重置全局更新标志
       if (app.globalData.achievementPointsUpdated) {
         app.globalData.achievementPointsUpdated = false;
         app.globalData.newAchievementPoints = 0;
       }
     }
 
-    // 检查成就状态变化
     this.checkAchievementChanges();
   },
 
@@ -274,7 +252,7 @@ Page({
       path: '/api/tts/text2audio',
       method: 'GET',
       header: {
-        'X-WX-SERVICE': 'tts-service-name',  // TTS服务名称
+        'X-WX-SERVICE': 'tts-service-name', 
         'content-type': 'application/json'
       },
       data: {

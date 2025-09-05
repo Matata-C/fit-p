@@ -1,7 +1,6 @@
 const mysql = require('mysql2/promise');
 const console = require('console');
 
-// 数据库连接配置
 const config = {
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -12,11 +11,9 @@ const config = {
   queueLimit: 0
 };
 
-// 创建连接池
 let pool = mysql.createPool(config);
 let isConnected = false;
 
-// 测试数据库连接
 async function testDatabaseConnection() {
   try {
     const connection = await pool.getConnection();
@@ -30,7 +27,6 @@ async function testDatabaseConnection() {
   }
 }
 
-// 尝试重新连接数据库
 async function reconnectDatabase() {
   if (isConnected) return true;
 
@@ -45,7 +41,6 @@ async function reconnectDatabase() {
   }
 }
 
-// 获取数据库连接（带自动重连）
 async function getConnection() {
   if (!isConnected) {
     await reconnectDatabase();
@@ -61,11 +56,9 @@ async function getConnection() {
     }
   }
 
-  // 如果仍然没有连接，返回null
   return null;
 }
 
-// 初始化数据库连接
 testDatabaseConnection();
 
 module.exports = {
