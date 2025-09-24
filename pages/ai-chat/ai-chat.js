@@ -322,7 +322,7 @@ Page({
         type: exerciseData.type,
         duration: exerciseData.duration,
         minutes: exerciseData.duration,
-        calories_burned: exerciseData.calories_burned || 0,
+        caloriesBurned: exerciseData.calories_burned,
         date: new Date().toISOString()
       });
 
