@@ -8,8 +8,10 @@
     <text class="tabbar-text">分析</text>
   </view>
   
-  <view class="tabbar-item {{selected === 2 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="2">
-    <view class="imgcontent"><image class="tabbar-image" src="/images/跑步.png" style="opacity: 0.8;"></image></view>
+  <view class="tabbar-item tabbar-center {{selected === 2 ? 'tabbar-item-selected' : ''}}" bindtap="switchTab" data-index="2">
+    <view class="center-circle">
+      <image class="center-icon" src="/images/跑步.png"></image>
+    </view>
     <text class="tabbar-text">AI对话</text>
   </view>
   
