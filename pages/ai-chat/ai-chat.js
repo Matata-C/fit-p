@@ -10,19 +10,19 @@ Page({
         id: 'professional',
         name: '腹黑教练',
         description: '专业腹黑，科学甩肉',
-        avatar: '/images/腹黑教练.png'
+        avatar: '/images/总裁.jpg'
       },
       {
         id: 'energetic',
         name: '性感御姐',
         description: '活力御姐，陪你变美',
-        avatar: '/images/性感御姐.png'
+        avatar: '/images/御姐.jpg'
       },
       {
         id: 'gentle',
         name: '阳光男大',
         description: '温和男大，管饭瘦快',
-        avatar: '/images/阳光男大.png'
+        avatar: '/images/男大.jpg'
       },
       {
         id: 'strict',

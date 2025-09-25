@@ -1,6 +1,6 @@
 <!--pages/feedback/feedback.wxml-->
 <view class="container">
-  <image class="feedback-banner" src="/images/feedback-banner.png"></image>
+  <image class="feedback-banner" src="/images/feedback-banner.jpeg"></image>
   <view class="faq-section">
     <view class="faq-title">常见问题</view>
     <view class="faq-list">
